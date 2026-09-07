@@ -1,0 +1,249 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Circa Survivor Season Map</title><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Source+Sans+3:ital,wght@0,400;0,600;1,400&display=swap"><style>
+:root{--bg:#EEF1F6;--surface:#FFFFFF;--surface-2:#F6F8FB;--ink:#0F1626;--muted:#5C6880;--line:#D6DCE6;
+--accent:#B98C0E;--accent-ink:#7A5B06;--accent-soft:#FBF1D3;--pick:#0E8F80;--pick-soft:#D6F3EE;
+--good:#1F9D63;--warn:#C9800F;--crit:#D64545;--bar:#9AACC4;
+--q1:#E7F4F1;--q2:#BFE5DD;--q3:#84CDC0;--q4:#3FAE9E;--q5:#0E8F80;--q5-ink:#FFFFFF;--dead:#E2E6EE;}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#0B1020;--surface:#141B2F;--surface-2:#1A2238;--ink:#E9EDF7;--muted:#94A0BA;
+--line:#26304A;--accent:#F2C14E;--accent-ink:#FFE08A;--accent-soft:#3A2E0B;--pick:#2DD4BF;--pick-soft:#0F3B37;
+--good:#3DDC97;--warn:#F5B94A;--crit:#FF6B6B;--bar:#3E4C6B;
+--q1:#16283A;--q2:#12463F;--q3:#0F6A5E;--q4:#178F7E;--q5:#2DD4BF;--q5-ink:#0B1020;--dead:#1B2133;}}
+:root[data-theme="dark"]{--bg:#0B1020;--surface:#141B2F;--surface-2:#1A2238;--ink:#E9EDF7;--muted:#94A0BA;
+--line:#26304A;--accent:#F2C14E;--accent-ink:#FFE08A;--accent-soft:#3A2E0B;--pick:#2DD4BF;--pick-soft:#0F3B37;
+--good:#3DDC97;--warn:#F5B94A;--crit:#FF6B6B;--bar:#3E4C6B;
+--q1:#16283A;--q2:#12463F;--q3:#0F6A5E;--q4:#178F7E;--q5:#2DD4BF;--q5-ink:#0B1020;--dead:#1B2133;}
+
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Source Sans 3","Segoe UI",system-ui,sans-serif;font-size:15px;line-height:1.45}
+h1,h2,h3{font-family:"Barlow Condensed","Arial Narrow",Impact,sans-serif;text-wrap:balance;margin:0}
+h1{font-size:44px;font-weight:700;line-height:1}
+h2{font-size:26px;font-weight:600;margin:40px 0 12px;padding-bottom:6px;border-bottom:2px solid var(--line)}
+h3{font-size:20px;font-weight:600}
+.eyebrow{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.num{font-variant-numeric:tabular-nums}
+.note{color:var(--muted);font-size:13.5px;max-width:72ch}
+a{color:var(--pick)}
+button{font:inherit;cursor:pointer;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:5px;padding:5px 11px}
+button:hover{border-color:var(--pick)}
+button:focus-visible,.cell:focus-visible{outline:2px solid var(--pick);outline-offset:1px}
+button.primary{background:var(--pick);border-color:var(--pick);color:var(--q5-ink);font-weight:600}
+.pill{display:inline-block;padding:2px 8px;border-radius:999px;font-size:12px;font-weight:600}
+.pill.good{background:color-mix(in srgb,var(--good) 18%,transparent);color:var(--good)}
+.pill.warn{background:color-mix(in srgb,var(--warn) 18%,transparent);color:var(--warn)}
+.pill.crit{background:color-mix(in srgb,var(--crit) 18%,transparent);color:var(--crit)}
+@media (prefers-reduced-motion: reduce){*{transition:none!important}}
+
+.wrap{max-width:1600px;margin:0 auto;padding:22px 18px 60px}
+.top{display:flex;flex-wrap:wrap;gap:14px 26px;align-items:end;justify-content:space-between}
+.stats{display:flex;flex-wrap:wrap;gap:10px 22px}
+.stat b{display:block;font-family:"Barlow Condensed",sans-serif;font-size:28px;font-weight:600;line-height:1}
+.stat span{font-size:12px;color:var(--muted)}
+.tabs{display:flex;gap:6px;margin:16px 0 10px;flex-wrap:wrap}
+.tabs button.on{background:var(--accent);border-color:var(--accent);color:#1a1300;font-weight:700}
+.mbtn.on{background:var(--pick);border-color:var(--pick);color:var(--q5-ink);font-weight:600}
+.toolbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:8px 0 12px}
+.toolbar .sp{flex:1}
+.legend{display:flex;flex-wrap:wrap;gap:14px;font-size:12.5px;color:var(--muted);margin:6px 0 12px}
+.legend i{display:inline-block;width:16px;height:12px;vertical-align:-1px;margin-right:5px;border-radius:2px;border:1px solid var(--line)}
+.gridwrap{overflow:auto;border:1px solid var(--line);border-radius:8px;background:var(--surface);max-height:78vh}
+table.grid{border-collapse:separate;border-spacing:0;font-size:12.5px;min-width:max-content}
+.grid th,.grid td{padding:0;border-bottom:1px solid var(--line);border-right:1px solid var(--line)}
+.grid thead th{position:sticky;top:0;background:var(--surface-2);z-index:3;padding:6px 6px 4px;text-align:center;font-family:"Barlow Condensed",sans-serif;font-size:15px;font-weight:600;min-width:74px}
+.grid thead th small{display:block;font-family:"Source Sans 3",sans-serif;font-size:10.5px;font-weight:400;color:var(--muted);letter-spacing:.02em}
+.grid thead th.hol{color:var(--accent-ink);box-shadow:inset 0 3px 0 var(--accent)}
+.grid thead th.cur{box-shadow:inset 0 3px 0 var(--pick)}
+.grid tbody th{position:sticky;left:0;background:var(--surface-2);z-index:2;text-align:left;padding:4px 8px;font-family:"Barlow Condensed",sans-serif;font-size:16px;font-weight:600;min-width:118px;white-space:nowrap}
+.grid tbody th small{font-family:"Source Sans 3",sans-serif;font-size:11px;font-weight:400;color:var(--muted);margin-left:4px}
+.grid tbody th .x{float:right;font-size:11px;color:var(--muted);cursor:pointer;padding:0 4px;border-radius:3px}
+.grid tbody th .x:hover{color:var(--crit)}
+.grid tbody tr.excl th{text-decoration:line-through;color:var(--muted)}
+.cell{display:block;width:100%;height:100%;min-height:40px;padding:4px 5px;text-align:center;cursor:pointer;border:0;background:transparent;color:var(--ink);font:inherit;line-height:1.15}
+.cell b{display:block;font-family:"Barlow Condensed",sans-serif;font-size:15px;font-weight:600}
+.cell small{font-size:10.5px;color:inherit;opacity:.85}
+.cell.q1{background:var(--q1)}.cell.q2{background:var(--q2)}.cell.q3{background:var(--q3)}.cell.q4{background:var(--q4);color:var(--q5-ink)}.cell.q5{background:var(--q5);color:var(--q5-ink)}
+.cell.q4 small,.cell.q5 small{opacity:.9}
+.cell.dog{color:var(--muted)}
+.cell.off{background:var(--dead);color:var(--muted);cursor:default}
+.cell.used{opacity:.35;text-decoration:line-through;cursor:pointer}
+.cell.plan{box-shadow:inset 0 0 0 2px var(--pick)}
+.cell.lock{background:var(--accent);color:#1a1300;box-shadow:inset 0 0 0 2px var(--accent-ink)}
+.cell.sub{background:var(--accent);color:#1a1300;box-shadow:inset 0 0 0 2px var(--ink)}
+.cell.won{box-shadow:inset 0 0 0 2px var(--good)}
+.cell.lost{background:var(--crit);color:#fff}
+.cell:hover:not(.off){filter:brightness(1.08)}
+.side{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px;margin-top:14px}
+.box{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:12px 14px}
+.box h3{margin-bottom:6px}
+.chips{display:flex;flex-wrap:wrap;gap:5px}
+.chip{font-size:12px;padding:2px 7px;border-radius:4px;border:1px solid var(--line);background:var(--surface-2)}
+.chip.on{border-color:var(--pick);color:var(--pick);font-weight:600}
+.chip.gone{opacity:.4;text-decoration:line-through}
+ol.plan{margin:6px 0 0;padding:0;list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:2px 14px;font-size:13px}
+ol.plan li{display:flex;justify-content:space-between;border-bottom:1px dotted var(--line);padding:2px 0}
+ol.plan li .lg{color:var(--muted)}
+ol.plan li.hol{background:var(--accent-soft);padding:2px 4px;border-radius:3px}
+.warnbox{border-left:4px solid var(--crit);background:var(--surface);padding:8px 12px;border-radius:0 6px 6px 0;margin-top:10px}
+@media (max-width:700px){h1{font-size:32px}.grid tbody th{min-width:90px}}
+</style></head><body><div class="wrap">
+<div class="top"><div><div class="eyebrow">Circa Survivor 2026 · from W1 onward · numbers as of 2026-09-07</div><h1>Season Map</h1></div>
+<div class="stats" id="stats"></div></div>
+<div class="tabs" id="tabs"></div>
+<div class="toolbar"><button id="model">Load the model's plan as locks</button><button id="clear">Clear locks & exclusions</button><button id="copy">Copy plan</button>
+<span class="note">Cells show:</span><button data-m="p" class="mbtn on">win %</button><button data-m="fv" class="mbtn">future value</button><button data-m="field" class="mbtn">field % (this week)</button><span class="sp"></span>
+<span class="note">Click a cell to lock that team for that leg; the rest of the season re-solves for the best surviving path. Click ✕ on a team to exclude it (injury, "never again"). Everything you set stays in this browser.</span></div>
+<div class="legend"><span><i style="background:var(--q1)"></i>50–55%</span><span><i style="background:var(--q2)"></i>55–62%</span><span><i style="background:var(--q3)"></i>62–70%</span><span><i style="background:var(--q4)"></i>70–78%</span><span><i style="background:var(--q5)"></i>78%+</span>
+<span><i style="background:var(--accent)"></i>submitted / locked pick</span><span><i style="box-shadow:inset 0 0 0 2px var(--pick)"></i>model's plan</span><span><i style="background:var(--dead)"></i>bye / past</span><span>struck-through = team already used on this path</span><span>gold top stripe = holiday leg · teal stripe = this week</span></div>
+<div id="warn"></div>
+<div class="gridwrap"><table class="grid" id="grid"></table></div>
+<div class="side"><div class="box"><h3>All entries this week</h3><div id="multi"></div></div><div class="box"><h3>Holiday reserves</h3><div id="holiday"></div></div>
+<div class="box" style="grid-column:1/-1"><h3>EV calculator — W1</h3><p class="note">Edit the field % column to test a different read of the field; leverage, EV (win % × leverage) and the field's expected survival recompute. Future cost is the model's (fixed).</p><div class="gridwrap" style="max-height:none"><table class="grid" id="ev"></table></div></div>
+<div class="box"><h3>This path</h3><ol class="plan" id="planlist"></ol><p class="note" style="margin-top:8px">Percentages are horizon-widened win odds (a 15-week-out number is pulled toward 50% for injuries and drift). They refresh every time the card is regenerated.</p></div></div>
+</div>
+<script>window.__DATA__ = {"season":2026,"current_leg":"W1","generated_at":"2026-09-07T04:46:05+00:00","legs":[{"id":"W1","label":"Week 1","week":1,"kind":"regular","teams":["ARI","ATL","BAL","BUF","CAR","CHI","CIN","CLE","DAL","DEN","DET","GB","HOU","IND","JAX","KC","LA","LAC","LV","MIA","MIN","NE","NO","NYG","NYJ","PHI","PIT","SEA","SF","TB","TEN","WAS"],"dates":"09/09\u201309/14","deadline":"Sat Sep 12 4:00 PM PT"},{"id":"W2","label":"Week 2","week":2,"kind":"regular","teams":["ARI","ATL","BAL","BUF","CAR","CHI","CIN","CLE","DAL","DEN","DET","GB","HOU","IND","JAX","KC","LA","LAC","LV","MIA","MIN","NE","NO","NYG","NYJ","PHI","PIT","SEA","SF","TB","TEN","WAS"],"dates":"09/17\u201309/21","deadline":"Sat Sep 19 4:00 PM PT"},{"id":"W3","label":"Week 3","week":3,"kind":"regular","teams":["ARI","ATL","BAL","BUF","CAR","CHI","CIN","CLE","DAL","DEN","DET","GB","HOU","IND","JAX","KC","LA","LAC","LV","MIA","MIN","NE","NO","NYG","NYJ","PHI","PIT","SEA","SF","TB","TEN","WAS"],"dates":"09/24\u201309/28","deadline":"Sat Sep 26 4:00 PM PT"},{"id":"W4","label":"Week 4","week":4,"kind":"regular","teams":["ARI","ATL","BAL","BUF","CAR","CHI","CIN","CLE","DAL","DEN","DET","GB","HOU","IND","JAX","KC","LA","LAC","LV","MIA","MIN","NE","NO","NYG","NYJ","PHI","PIT","SEA","SF","TB","TEN","WAS"],"dates":"10/01\u201310/05","deadline":"Sat Oct 3 4:00 PM PT"},{"id":"W5","label":"Week 5","week":5,"kind":"regular","teams":["ARI","ATL","BAL","BUF","CHI","CIN","CLE","DAL","DEN","DET","GB","HOU","IND","JAX","LA","LAC","LV","MIA","MIN","NE","NO","NYG","NYJ","PHI","PIT","SEA","SF","TB","TEN","WAS"],"dates":"10/08\u201310/12","deadline":"Sat Oct 10 4:00 PM PT"},{"id":"W6","label":"Week 6","week":6,"kind":"regular","teams":["ARI","ATL","BAL","BUF","CAR","CHI","CLE","DAL","DEN","GB","HOU","IND","JAX","KC","LA","LAC","LV","NE","NO","NYG","NYJ","PHI","PIT","SEA","SF","TB","TEN","WAS"],"dates":"10/15\u201310/19","deadline":"Sat Oct 17 4:00 PM PT"},{"id":"W7","label":"Week 7","week":7,"kind":"regular","teams":["ARI","ATL","BAL","CAR","CHI","CIN","CLE","DAL","DEN","DET","GB","HOU","IND","KC","LA","LV","MIA","MIN","NE","NO","NYG","NYJ","PHI","PIT","SEA","SF","TB","TEN"],"dates":"10/22\u201310/26","deadline":"Sat Oct 24 4:00 PM PT"},{"id":"W8","label":"Week 8","week":8,"kind":"regular","teams":["ARI","ATL","BAL","BUF","CAR","CHI","CIN","CLE","DAL","DEN","DET","GB","IND","JAX","KC","LA","LAC","LV","MIA","MIN","NE","NYJ","PHI","PIT","SEA","TB","TEN","WAS"],"dates":"10/29\u201311/02","deadline":"Sat Oct 31 4:00 PM PT"},{"id":"W9","label":"Week 9","week":9,"kind":"regular","teams":["ARI","ATL","BAL","BUF","CAR","CHI","CIN","CLE","DAL","DEN","DET","GB","HOU","IND","JAX","KC","LA","LAC","LV","MIA","MIN","NE","NO","NYG","NYJ","PHI","SEA","SF","TB","WAS"],"dates":"11/05\u201311/09","deadline":"Sat Nov 7 4:00 PM PT"},{"id":"W10","label":"Week 10","week":10,"kind":"regular","teams":["ARI","ATL","BAL","BUF","CAR","CIN","CLE","DAL","DET","GB","HOU","IND","JAX","KC","LA","LAC","LV","MIA","MIN","NE","NO","NYG","NYJ","PIT","SEA","SF","TEN","WAS"],"dates":"11/12\u201311/16","deadline":"Sat Nov 14 4:00 PM PT"},{"id":"W11","label":"Week 11","week":11,"kind":"regular","teams":["ARI","BAL","BUF","CAR","CHI","CIN","DAL","DEN","DET","HOU","IND","JAX","KC","LAC","LV","MIA","MIN","NO","NYG","NYJ","PHI","PIT","SF","TB","TEN","WAS"],"dates":"11/19\u201311/23","deadline":"Sat Nov 21 4:00 PM PT"},{"id":"W12a","label":"Week 12a \u2014 holiday games","week":12,"kind":"holiday","teams":["BUF","CHI","DAL","DEN","DET","GB","KC","LA","PHI","PIT"],"dates":"11/25\u201311/27","deadline":"Wed Nov 25 4:00 PM PT"},{"id":"W12b","label":"Week 12b \u2014 Sun/Mon","week":12,"kind":"post_holiday","teams":["ARI","ATL","BAL","CAR","CIN","CLE","HOU","IND","JAX","LAC","LV","MIA","MIN","NE","NO","NYG","NYJ","SEA","SF","TB","TEN","WAS"],"dates":"11/29\u201311/30","deadline":"Sat Nov 28 4:00 PM PT"},{"id":"W13","label":"Week 13","week":13,"kind":"regular","teams":["ARI","ATL","BUF","CAR","CHI","CIN","CLE","DAL","DEN","DET","GB","HOU","JAX","KC","LA","LAC","MIA","MIN","NE","NO","NYG","PHI","PIT","SEA","SF","TB","TEN","WAS"],"dates":"12/03\u201312/07","deadline":"Sat Dec 5 4:00 PM PT"},{"id":"W14","label":"Week 14","week":14,"kind":"regular","teams":["ATL","BAL","BUF","CAR","CHI","CIN","CLE","DEN","DET","GB","HOU","IND","JAX","KC","LA","LAC","LV","MIA","MIN","NE","NO","NYG","NYJ","PHI","PIT","SEA","SF","TB","TEN","WAS"],"dates":"12/10\u201312/14","deadline":"Sat Dec 12 4:00 PM PT"},{"id":"W15","label":"Week 15","week":15,"kind":"regular","teams":["ARI","ATL","BAL","BUF","CAR","CHI","CIN","CLE","DAL","DEN","DET","GB","HOU","IND","JAX","KC","LA","LAC","LV","MIA","MIN","NE","NO","NYG","NYJ","PHI","PIT","SEA","SF","TB","TEN","WAS"],"dates":"12/17\u201312/21","deadline":"Sat Dec 19 4:00 PM PT"},{"id":"W16a","label":"Week 16a \u2014 holiday games","week":16,"kind":"holiday","teams":["BUF","CHI","DEN","GB","HOU","LA","PHI","SEA"],"dates":"12/24\u201312/25","deadline":"Thu Dec 24 4:00 PM PT"},{"id":"W16b","label":"Week 16b \u2014 Sun/Mon","week":16,"kind":"post_holiday","teams":["ARI","ATL","BAL","CAR","CIN","CLE","DAL","DET","IND","JAX","KC","LAC","LV","MIA","MIN","NE","NO","NYG","NYJ","PIT","SF","TB","TEN","WAS"],"dates":"12/27\u201312/28","deadline":"Sat Dec 26 4:00 PM PT"},{"id":"W17","label":"Week 17","week":17,"kind":"regular","teams":["ARI","ATL","BAL","BUF","CAR","CHI","CIN","CLE","DAL","DEN","DET","GB","HOU","IND","JAX","KC","LA","LAC","LV","MIA","MIN","NE","NO","NYG","NYJ","PHI","PIT","SEA","SF","TB","TEN","WAS"],"dates":"01/03\u201312/31","deadline":"Sat Jan 2 4:00 PM PT"},{"id":"W18","label":"Week 18","week":18,"kind":"regular","teams":["ARI","ATL","BAL","BUF","CAR","CHI","CIN","CLE","DAL","DEN","DET","GB","HOU","IND","JAX","KC","LA","LAC","LV","MIA","MIN","NE","NO","NYG","NYJ","PHI","PIT","SEA","SF","TB","TEN","WAS"],"dates":"01/10","deadline":"Sat Jan 9 4:00 PM PT"}],"teams":[{"abbr":"LA","name":"Los Angeles Rams","rating":4.362191217690627},{"abbr":"BAL","name":"Baltimore Ravens","rating":2.996376647628684},{"abbr":"SEA","name":"Seattle Seahawks","rating":2.8844912824330686},{"abbr":"BUF","name":"Buffalo Bills","rating":2.8774895366745548},{"abbr":"KC","name":"Kansas City Chiefs","rating":2.3324259917452914},{"abbr":"SF","name":"San Francisco 49ers","rating":2.3225708905107383},{"abbr":"DET","name":"Detroit Lions","rating":2.1484631737323414},{"abbr":"PHI","name":"Philadelphia Eagles","rating":1.9166115424581445},{"abbr":"NE","name":"New England Patriots","rating":1.890902028121458},{"abbr":"GB","name":"Green Bay Packers","rating":1.7943873317669945},{"abbr":"LAC","name":"Los Angeles Chargers","rating":1.5946300139907887},{"abbr":"CHI","name":"Chicago Bears","rating":1.5245394938010748},{"abbr":"CIN","name":"Cincinnati Bengals","rating":1.4207225665785181},{"abbr":"HOU","name":"Houston Texans","rating":1.0653573331260369},{"abbr":"DAL","name":"Dallas Cowboys","rating":1.028519816566513},{"abbr":"DEN","name":"Denver Broncos","rating":0.703338936810814},{"abbr":"JAX","name":"Jacksonville Jaguars","rating":0.6588200826986537},{"abbr":"MIN","name":"Minnesota Vikings","rating":0.1612700985732088},{"abbr":"TB","name":"Tampa Bay Buccaneers","rating":-0.06245023143760745},{"abbr":"PIT","name":"Pittsburgh Steelers","rating":-0.4992296476355814},{"abbr":"WAS","name":"Washington Commanders","rating":-0.9949192379612096},{"abbr":"IND","name":"Indianapolis Colts","rating":-1.3528623991757158},{"abbr":"NYG","name":"New York Giants","rating":-1.4586850364824255},{"abbr":"CAR","name":"Carolina Panthers","rating":-1.7413505032823766},{"abbr":"NO","name":"New Orleans Saints","rating":-1.933979372440312},{"abbr":"ATL","name":"Atlanta Falcons","rating":-2.4315962593072267},{"abbr":"TEN","name":"Tennessee Titans","rating":-2.7370427780578748},{"abbr":"LV","name":"Las Vegas Raiders","rating":-3.3224133284718143},{"abbr":"CLE","name":"Cleveland Browns","rating":-3.5263717455057435},{"abbr":"NYJ","name":"New York Jets","rating":-3.563140312017719},{"abbr":"MIA","name":"Miami Dolphins","rating":-4.340774825866294},{"abbr":"ARI","name":"Arizona Cardinals","rating":-5.7182923072656076}],"p":{"W1":{"SEA":0.618,"NE":0.382,"LA":0.6267,"SF":0.3733,"CAR":0.4156,"CHI":0.5844,"CIN":0.6349,"TB":0.3651,"DET":0.7252,"NO":0.2748,"HOU":0.4687,"BUF":0.5313,"IND":0.3864,"BAL":0.6136,"JAX":0.7605,"CLE":0.2395,"PIT":0.6216,"ATL":0.3784,"TEN":0.5465,"NYJ":0.4535,"LAC":0.8154,"ARI":0.1846,"LV":0.6302,"MIA":0.3698,"MIN":0.5365,"GB":0.4635,"PHI":0.6684,"WAS":0.3316,"NYG":0.4221,"DAL":0.5779,"KC":0.5795,"DEN":0.4205},"W2":{"BUF":0.6027,"DET":0.3973,"ATL":0.5518,"CAR":0.4482,"BAL":0.7425,"NO":0.2575,"CHI":0.6194,"MIN":0.3806,"HOU":0.5859,"CIN":0.4141,"NE":0.652,"PIT":0.348,"NYJ":0.3165,"GB":0.6835,"TB":0.7137,"CLE":0.2863,"TEN":0.348,"PHI":0.652,"DEN":0.6027,"JAX":0.3973,"LAC":0.7697,"LV":0.2303,"ARI":0.1927,"SEA":0.8073,"DAL":0.652,"WAS":0.348,"SF":0.819,"MIA":0.181,"KC":0.7137,"IND":0.2863,"LA":0.7697,"NYG":0.2303},"W3":{"GB":0.738,"ATL":0.262,"BUF":0.6006,"LAC":0.3994,"CLE":0.4493,"CAR":0.5507,"DET":0.7902,"NYJ":0.2098,"IND":0.4493,"HOU":0.5507,"JAX":0.5507,"NE":0.4493,"MIA":0.262,"KC":0.738,"NYG":0.6006,"TEN":0.3994,"PIT":0.4493,"CIN":0.5507,"WAS":0.3831,"SEA":0.6169,"SF":0.8357,"ARI":0.1643,"TB":0.5507,"MIN":0.4493,"DAL":0.4159,"BAL":0.5841,"NO":0.6169,"LV":0.3831,"DEN":0.3994,"LA":0.6006,"CHI":0.5507,"PHI":0.4493},"W4":{"CLE":0.4187,"PIT":0.5813,"WAS":0.549,"IND":0.451,"BAL":0.7574,"TEN":0.2426,"BUF":0.5973,"NE":0.4027,"CHI":0.7574,"NYJ":0.2426,"CIN":0.5813,"JAX":0.4187,"HOU":0.5813,"DAL":0.4187,"NYG":0.7172,"ARI":0.2828,"PHI":0.451,"LA":0.549,"TB":0.451,"GB":0.549,"MIN":0.731,"MIA":0.269,"LV":0.3258,"KC":0.6742,"SEA":0.5973,"LAC":0.4027,"SF":0.5813,"DEN":0.4187,"CAR":0.4027,"DET":0.5973,"NO":0.5813,"ATL":0.4187},"W5":{"DAL":0.6083,"TB":0.3917,"JAX":0.4531,"PHI":0.5469,"MIA":0.3187,"CIN":0.6813,"NE":0.7478,"LV":0.2522,"NO":0.4531,"MIN":0.5469,"NYJ":0.5469,"CLE":0.4531,"PIT":0.5778,"IND":0.4222,"TEN":0.3917,"HOU":0.6083,"WAS":0.5778,"NYG":0.4222,"LAC":0.5778,"DEN":0.4222,"ARI":0.2522,"DET":0.7478,"GB":0.5931,"CHI":0.4069,"SEA":0.6083,"SF":0.3917,"ATL":0.3619,"BAL":0.6381,"LA":0.5931,"BUF":0.4069},"W6":{"DEN":0.4555,"SEA":0.5445,"JAX":0.5445,"HOU":0.4555,"ATL":0.4115,"CHI":0.5885,"CLE":0.3139,"BAL":0.6861,"IND":0.603,"TEN":0.397,"NE":0.7607,"NYJ":0.2393,"NYG":0.574,"NO":0.426,"PHI":0.6861,"CAR":0.3139,"TB":0.5445,"PIT":0.4555,"LA":0.843,"ARI":0.157,"KC":0.574,"LAC":0.426,"LV":0.3139,"BUF":0.6861,"GB":0.5885,"DAL":0.4115,"SF":0.6592,"WAS":0.3408},"W7":{"CHI":0.5421,"NE":0.4579,"NO":0.4301,"PIT":0.5699,"ATL":0.3756,"SF":0.6244,"BAL":0.5974,"CIN":0.4026,"CAR":0.4579,"TB":0.5421,"HOU":0.6509,"NYG":0.3491,"MIN":0.5699,"IND":0.4301,"NYJ":0.5306,"MIA":0.4694,"TEN":0.5413,"CLE":0.4587,"ARI":0.352,"DEN":0.648,"DET":0.564,"GB":0.436,"LV":0.3163,"LA":0.6837,"SEA":0.619,"KC":0.381,"PHI":0.5982,"DAL":0.4018},"W8":{"GB":0.6382,"CAR":0.3618,"BUF":0.562,"BAL":0.438,"CIN":0.6567,"TEN":0.3433,"DAL":0.6836,"ARI":0.3164,"DET":0.5824,"MIN":0.4176,"JAX":0.6134,"IND":0.3866,"NYJ":0.5443,"LV":0.4557,"PIT":0.6268,"CLE":0.3732,"TB":0.5903,"ATL":0.4097,"LA":0.6204,"LAC":0.3796,"DEN":0.5524,"KC":0.4476,"MIA":0.3866,"NE":0.6134,"WAS":0.4604,"PHI":0.5396,"SEA":0.6143,"CHI":0.3857},"W9":{"BAL":0.5748,"JAX":0.4252,"ATL":0.3893,"CIN":0.6107,"CAR":0.4467,"DEN":0.5533,"IND":0.5041,"DAL":0.4959,"KC":0.6773,"NYJ":0.3227,"MIA":0.4012,"DET":0.5988,"NO":0.5744,"CLE":0.4256,"PHI":0.638,"NYG":0.362,"WAS":0.4056,"LA":0.5944,"LAC":0.528,"HOU":0.472,"SF":0.6946,"LV":0.3054,"NE":0.565,"GB":0.435,"SEA":0.7561,"ARI":0.2439,"CHI":0.5848,"TB":0.4152,"MIN":0.4791,"BUF":0.5209},"W10":{"NYG":0.5222,"WAS":0.4778,"DET":0.4649,"NE":0.5351,"ATL":0.4568,"KC":0.5432,"CLE":0.4138,"HOU":0.5862,"GB":0.5595,"MIN":0.4405,"IND":0.5908,"MIA":0.4092,"NO":0.5389,"CAR":0.4611,"NYJ":0.3683,"BUF":0.6317,"TEN":0.4249,"JAX":0.5751,"ARI":0.3202,"LA":0.6798,"LV":0.3504,"SEA":0.6496,"DAL":0.4902,"SF":0.5098,"CIN":0.5625,"PIT":0.4375,"BAL":0.5673,"LAC":0.4327},"W11":{"HOU":0.61,"IND":0.39,"BUF":0.6812,"MIA":0.3188,"CAR":0.4348,"BAL":0.5652,"CHI":0.6136,"NO":0.3864,"DAL":0.6199,"TEN":0.3801,"DET":0.591,"TB":0.409,"KC":0.681,"ARI":0.319,"NYG":0.4664,"JAX":0.5336,"LAC":0.6566,"NYJ":0.3434,"DEN":0.6634,"LV":0.3366,"PHI":0.5865,"PIT":0.4135,"SF":0.5983,"MIN":0.4017,"WAS":0.495,"CIN":0.505},"W12a":{"LA":0.6128,"GB":0.3872,"DET":0.5519,"CHI":0.4481,"DAL":0.5312,"PHI":0.4688,"BUF":0.5519,"KC":0.4481,"PIT":0.4688,"DEN":0.5312},"W12b":{"CIN":0.5937,"NO":0.4063,"CLE":0.5506,"LV":0.4494,"HOU":0.5228,"BAL":0.4772,"IND":0.5475,"NYG":0.4525,"MIA":0.5479,"NYJ":0.4521,"MIN":0.592,"ATL":0.408,"JAX":0.635,"TEN":0.365,"ARI":0.4496,"WAS":0.5504,"SF":0.4981,"SEA":0.5019,"LAC":0.5133,"NE":0.4867,"TB":0.5714,"CAR":0.4286},"W13":{"LA":0.5885,"KC":0.4115,"ATL":0.4511,"DET":0.5489,"CHI":0.5359,"JAX":0.4641,"CLE":0.4521,"CIN":0.5479,"NO":0.4614,"GB":0.5386,"NYG":0.4503,"SF":0.5497,"TB":0.4993,"LAC":0.5007,"TEN":0.4853,"WAS":0.5147,"ARI":0.391,"PHI":0.609,"DEN":0.6355,"MIA":0.3645,"MIN":0.5872,"CAR":0.4128,"NE":0.5182,"BUF":0.4818,"PIT":0.4895,"HOU":0.5105,"SEA":0.6087,"DAL":0.3913},"W14":{"NE":0.5677,"MIN":0.4323,"BAL":0.5899,"TB":0.4101,"CAR":0.5341,"NO":0.4659,"CLE":0.5068,"ATL":0.4932,"DET":0.6436,"TEN":0.3564,"MIA":0.436,"CHI":0.564,"NYJ":0.4172,"DEN":0.5828,"PHI":0.5984,"IND":0.4016,"WAS":0.4709,"HOU":0.5291,"LV":0.4246,"LAC":0.5754,"CIN":0.5186,"KC":0.4814,"SEA":0.6482,"NYG":0.3518,"SF":0.4934,"LA":0.5066,"GB":0.5001,"BUF":0.4999,"JAX":0.563,"PIT":0.437},"W15":{"LAC":0.5161,"SF":0.4839,"PHI":0.4926,"SEA":0.5074,"BUF":0.5691,"CHI":0.4309,"CAR":0.4783,"CIN":0.5217,"GB":0.6314,"MIA":0.3686,"HOU":0.5472,"JAX":0.4528,"NYG":0.5619,"CLE":0.4381,"PIT":0.4776,"BAL":0.5224,"TB":0.5682,"NO":0.4318,"TEN":0.4886,"IND":0.5114,"WAS":0.5502,"ATL":0.4498,"ARI":0.511,"NYJ":0.489,"LA":0.6133,"DAL":0.3867,"LV":0.4176,"DEN":0.5824,"MIN":0.5052,"DET":0.4948,"KC":0.514,"NE":0.486},"W16a":{"PHI":0.549,"HOU":0.451,"CHI":0.5294,"GB":0.4706,"DEN":0.4706,"BUF":0.5294,"SEA":0.4706,"LA":0.5294},"W16b":{"ATL":0.4993,"TB":0.5007,"BAL":0.6478,"CLE":0.3522,"IND":0.4923,"CIN":0.5077,"MIA":0.4359,"LAC":0.5641,"MIN":0.5703,"WAS":0.4297,"NO":0.5954,"ARI":0.4046,"NYJ":0.4038,"NE":0.5962,"PIT":0.5689,"CAR":0.4311,"LV":0.5233,"TEN":0.4767,"KC":0.5175,"SF":0.4825,"DAL":0.5117,"JAX":0.4883,"DET":0.6121,"NYG":0.3879},"W17":{"CIN":0.4968,"BAL":0.5032,"ATL":0.5344,"NO":0.4656,"CAR":0.4132,"SEA":0.5868,"CLE":0.493,"IND":0.507,"DAL":0.5746,"NYG":0.4254,"JAX":0.5813,"WAS":0.4187,"LAC":0.5319,"KC":0.4681,"MIA":0.4007,"BUF":0.5993,"NE":0.547,"DEN":0.453,"NYJ":0.4378,"MIN":0.5622,"TB":0.4423,"LA":0.5577,"TEN":0.4667,"PIT":0.5333,"ARI":0.5105,"LV":0.4895,"CHI":0.519,"DET":0.481,"SF":0.539,"PHI":0.461,"GB":0.5248,"HOU":0.4752},"W18":{"ARI":0.3855,"SF":0.6145,"BAL":0.5884,"PIT":0.4116,"BUF":0.6733,"NYJ":0.3267,"CAR":0.533,"ATL":0.467,"CIN":0.6132,"CLE":0.3868,"DEN":0.5403,"LAC":0.4597,"GB":0.5219,"DET":0.4781,"HOU":0.6409,"TEN":0.3591,"IND":0.4816,"JAX":0.5184,"KC":0.641,"LV":0.359,"LA":0.5381,"SEA":0.4619,"MIN":0.5196,"CHI":0.4804,"NE":0.6483,"MIA":0.3517,"NO":0.4982,"TB":0.5018,"NYG":0.4559,"PHI":0.5441,"WAS":0.5065,"DAL":0.4935}},"opp":{"W1":{"SEA":"vs NE","NE":"@ SEA","LA":"vs SF","SF":"@ LA","CAR":"vs CHI","CHI":"@ CAR","CIN":"vs TB","TB":"@ CIN","DET":"vs NO","NO":"@ DET","HOU":"vs BUF","BUF":"@ HOU","IND":"vs BAL","BAL":"@ IND","JAX":"vs CLE","CLE":"@ JAX","PIT":"vs ATL","ATL":"@ PIT","TEN":"vs NYJ","NYJ":"@ TEN","LAC":"vs ARI","ARI":"@ LAC","LV":"vs MIA","MIA":"@ LV","MIN":"vs GB","GB":"@ MIN","PHI":"vs WAS","WAS":"@ PHI","NYG":"vs DAL","DAL":"@ NYG","KC":"vs DEN","DEN":"@ KC"},"W2":{"BUF":"vs DET","DET":"@ BUF","ATL":"vs CAR","CAR":"@ ATL","BAL":"vs NO","NO":"@ BAL","CHI":"vs MIN","MIN":"@ CHI","HOU":"vs CIN","CIN":"@ HOU","NE":"vs PIT","PIT":"@ NE","NYJ":"vs GB","GB":"@ NYJ","TB":"vs CLE","CLE":"@ TB","TEN":"vs PHI","PHI":"@ TEN","DEN":"vs JAX","JAX":"@ DEN","LAC":"vs LV","LV":"@ LAC","ARI":"vs SEA","SEA":"@ ARI","DAL":"vs WAS","WAS":"@ DAL","SF":"vs MIA","MIA":"@ SF","KC":"vs IND","IND":"@ KC","LA":"vs NYG","NYG":"@ LA"},"W3":{"GB":"vs ATL","ATL":"@ GB","BUF":"vs LAC","LAC":"@ BUF","CLE":"vs CAR","CAR":"@ CLE","DET":"vs NYJ","NYJ":"@ DET","IND":"vs HOU","HOU":"@ IND","JAX":"vs NE","NE":"@ JAX","MIA":"vs KC","KC":"@ MIA","NYG":"vs TEN","TEN":"@ NYG","PIT":"vs CIN","CIN":"@ PIT","WAS":"vs SEA","SEA":"@ WAS","SF":"vs ARI","ARI":"@ SF","TB":"vs MIN","MIN":"@ TB","DAL":"vs BAL","BAL":"@ DAL","NO":"vs LV","LV":"@ NO","DEN":"vs LA","LA":"@ DEN","CHI":"vs PHI","PHI":"@ CHI"},"W4":{"CLE":"vs PIT","PIT":"@ CLE","WAS":"vs IND","IND":"@ WAS","BAL":"vs TEN","TEN":"@ BAL","BUF":"vs NE","NE":"@ BUF","CHI":"vs NYJ","NYJ":"@ CHI","CIN":"vs JAX","JAX":"@ CIN","HOU":"vs DAL","DAL":"@ HOU","NYG":"vs ARI","ARI":"@ NYG","PHI":"vs LA","LA":"@ PHI","TB":"vs GB","GB":"@ TB","MIN":"vs MIA","MIA":"@ MIN","LV":"vs KC","KC":"@ LV","SEA":"vs LAC","LAC":"@ SEA","SF":"vs DEN","DEN":"@ SF","CAR":"vs DET","DET":"@ CAR","NO":"vs ATL","ATL":"@ NO"},"W5":{"DAL":"vs TB","TB":"@ DAL","JAX":"vs PHI","PHI":"@ JAX","MIA":"vs CIN","CIN":"@ MIA","NE":"vs LV","LV":"@ NE","NO":"vs MIN","MIN":"@ NO","NYJ":"vs CLE","CLE":"@ NYJ","PIT":"vs IND","IND":"@ PIT","TEN":"vs HOU","HOU":"@ TEN","WAS":"vs NYG","NYG":"@ WAS","LAC":"vs DEN","DEN":"@ LAC","ARI":"vs DET","DET":"@ ARI","GB":"vs CHI","CHI":"@ GB","SEA":"vs SF","SF":"@ SEA","ATL":"vs BAL","BAL":"@ ATL","LA":"vs BUF","BUF":"@ LA"},"W6":{"DEN":"vs SEA","SEA":"@ DEN","JAX":"vs HOU","HOU":"@ JAX","ATL":"vs CHI","CHI":"@ ATL","CLE":"vs BAL","BAL":"@ CLE","IND":"vs TEN","TEN":"@ IND","NE":"vs NYJ","NYJ":"@ NE","NYG":"vs NO","NO":"@ NYG","PHI":"vs CAR","CAR":"@ PHI","TB":"vs PIT","PIT":"@ TB","LA":"vs ARI","ARI":"@ LA","KC":"vs LAC","LAC":"@ KC","LV":"vs BUF","BUF":"@ LV","GB":"vs DAL","DAL":"@ GB","SF":"vs WAS","WAS":"@ SF"},"W7":{"CHI":"vs NE","NE":"@ CHI","NO":"vs PIT","PIT":"@ NO","ATL":"vs SF","SF":"@ ATL","BAL":"vs CIN","CIN":"@ BAL","CAR":"vs TB","TB":"@ CAR","HOU":"vs NYG","NYG":"@ HOU","MIN":"vs IND","IND":"@ MIN","NYJ":"vs MIA","MIA":"@ NYJ","TEN":"vs CLE","CLE":"@ TEN","ARI":"vs DEN","DEN":"@ ARI","DET":"vs GB","GB":"@ DET","LV":"vs LA","LA":"@ LV","SEA":"vs KC","KC":"@ SEA","PHI":"vs DAL","DAL":"@ PHI"},"W8":{"GB":"vs CAR","CAR":"@ GB","BUF":"vs BAL","BAL":"@ BUF","CIN":"vs TEN","TEN":"@ CIN","DAL":"vs ARI","ARI":"@ DAL","DET":"vs MIN","MIN":"@ DET","JAX":"vs IND","IND":"@ JAX","NYJ":"vs LV","LV":"@ NYJ","PIT":"vs CLE","CLE":"@ PIT","TB":"vs ATL","ATL":"@ TB","LA":"vs LAC","LAC":"@ LA","DEN":"vs KC","KC":"@ DEN","MIA":"vs NE","NE":"@ MIA","WAS":"vs PHI","PHI":"@ WAS","SEA":"vs CHI","CHI":"@ SEA"},"W9":{"BAL":"vs JAX","JAX":"@ BAL","ATL":"vs CIN","CIN":"@ ATL","CAR":"vs DEN","DEN":"@ CAR","IND":"vs DAL","DAL":"@ IND","KC":"vs NYJ","NYJ":"@ KC","MIA":"vs DET","DET":"@ MIA","NO":"vs CLE","CLE":"@ NO","PHI":"vs NYG","NYG":"@ PHI","WAS":"vs LA","LA":"@ WAS","LAC":"vs HOU","HOU":"@ LAC","SF":"vs LV","LV":"@ SF","NE":"vs GB","GB":"@ NE","SEA":"vs ARI","ARI":"@ SEA","CHI":"vs TB","TB":"@ CHI","MIN":"vs BUF","BUF":"@ MIN"},"W10":{"NYG":"vs WAS","WAS":"@ NYG","DET":"vs NE","NE":"@ DET","ATL":"vs KC","KC":"@ ATL","CLE":"vs HOU","HOU":"@ CLE","GB":"vs MIN","MIN":"@ GB","IND":"vs MIA","MIA":"@ IND","NO":"vs CAR","CAR":"@ NO","NYJ":"vs BUF","BUF":"@ NYJ","TEN":"vs JAX","JAX":"@ TEN","ARI":"vs LA","LA":"@ ARI","LV":"vs SEA","SEA":"@ LV","DAL":"vs SF","SF":"@ DAL","CIN":"vs PIT","PIT":"@ CIN","BAL":"vs LAC","LAC":"@ BAL"},"W11":{"HOU":"vs IND","IND":"@ HOU","BUF":"vs MIA","MIA":"@ BUF","CAR":"vs BAL","BAL":"@ CAR","CHI":"vs NO","NO":"@ CHI","DAL":"vs TEN","TEN":"@ DAL","DET":"vs TB","TB":"@ DET","KC":"vs ARI","ARI":"@ KC","NYG":"vs JAX","JAX":"@ NYG","LAC":"vs NYJ","NYJ":"@ LAC","DEN":"vs LV","LV":"@ DEN","PHI":"vs PIT","PIT":"@ PHI","SF":"vs MIN","MIN":"@ SF","WAS":"vs CIN","CIN":"@ WAS"},"W12a":{"LA":"vs GB","GB":"@ LA","DET":"vs CHI","CHI":"@ DET","DAL":"vs PHI","PHI":"@ DAL","BUF":"vs KC","KC":"@ BUF","PIT":"vs DEN","DEN":"@ PIT"},"W12b":{"CIN":"vs NO","NO":"@ CIN","CLE":"vs LV","LV":"@ CLE","HOU":"vs BAL","BAL":"@ HOU","IND":"vs NYG","NYG":"@ IND","MIA":"vs NYJ","NYJ":"@ MIA","MIN":"vs ATL","ATL":"@ MIN","JAX":"vs TEN","TEN":"@ JAX","ARI":"vs WAS","WAS":"@ ARI","SF":"vs SEA","SEA":"@ SF","LAC":"vs NE","NE":"@ LAC","TB":"vs CAR","CAR":"@ TB"},"W13":{"LA":"vs KC","KC":"@ LA","ATL":"vs DET","DET":"@ ATL","CHI":"vs JAX","JAX":"@ CHI","CLE":"vs CIN","CIN":"@ CLE","NO":"vs GB","GB":"@ NO","NYG":"vs SF","SF":"@ NYG","TB":"vs LAC","LAC":"@ TB","TEN":"vs WAS","WAS":"@ TEN","ARI":"vs PHI","PHI":"@ ARI","DEN":"vs MIA","MIA":"@ DEN","MIN":"vs CAR","CAR":"@ MIN","NE":"vs BUF","BUF":"@ NE","PIT":"vs HOU","HOU":"@ PIT","SEA":"vs DAL","DAL":"@ SEA"},"W14":{"NE":"vs MIN","MIN":"@ NE","BAL":"vs TB","TB":"@ BAL","CAR":"vs NO","NO":"@ CAR","CLE":"vs ATL","ATL":"@ CLE","DET":"vs TEN","TEN":"@ DET","MIA":"vs CHI","CHI":"@ MIA","NYJ":"vs DEN","DEN":"@ NYJ","PHI":"vs IND","IND":"@ PHI","WAS":"vs HOU","HOU":"@ WAS","LV":"vs LAC","LAC":"@ LV","CIN":"vs KC","KC":"@ CIN","SEA":"vs NYG","NYG":"@ SEA","SF":"vs LA","LA":"@ SF","GB":"vs BUF","BUF":"@ GB","JAX":"vs PIT","PIT":"@ JAX"},"W15":{"LAC":"vs SF","SF":"@ LAC","PHI":"vs SEA","SEA":"@ PHI","BUF":"vs CHI","CHI":"@ BUF","CAR":"vs CIN","CIN":"@ CAR","GB":"vs MIA","MIA":"@ GB","HOU":"vs JAX","JAX":"@ HOU","NYG":"vs CLE","CLE":"@ NYG","PIT":"vs BAL","BAL":"@ PIT","TB":"vs NO","NO":"@ TB","TEN":"vs IND","IND":"@ TEN","WAS":"vs ATL","ATL":"@ WAS","ARI":"vs NYJ","NYJ":"@ ARI","LA":"vs DAL","DAL":"@ LA","LV":"vs DEN","DEN":"@ LV","MIN":"vs DET","DET":"@ MIN","KC":"vs NE","NE":"@ KC"},"W16a":{"PHI":"vs HOU","HOU":"@ PHI","CHI":"vs GB","GB":"@ CHI","DEN":"vs BUF","BUF":"@ DEN","SEA":"vs LA","LA":"@ SEA"},"W16b":{"ATL":"vs TB","TB":"@ ATL","BAL":"vs CLE","CLE":"@ BAL","IND":"vs CIN","CIN":"@ IND","MIA":"vs LAC","LAC":"@ MIA","MIN":"vs WAS","WAS":"@ MIN","NO":"vs ARI","ARI":"@ NO","NYJ":"vs NE","NE":"@ NYJ","PIT":"vs CAR","CAR":"@ PIT","LV":"vs TEN","TEN":"@ LV","KC":"vs SF","SF":"@ KC","DAL":"vs JAX","JAX":"@ DAL","DET":"vs NYG","NYG":"@ DET"},"W17":{"CIN":"vs BAL","BAL":"@ CIN","ATL":"vs NO","NO":"@ ATL","CAR":"vs SEA","SEA":"@ CAR","CLE":"vs IND","IND":"@ CLE","DAL":"vs NYG","NYG":"@ DAL","JAX":"vs WAS","WAS":"@ JAX","LAC":"vs KC","KC":"@ LAC","MIA":"vs BUF","BUF":"@ MIA","NE":"vs DEN","DEN":"@ NE","NYJ":"vs MIN","MIN":"@ NYJ","TB":"vs LA","LA":"@ TB","TEN":"vs PIT","PIT":"@ TEN","ARI":"vs LV","LV":"@ ARI","CHI":"vs DET","DET":"@ CHI","SF":"vs PHI","PHI":"@ SF","GB":"vs HOU","HOU":"@ GB"},"W18":{"ARI":"vs SF","SF":"@ ARI","BAL":"vs PIT","PIT":"@ BAL","BUF":"vs NYJ","NYJ":"@ BUF","CAR":"vs ATL","ATL":"@ CAR","CIN":"vs CLE","CLE":"@ CIN","DEN":"vs LAC","LAC":"@ DEN","GB":"vs DET","DET":"@ GB","HOU":"vs TEN","TEN":"@ HOU","IND":"vs JAX","JAX":"@ IND","KC":"vs LV","LV":"@ KC","LA":"vs SEA","SEA":"@ LA","MIN":"vs CHI","CHI":"@ MIN","NE":"vs MIA","MIA":"@ NE","NO":"vs TB","TB":"@ NO","NYG":"vs PHI","PHI":"@ NYG","WAS":"vs DAL","DAL":"@ WAS"}},"results":{"W1":{},"W2":{},"W3":{},"W4":{},"W5":{},"W6":{},"W7":{},"W8":{},"W9":{},"W10":{},"W11":{},"W12a":{},"W12b":{},"W13":{},"W14":{},"W15":{},"W16a":{},"W16b":{},"W17":{},"W18":{}},"field":{"LAC":0.366,"JAX":0.3152,"DET":0.1336,"PHI":0.0279,"CIN":0.0305,"LV":0.0463,"LA":0.0064,"PIT":0.0214,"SEA":0.008,"BAL":0.0091,"CHI":0.0038,"KC":0.0052,"DAL":0.0051,"TEN":0.0084,"MIN":0.0051,"BUF":0.001,"HOU":0.0009,"GB":0.0003,"NYJ":0.0011,"NYG":0.0007,"DEN":0.0002,"CAR":0.0006,"IND":0.0003,"NE":0.0001,"ATL":0.0002,"SF":0.0001,"MIA":0.0002,"TB":0.0001,"WAS":0.0001,"NO":0.0,"CLE":0.0,"ARI":0.0},"entries":[{"name":"Entry 1","alive":true,"picks":{},"eliminated_at":null,"model_plan":{"W1":"LAC","W2":"TB","W3":"SF","W4":"CHI","W5":"NE","W6":"LA","W7":"HOU","W8":"CIN","W9":"SEA","W10":"IND","W11":"KC","W12a":"DAL","W12b":"JAX","W13":"DEN","W14":"DET","W15":"GB","W16a":"PHI","W16b":"BAL","W17":"MIN","W18":"BUF"}},{"name":"Entry 2","alive":true,"picks":{},"eliminated_at":null,"model_plan":{"W1":"LAC","W2":"TB","W3":"SF","W4":"CHI","W5":"NE","W6":"LA","W7":"HOU","W8":"CIN","W9":"SEA","W10":"IND","W11":"KC","W12a":"DAL","W12b":"JAX","W13":"DEN","W14":"DET","W15":"GB","W16a":"PHI","W16b":"BAL","W17":"MIN","W18":"BUF"}},{"name":"Entry 3","alive":true,"picks":{},"eliminated_at":null,"model_plan":{"W1":"JAX","W2":"LAC","W3":"SF","W4":"CHI","W5":"NE","W6":"LA","W7":"HOU","W8":"CIN","W9":"SEA","W10":"IND","W11":"KC","W12a":"DAL","W12b":"TB","W13":"DEN","W14":"DET","W15":"GB","W16a":"PHI","W16b":"BAL","W17":"MIN","W18":"BUF"}}]};</script><script>
+const D = window.__DATA__;
+const LEGS = D.legs, TEAMS = D.teams, LI = Object.fromEntries(LEGS.map((l,i)=>[l.id,i]));
+const CUR = LI[D.current_leg];
+const KEY = 'survivor-planner-' + D.season;
+let store = {entry: 0, locks: {}, excl: {}, metric: 'p'};
+try { const s = JSON.parse(localStorage.getItem(KEY) || 'null'); if (s) store = Object.assign(store, s); } catch (e) {}
+// first visit (or a new leg): start each entry from the model's recommended pick for this leg, rest re-solves
+D.entries.forEach((e,k)=>{ const L = store.locks[k] = store.locks[k] || {}; const rec = e.model_plan[D.current_leg];
+  if (rec && !(D.current_leg in e.picks) && !L.__seen_ || L.__seen_ !== D.current_leg){ if (rec && !(D.current_leg in e.picks)) L[D.current_leg] = rec; L.__seen_ = D.current_leg; } });
+function save(){ try { localStorage.setItem(KEY, JSON.stringify(store)); } catch (e) {} }
+function locksFor(i){ return store.locks[i] = store.locks[i] || {}; }
+function exclFor(i){ return store.excl[i] = store.excl[i] || {}; }
+
+// e-maxx Hungarian, minimising, rows <= cols
+function hungarian(cost){
+  const n=cost.length, m=cost[0].length, INF=1e18;
+  const u=new Array(n+1).fill(0), v=new Array(m+1).fill(0), p=new Array(m+1).fill(0), way=new Array(m+1).fill(0);
+  for(let i=1;i<=n;i++){ p[0]=i; let j0=0; const minv=new Array(m+1).fill(INF), used=new Array(m+1).fill(false);
+    do{ used[j0]=true; const i0=p[j0]; let delta=INF, j1=0;
+      for(let j=1;j<=m;j++) if(!used[j]){ const cur=cost[i0-1][j-1]-u[i0]-v[j]; if(cur<minv[j]){minv[j]=cur; way[j]=j0;} if(minv[j]<delta){delta=minv[j]; j1=j;} }
+      for(let j=0;j<=m;j++){ if(used[j]){u[p[j]]+=delta; v[j]-=delta;} else minv[j]-=delta; }
+      j0=j1; } while(p[j0]!==0);
+    do{ const j1=way[j0]; p[j0]=p[j1]; j0=j1; } while(j0); }
+  const ans=new Array(n).fill(-1); for(let j=1;j<=m;j++) if(p[j]) ans[p[j]-1]=j-1; return ans; }
+
+const BIG = 1e6;
+function solve(entryIdx){
+  const e = D.entries[entryIdx], locks = locksFor(entryIdx), excl = exclFor(entryIdx);
+  const fixed = {};                        // leg -> team (submitted picks + user locks)
+  for (const [leg,t] of Object.entries(e.picks)) fixed[leg] = t;
+  for (const [leg,t] of Object.entries(locks)) if (leg !== '__seen_' && !(leg in e.picks)) fixed[leg] = t;
+  const usedTeams = new Set(Object.values(fixed));
+  const open = LEGS.filter(l => LI[l.id] >= CUR && !(l.id in fixed)).map(l => l.id);
+  const pool = TEAMS.map(t=>t.abbr).filter(t => !usedTeams.has(t) && !excl[t]);
+  const plan = Object.assign({}, fixed);
+  let stuck = null;
+  if (open.length){
+    const cost = open.map(leg => pool.map(t => { const p = D.p[leg][t]; return (p === undefined) ? BIG : -Math.log(Math.max(p,1e-9)); }));
+    if (pool.length < open.length) for (const row of cost) while (row.length < open.length) row.push(BIG);
+    const a = hungarian(cost);
+    open.forEach((leg,i) => { const j=a[i]; if (j>=0 && j<pool.length && cost[i][j] < BIG) plan[leg]=pool[j]; else if (!stuck || LI[leg] < LI[stuck]) stuck = leg; });
+  }
+  // survival from the current leg on; legs already decided by results count as certain
+  let logp = 0; const rows = [];
+  for (const l of LEGS){ if (LI[l.id] < CUR) continue; const t = plan[l.id]; if (!t){ rows.push({leg:l.id, team:null}); continue; }
+    const res = (D.results[l.id]||{})[t]; const p = res==='W' ? 1 : (res ? 0 : (D.p[l.id][t] ?? 0));
+    logp += Math.log(Math.max(p,1e-9)); rows.push({leg:l.id, team:t, p, fixed: l.id in fixed, sub: l.id in e.picks}); }
+  if (stuck) logp = -Infinity;
+  return {plan, fixed, stuck, pReach: Math.exp(logp), rows, usedTeams};
+}
+
+function fvOf(team, fromLeg){ let v=0; for (const l of LEGS){ if (LI[l.id] <= LI[fromLeg]) continue; const p=D.p[l.id][team]; if (p!==undefined) v += Math.max(0, p-0.6); } return v; }
+function metricCell(leg, team, p){
+  const m = store.metric || 'p';
+  if (m==='fv'){ const v=fvOf(team, leg); return [v.toFixed(2), Math.min(1, 0.5+v/4)]; }
+  if (m==='field'){ if (leg!==D.current_leg) return [pct(p), p]; const f=D.field[team]||0; return [pct(f,1), 0.5+f]; }
+  return [pct(p), p]; }
+function q(p){ return p>=0.78?'q5':p>=0.70?'q4':p>=0.62?'q3':p>=0.55?'q2':'q1'; }
+function pct(x,d=0){ return (100*x).toFixed(d)+'%'; }
+function esc(s){ return String(s).replace(/[&<>"]/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+
+function render(){
+  const i = store.entry, e = D.entries[i], S = solve(i), locks = locksFor(i), excl = exclFor(i);
+  document.getElementById('tabs').innerHTML = D.entries.map((en,k)=>`<button class="${k===i?'on':''}" data-e="${k}">${esc(en.name)}${en.alive?'':' (out)'}</button>`).join('');
+  const nLocks = Object.keys(locks).filter(l=>l !== '__seen_' && !(l in e.picks)).length;
+  document.getElementById('stats').innerHTML = `
+    <div class="stat"><b class="num">${S.stuck?'—':pct(S.pReach,3)}</b><span>P(survive every leg from ${D.current_leg})</span></div>
+    <div class="stat"><b class="num">${Object.keys(e.picks).length}</b><span>picks submitted</span></div>
+    <div class="stat"><b class="num">${nLocks}</b><span>what-if locks</span></div>
+    <div class="stat"><b class="num">${Object.keys(excl).length}</b><span>teams excluded</span></div>`;
+  // holiday reserves
+  const hol = LEGS.filter(l=>l.kind==='holiday' && LI[l.id]>=CUR);
+  document.getElementById('holiday').innerHTML = hol.map(l=>{
+    const avail = l.teams.filter(t=>!S.usedTeams.has(t) || S.plan[l.id]===t);
+    return `<div><b>${l.id}</b> <span class="note">${esc(l.label)}</span><div class="chips">${l.teams.map(t=>`<span class="chip ${S.plan[l.id]===t?'on':''} ${(S.usedTeams.has(t)&&S.plan[l.id]!==t)||excl[t]?'gone':''}">${t} ${D.p[l.id][t]!==undefined?pct(D.p[l.id][t]):''}</span>`).join('')}</div><div class="note">${avail.length} of ${l.teams.length} still available on this path</div></div>`;
+  }).join('');
+  document.getElementById('warn').innerHTML = S.stuck ? `<div class="warnbox"><b>This path cannot finish:</b> no eligible team left for <b>${S.stuck}</b>. Unlock something or free a holiday team.</div>` : '';
+  // plan list
+  document.getElementById('planlist').innerHTML = S.rows.map(r=>{ const l=LEGS[LI[r.leg]]; const res=(D.results[r.leg]||{})[r.team];
+    return `<li class="${l.kind==='holiday'?'hol':''}"><span class="lg">${r.leg}</span><span>${r.team?`<b>${r.team}</b> ${res?(res==='W'?'✓':'✗'):'<span class="note">'+pct(r.p)+'</span>'}${r.sub?' <span class="note">submitted</span>':r.fixed?' <span class="note">locked</span>':''}`:'<span class="pill crit">none</span>'}</span></li>`; }).join('');
+  // grid
+  const head = `<tr><th style="text-align:left">Team <small>sorted by power rating</small></th>` + LEGS.map(l=>`<th class="${l.kind==='holiday'?'hol':''} ${l.id===D.current_leg?'cur':''}" title="${esc(l.label)} · due ${esc(l.deadline)}">${l.id}<small>${esc(l.dates)}</small></th>`).join('') + `</tr>`;
+  const body = TEAMS.map(t=>{
+    const a=t.abbr; const usedAt = Object.entries(S.plan).find(([leg,tt])=>tt===a && (leg in S.fixed))?.[0];
+    const cells = LEGS.map(l=>{
+      const p = D.p[l.id][a]; const opp = (D.opp[l.id]||{})[a];
+      if (p===undefined) return `<td><span class="cell off"><small>bye</small></span></td>`;
+      const past = LI[l.id] < CUR; const res=(D.results[l.id]||{})[a];
+      const isPlan = S.plan[l.id]===a, isFixed = isPlan && (l.id in S.fixed), isSub = isPlan && (l.id in e.picks);
+      let cls = 'cell '+q(p)+(p<0.5?' dog':'');
+      if (isSub) cls += ' sub'; else if (isFixed) cls += ' lock'; else if (isPlan) cls += ' plan';
+      if (!isPlan && (S.usedTeams.has(a)||excl[a])) cls += ' used';
+      if (past && !isPlan) cls = 'cell off';
+      if (isPlan && res==='W') cls += ' won'; if (isPlan && res && res!=='W') cls += ' lost';
+      const fld = l.id===D.current_leg && D.field[a]!==undefined ? ` · field ${pct(D.field[a])}` : '';
+      const title = `${a} ${opp} ${l.id}: ${pct(p,1)} to win${fld}${usedAt&&!isPlan?` (used in ${usedAt})`:''}`;
+      const dis = past || isSub;
+      const [txt, shade] = metricCell(l.id, a, p); if ((store.metric||'p')!=='p' && !isPlan && !cls.includes('used') && !past) cls = cls.replace(/q[1-5]/, q(shade));
+      return `<td><button class="${cls}" data-leg="${l.id}" data-team="${a}" title="${esc(title)}" ${dis?'disabled':''}><b>${txt}</b><small>${esc(opp)}</small></button></td>`;
+    }).join('');
+    return `<tr class="${excl[a]?'excl':''}"><th title="${esc(t.name)} · rating ${t.rating>0?'+':''}${t.rating.toFixed(1)}">${a}<small>${t.rating>0?'+':''}${t.rating.toFixed(1)}</small><span class="x" data-x="${a}" title="${excl[a]?'include again':'exclude (injury / what-if)'}">${excl[a]?'↺':'✕'}</span></th>${cells}</tr>`;
+  }).join('');
+  document.getElementById('grid').innerHTML = `<thead>${head}</thead><tbody>${body}</tbody>`;
+  document.querySelectorAll('.mbtn').forEach(b=>b.classList.toggle('on', b.dataset.m===(store.metric||'p')));
+  renderMulti(); renderEV();
+}
+function renderMulti(){
+  // every alive entry's current-leg team (locked/planned) -> P(all survive), P(at least one), P(wipeout), exact on shared games
+  const picks = D.entries.map((e,k)=>({name:e.name, alive:e.alive, team: e.alive ? solve(k).plan[D.current_leg] : null})).filter(x=>x.alive && x.team);
+  if (!picks.length){ document.getElementById('multi').innerHTML='<span class="note">No alive entries.</span>'; return; }
+  const games = {}; for (const x of picks){ const opp=(D.opp[D.current_leg][x.team]||'').slice(-3); const key=[x.team,opp].sort().join('-'); games[key] = games[key] || {a:x.team, p:D.p[D.current_leg][x.team]}; }
+  const keys=Object.keys(games); let pAll=0, pAny=0, pNone=0; const n=keys.length;
+  for (let mask=0; mask<(1<<n); mask++){ let pr=1; const won={}; keys.forEach((k,i)=>{ const g=games[k]; const w=!!(mask&(1<<i)); pr*= w?g.p:(1-g.p); won[g.a]=w; });
+    const alive = picks.map(x=> won[x.team]!==undefined ? won[x.team] : !won[Object.keys(won).find(t=>true)]);
+    const cnt = picks.filter(x=>{ const key=Object.keys(games).find(k=>k.split('-').includes(x.team)); return games[key].a===x.team ? won[games[key].a] : !won[games[key].a]; }).length;
+    if (cnt===picks.length) pAll+=pr; if (cnt>0) pAny+=pr; if (cnt===0) pNone+=pr; }
+  const list = picks.map(x=>`<span class="chip">${esc(x.name)}: <b>${x.team}</b> ${pct(D.p[D.current_leg][x.team])}</span>`).join(' ');
+  document.getElementById('multi').innerHTML = `<div class="chips">${list}</div><p class="note" style="margin:8px 0 0">All survive ${D.current_leg}: <b>${pct(pAll,1)}</b> · at least one: <b>${pct(pAny,1)}</b> · wiped out: <b>${pct(pNone,1)}</b> (${new Set(picks.map(x=>x.team)).size} distinct team${new Set(picks.map(x=>x.team)).size>1?'s':''}).</p>`;
+}
+let fieldEdit = null;
+function renderEV(){
+  const leg = D.current_leg; const teams = Object.keys(D.p[leg]).sort((a,b)=>D.p[leg][b]-D.p[leg][a]);
+  if (!fieldEdit){ fieldEdit = {}; for (const t of teams) fieldEdit[t] = D.field[t]||0; }
+  const opp = t => (D.opp[leg][t]||'').slice(-3);
+  const base = teams.reduce((s,t)=>s+fieldEdit[t]*D.p[leg][t],0);
+  const rows = teams.map(t=>{ const p=D.p[leg][t]; const cond = fieldEdit[t] + teams.filter(s=>s!==t && s!==opp(t)).reduce((s,x)=>s+fieldEdit[x]*D.p[leg][x],0); const lev = cond>0? base/cond : 1;
+    const fv = fvOf(t, leg);
+    return `<tr><th>${t}<small>${esc(D.opp[leg][t]||'')}</small></th><td class="cell" style="cursor:default"><b>${pct(p)}</b></td><td><input data-f="${t}" type="number" min="0" max="100" step="0.5" value="${(100*fieldEdit[t]).toFixed(1)}" style="width:64px;font:inherit;background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:4px;padding:3px 5px"></td><td class="cell" style="cursor:default">×${lev.toFixed(2)}</td><td class="cell" style="cursor:default"><b>${(p*lev).toFixed(3)}</b></td><td class="cell" style="cursor:default">${fv.toFixed(2)}</td></tr>`; }).join('');
+  const tot = teams.reduce((s,t)=>s+fieldEdit[t],0);
+  document.getElementById('ev').innerHTML = `<thead><tr><th style="text-align:left">Team</th><th>Win %</th><th>Field % <small>(sum ${pct(tot)})</small></th><th>Leverage</th><th>EV = win × lev</th><th>Future value</th></tr></thead><tbody>${rows}</tbody>`;
+  document.getElementById('ev').insertAdjacentHTML('beforeend', `<tfoot><tr><th colspan="6" style="text-align:left;font-family:inherit;font-size:12.5px;font-weight:400;color:var(--muted)">Field expected to survive ${leg}: ${pct(base,1)}</th></tr></tfoot>`);
+}
+document.addEventListener('change', ev=>{ const f=ev.target.dataset.f; if (f){ fieldEdit[f]=Math.max(0, parseFloat(ev.target.value)||0)/100; renderEV(); } });
+document.addEventListener('click', ev=>{
+  const tab = ev.target.closest('[data-e]'); if (tab){ store.entry = +tab.dataset.e; save(); render(); return; }
+  const x = ev.target.closest('[data-x]'); if (x){ const ex=exclFor(store.entry); const a=x.dataset.x; if (ex[a]) delete ex[a]; else ex[a]=1; save(); render(); return; }
+  const c = ev.target.closest('.cell[data-leg]'); if (c && !c.disabled){
+    const i=store.entry, locks=locksFor(i), leg=c.dataset.leg, team=c.dataset.team;
+    if (locks[leg]===team) delete locks[leg];
+    else { for (const l of Object.keys(locks)) if (l !== '__seen_' && locks[l]===team) delete locks[l]; locks[leg]=team; }
+    save(); render(); return; }
+  const mb = ev.target.closest('.mbtn'); if (mb){ store.metric = mb.dataset.m; save(); render(); return; }
+  if (ev.target.id==='clear'){ store.locks[store.entry]={__seen_: D.current_leg}; store.excl[store.entry]={}; save(); render(); }
+  if (ev.target.id==='model'){ const i=store.entry; store.locks[i]={__seen_: D.current_leg}; store.excl[i]={}; const mp=D.entries[i].model_plan; for (const [l,t] of Object.entries(mp)) if (!(l in D.entries[i].picks)) store.locks[i][l]=t; save(); render(); }
+  if (ev.target.id==='copy'){ const S=solve(store.entry); const txt=S.rows.map(r=>`${r.leg}: ${r.team||'—'}`).join('\n'); navigator.clipboard?.writeText(txt); ev.target.textContent='Copied'; setTimeout(()=>ev.target.textContent='Copy plan',1200); }
+});
+render();
+</script></body></html>
