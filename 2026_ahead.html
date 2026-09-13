@@ -1,0 +1,521 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Circa Survivor Look Ahead</title><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Source+Sans+3:ital,wght@0,400;0,600;1,400&display=swap"><style>
+:root{--bg:#EEF1F6;--surface:#FFFFFF;--surface-2:#F6F8FB;--ink:#0F1626;--muted:#5C6880;--line:#D6DCE6;
+--accent:#B98C0E;--accent-ink:#7A5B06;--accent-soft:#FBF1D3;--pick:#0E8F80;--pick-soft:#D6F3EE;
+--good:#1F9D63;--warn:#C9800F;--crit:#D64545;--bar:#9AACC4;
+--q1:#E7F4F1;--q2:#BFE5DD;--q3:#84CDC0;--q4:#3FAE9E;--q5:#0E8F80;--q5-ink:#FFFFFF;--dead:#E2E6EE;}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#0B1020;--surface:#141B2F;--surface-2:#1A2238;--ink:#E9EDF7;--muted:#94A0BA;
+--line:#26304A;--accent:#F2C14E;--accent-ink:#FFE08A;--accent-soft:#3A2E0B;--pick:#2DD4BF;--pick-soft:#0F3B37;
+--good:#3DDC97;--warn:#F5B94A;--crit:#FF6B6B;--bar:#3E4C6B;
+--q1:#16283A;--q2:#12463F;--q3:#0F6A5E;--q4:#178F7E;--q5:#2DD4BF;--q5-ink:#0B1020;--dead:#1B2133;}}
+:root[data-theme="dark"]{--bg:#0B1020;--surface:#141B2F;--surface-2:#1A2238;--ink:#E9EDF7;--muted:#94A0BA;
+--line:#26304A;--accent:#F2C14E;--accent-ink:#FFE08A;--accent-soft:#3A2E0B;--pick:#2DD4BF;--pick-soft:#0F3B37;
+--good:#3DDC97;--warn:#F5B94A;--crit:#FF6B6B;--bar:#3E4C6B;
+--q1:#16283A;--q2:#12463F;--q3:#0F6A5E;--q4:#178F7E;--q5:#2DD4BF;--q5-ink:#0B1020;--dead:#1B2133;}
+
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Source Sans 3","Segoe UI",system-ui,sans-serif;font-size:15px;line-height:1.45}
+h1,h2,h3{font-family:"Barlow Condensed","Arial Narrow",Impact,sans-serif;text-wrap:balance;margin:0}
+h1{font-size:44px;font-weight:700;line-height:1}
+h2{font-size:26px;font-weight:600;margin:40px 0 12px;padding-bottom:6px;border-bottom:2px solid var(--line)}
+h3{font-size:20px;font-weight:600}
+.eyebrow{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.num{font-variant-numeric:tabular-nums}
+.note{color:var(--muted);font-size:13.5px;max-width:72ch}
+a{color:var(--pick)}
+button{font:inherit;cursor:pointer;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:5px;padding:5px 11px}
+button:hover{border-color:var(--pick)}
+button:focus-visible,.cell:focus-visible{outline:2px solid var(--pick);outline-offset:1px}
+button.primary{background:var(--pick);border-color:var(--pick);color:var(--q5-ink);font-weight:600}
+.pill{display:inline-block;padding:2px 8px;border-radius:999px;font-size:12px;font-weight:600}
+.pill.good{background:color-mix(in srgb,var(--good) 18%,transparent);color:var(--good)}
+.pill.warn{background:color-mix(in srgb,var(--warn) 18%,transparent);color:var(--warn)}
+.pill.crit{background:color-mix(in srgb,var(--crit) 18%,transparent);color:var(--crit)}
+@media (prefers-reduced-motion: reduce){*{transition:none!important}}
+html{-webkit-text-size-adjust:100%}
+img,svg{max-width:100%}
+/* sticky first column inside any horizontally scrolling table, so the team stays visible on a phone */
+.scroll table th:first-child,.scroll table td:first-child{position:sticky;left:0;background:var(--surface);z-index:1}
+.scroll tbody tr:nth-child(even) td:first-child{background:var(--surface-2)}
+.scroll tr.ours td:first-child{background:var(--accent-soft)}
+@media (max-width:640px){
+  body{font-size:14.5px}
+  h1{font-size:30px}h2{font-size:22px;margin-top:30px}h3{font-size:18px}
+  table{font-size:13px}th,td{padding:6px 7px}
+  .note{max-width:none}
+}
+
+.wrap{max-width:1200px;margin:0 auto;padding:28px 20px 64px;--e1:#0E8F80;--e2:#B98C0E;--e3:#7C3AED;--e4:#D64545;--e5:#2563EB;--e6:#DB2777}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .wrap{--e1:#2DD4BF;--e2:#F2C14E;--e3:#C084FC;--e4:#FF6B6B;--e5:#60A5FA;--e6:#F472B6}}
+:root[data-theme="dark"] .wrap{--e1:#2DD4BF;--e2:#F2C14E;--e3:#C084FC;--e4:#FF6B6B;--e5:#60A5FA;--e6:#F472B6}
+.disclaim{margin:10px 0 16px;padding:11px 14px;border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:8px;background:var(--surface);color:var(--muted);font-size:13.5px;line-height:1.5}
+.disclaim b{color:var(--ink)}
+.strip{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(150px,100%),1fr));gap:14px;margin-top:14px}
+.strip .cell{border-top:2px solid var(--line);padding-top:8px}
+.strip .cell b{display:block;font-family:"Barlow Condensed",sans-serif;font-size:28px;font-weight:600;line-height:1.05;overflow-wrap:anywhere}
+.strip .cell span{color:var(--muted);font-size:13px}
+.box{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:14px 16px}
+table{border-collapse:collapse;width:100%;font-size:14px}
+th,td{padding:7px 9px;text-align:left;vertical-align:top;border-bottom:1px solid var(--line)}
+th{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600;white-space:nowrap}
+td.n,th.n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+tbody tr:nth-child(even){background:var(--surface-2)}
+tr.ours td{background:var(--accent-soft)}
+tr.gone td{opacity:.5}
+tr.on td{box-shadow:inset 3px 0 0 var(--pick)}
+tr.hol td:first-child{color:var(--accent-ink);font-weight:600}
+td.none{color:var(--crit);font-weight:600}
+.scroll{overflow-x:auto;background:var(--surface);border:1px solid var(--line);border-radius:6px}
+.la-chips{display:flex;flex-wrap:wrap;gap:6px;margin:2px 0 4px}
+.la-chip{display:flex;flex-direction:column;align-items:center;gap:1px;min-width:70px;padding:6px 10px;line-height:1.1}
+.la-chip b{font-family:"Barlow Condensed",sans-serif;font-size:18px;font-weight:700}
+.la-chip small{font-size:10.5px;color:var(--muted);white-space:nowrap}
+.la-chip.on{background:var(--pick);border-color:var(--pick);color:var(--q5-ink)}
+.la-chip.on small{color:var(--q5-ink);opacity:.85}
+.la-chip.hol{box-shadow:inset 0 3px 0 var(--accent)}
+.la-sub{margin:10px 0 0}
+.la-warn{margin-top:12px;padding:9px 13px;border-radius:0 6px 6px 0;border-left:4px solid var(--crit);background:var(--surface);font-size:14px}
+.la-srcbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:10px}
+.la-srcbar .eyebrow{margin-right:4px}
+.la-src.on{background:var(--pick);border-color:var(--pick);color:var(--q5-ink);font-weight:600}
+.la-ghost{margin-left:auto;color:var(--muted)}
+table.la-bridge td{vertical-align:middle}
+table.la-bridge td.lg b{font-family:"Barlow Condensed",sans-serif;font-size:17px}
+table.la-bridge td.lg small{display:block;font-size:11.5px;color:var(--muted)}
+table.la-bridge td small{display:block;font-size:11px;color:var(--muted);margin-top:2px}
+table.la-bridge td.sub b{font-family:"Barlow Condensed",sans-serif;font-size:18px}
+table.la-bridge td.sub{background:var(--accent-soft)}
+table.la-bridge td.mine select{border-color:var(--pick)}
+table.la-bridge tr.hol td:first-child{color:var(--accent-ink)}
+select{font:inherit;font-size:14px;padding:5px 7px;border:1px solid var(--line);border-radius:5px;background:var(--surface);color:var(--ink);max-width:100%}
+.la-lenses{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:6px}
+.la-lens{font-size:13px;padding:5px 10px}
+.la-lens.on{background:var(--pick);border-color:var(--pick);color:var(--q5-ink);font-weight:600}
+.la-try{font-size:12px;padding:3px 8px}
+.la-sels{display:flex;flex-wrap:wrap;gap:10px;align-items:end;margin-bottom:12px}
+.la-sel{display:flex;flex-direction:column;gap:3px;font-size:12px;color:var(--muted)}
+.la-sel select{min-width:190px}
+.la-verdict{font-size:16px;font-weight:600;padding:10px 14px;border-radius:6px;border-left:4px solid var(--line);background:var(--surface-2);margin:4px 0 12px}
+.la-verdict.good{border-color:var(--good)}.la-verdict.warn{border-color:var(--warn)}.la-verdict.crit{border-color:var(--crit)}
+table.la-cmp td,table.la-cmp th{white-space:nowrap}
+table.la-cmp .tp{color:var(--muted);font-size:13px;font-weight:400}
+table.la-cmp tr.mine td{background:var(--accent-soft);font-weight:600}
+table.la-cmp thead tr:first-child th{border-bottom:0;color:var(--ink);font-size:11px}
+.la-more{margin-top:12px}.la-more summary{cursor:pointer;font-weight:600;color:var(--pick);padding:6px 0}
+.la-more ul{margin:6px 0 0;padding-left:18px;font-size:14px}.la-more li{margin:4px 0}
+.la-dot{display:inline-block;width:15px;height:15px;border-radius:50%;font-size:10px;line-height:15px;text-align:center;color:#fff;font-style:normal;font-weight:700;margin-right:3px}
+.la-dot.e1{background:var(--e1)}.la-dot.e2{background:var(--e2)}.la-dot.e3{background:var(--e3)}.la-dot.e4{background:var(--e4)}.la-dot.e5{background:var(--e5)}.la-dot.e6{background:var(--e6)}
+.la-jump{font-family:"Barlow Condensed",sans-serif;font-size:16px;font-weight:700;padding:2px 9px}
+.foot{margin-top:40px;font-size:12.5px;color:var(--muted);border-top:1px solid var(--line);padding-top:12px}
+@media (max-width:640px){.wrap{padding:18px 14px 48px}.strip .cell b{font-size:22px}.la-sel select{min-width:150px}.la-chip{min-width:58px;padding:5px 7px}.la-chip small{display:none}}
+</style></head><body><div class="wrap"><div class="eyebrow">Circa Survivor 2026 · looking past W1 (Week 1)</div><h1>Look Ahead</h1><div class="disclaim"><b>A look ahead is a forecast of a forecast.</b> Nothing on this tab is a pick, and the lines it prices do not exist yet — a future leg's number is this week's market rating widened for everything that can still happen between now and then (injuries, form, the line itself moving). Use it to see which weeks are thin, what a pick this week costs you later, and which teams to keep — not to commit. The week you are actually submitting is on <b>This week's suggestions</b>.</div><div id="ahead"></div><div class="foot">Every future leg is priced from the same market-implied ratings and Elo the rest of the site uses, widened by 0.32 points of spread per week of lookahead and tilted by each team's expected trajectory. The field is rolled forward through the fitted Circa choice model from no 2026 selections PDF yet — assuming 24,982 entries, all teams available: 24,982 entries alive now, spending teams every week. Your assumptions live in this browser only. Generated 2026-09-13T21:43:22+00:00.</div></div><script>window.__AHEAD__ = {"season":2026,"generated_at":"2026-09-13T21:43:22+00:00","current_leg":"W1","current_label":"Week 1","current_deadline":"2026-09-12T16:00:00-07:00","stance":"balanced","gamma":0.5,"lw":0.35,"pot":24982000.0,"n_start":24982,"n_alive":24982,"finalist_rate":0.0005,"base_survive":0.7498895743747241,"locked":["ARI","ATL","BAL","BUF","CAR","CHI","CIN","CLE","DET","GB","HOU","IND","JAX","LA","LAC","LV","MIA","MIN","NE","NO","NYJ","PHI","PIT","SEA","SF","TB","TEN","WAS"],"legs":[{"id":"W2","label":"Week 2","week":2,"kind":"regular","is_holiday":false,"deadline":"2026-09-19T16:00:00-07:00","deadline_txt":"Sat Sep 19, 4:00 PM PT","days_away":6.1,"field_alive":18953,"field_survive":0.765364838979223,"field_known":true,"teams":{"SEA":{"opp":"ARI","home":false,"game":"2026_02_SEA_ARI","kick":"16:25","weekday":"Sunday","spread":-10.0,"p":0.8261,"share":0.1126,"lev":0.975},"SF":{"opp":"MIA","home":true,"game":"2026_02_MIA_SF","kick":"16:25","weekday":"Sunday","spread":-10.5,"p":0.8205,"share":0.2733,"lev":0.94},"LA":{"opp":"NYG","home":true,"game":"2026_02_NYG_LA","kick":"20:15","weekday":"Monday","spread":-9.5,"p":0.7961,"share":0.0571,"lev":0.985},"LAC":{"opp":"LV","home":true,"game":"2026_02_LV_LAC","kick":"16:05","weekday":"Sunday","spread":-9.5,"p":0.7763,"share":0.133,"lev":0.963},"BAL":{"opp":"NO","home":true,"game":"2026_02_NO_BAL","kick":"13:00","weekday":"Sunday","spread":-7.5,"p":0.7429,"share":0.1138,"lev":0.963},"KC":{"opp":"IND","home":true,"game":"2026_02_IND_KC","kick":"20:20","weekday":"Sunday","spread":-6.5,"p":0.7149,"share":0.0627,"lev":0.977},"TB":{"opp":"CLE","home":true,"game":"2026_02_CLE_TB","kick":"13:00","weekday":"Sunday","spread":-6.5,"p":0.7144,"share":0.1705,"lev":0.94},"PHI":{"opp":"TEN","home":false,"game":"2026_02_PHI_TEN","kick":"13:00","weekday":"Sunday","spread":-5.5,"p":0.6844,"share":0.0134,"lev":0.995},"GB":{"opp":"NYJ","home":false,"game":"2026_02_GB_NYJ","kick":"13:00","weekday":"Sunday","spread":-5.5,"p":0.6835,"share":0.0136,"lev":0.994},"NE":{"opp":"PIT","home":true,"game":"2026_02_PIT_NE","kick":"13:00","weekday":"Sunday","spread":-4.5,"p":0.6531,"share":0.0231,"lev":0.99},"DAL":{"opp":"WAS","home":true,"game":"2026_02_WAS_DAL","kick":"16:25","weekday":"Sunday","spread":-4.5,"p":0.6256,"share":0.0095,"lev":0.995},"DEN":{"opp":"JAX","home":true,"game":"2026_02_JAX_DEN","kick":"16:05","weekday":"Sunday","spread":-3.0,"p":0.6036,"share":0.0038,"lev":0.998},"BUF":{"opp":"DET","home":true,"game":"2026_02_DET_BUF","kick":"20:15","weekday":"Thursday","spread":-3.0,"p":0.6035,"share":0.0017,"lev":0.999},"HOU":{"opp":"CIN","home":true,"game":"2026_02_CIN_HOU","kick":"13:00","weekday":"Sunday","spread":-2.5,"p":0.5859,"share":0.0043,"lev":0.998},"CHI":{"opp":"MIN","home":true,"game":"2026_02_MIN_CHI","kick":"13:00","weekday":"Sunday","spread":-3.0,"p":0.574,"share":0.0019,"lev":0.999},"ATL":{"opp":"CAR","home":true,"game":"2026_02_CAR_ATL","kick":"13:00","weekday":"Sunday","spread":-1.5,"p":0.5237,"share":0.0026,"lev":0.999},"CAR":{"opp":"ATL","home":false,"game":"2026_02_CAR_ATL","kick":"13:00","weekday":"Sunday","spread":1.5,"p":0.4763,"share":0.0006,"lev":1.001},"MIN":{"opp":"CHI","home":false,"game":"2026_02_MIN_CHI","kick":"13:00","weekday":"Sunday","spread":3.0,"p":0.426,"share":0.0002,"lev":1.001},"CIN":{"opp":"HOU","home":false,"game":"2026_02_CIN_HOU","kick":"13:00","weekday":"Sunday","spread":2.5,"p":0.4141,"share":0.0001,"lev":1.003},"DET":{"opp":"BUF","home":false,"game":"2026_02_DET_BUF","kick":"20:15","weekday":"Thursday","spread":3.0,"p":0.3965,"share":0.0,"lev":1.001},"JAX":{"opp":"DEN","home":false,"game":"2026_02_JAX_DEN","kick":"16:05","weekday":"Sunday","spread":3.0,"p":0.3964,"share":0.0001,"lev":1.003},"WAS":{"opp":"DAL","home":false,"game":"2026_02_WAS_DAL","kick":"16:25","weekday":"Sunday","spread":4.5,"p":0.3744,"share":0.0001,"lev":1.008},"PIT":{"opp":"NE","home":false,"game":"2026_02_PIT_NE","kick":"13:00","weekday":"Sunday","spread":4.5,"p":0.3469,"share":0.0,"lev":1.02},"NYJ":{"opp":"GB","home":true,"game":"2026_02_GB_NYJ","kick":"13:00","weekday":"Sunday","spread":5.5,"p":0.3165,"share":0.0,"lev":1.012},"TEN":{"opp":"PHI","home":true,"game":"2026_02_PHI_TEN","kick":"13:00","weekday":"Sunday","spread":5.5,"p":0.3156,"share":0.0,"lev":1.012},"CLE":{"opp":"TB","home":false,"game":"2026_02_CLE_TB","kick":"13:00","weekday":"Sunday","spread":6.5,"p":0.2856,"share":0.0,"lev":1.189},"IND":{"opp":"KC","home":false,"game":"2026_02_IND_KC","kick":"20:20","weekday":"Sunday","spread":6.5,"p":0.2851,"share":0.0,"lev":1.062},"NO":{"opp":"BAL","home":false,"game":"2026_02_NO_BAL","kick":"13:00","weekday":"Sunday","spread":7.5,"p":0.2571,"share":0.0,"lev":1.124},"LV":{"opp":"LAC","home":false,"game":"2026_02_LV_LAC","kick":"16:05","weekday":"Sunday","spread":9.5,"p":0.2237,"share":0.0,"lev":1.156},"NYG":{"opp":"LA","home":false,"game":"2026_02_NYG_LA","kick":"20:15","weekday":"Monday","spread":9.5,"p":0.2039,"share":0.0,"lev":1.063},"MIA":{"opp":"SF","home":false,"game":"2026_02_MIA_SF","kick":"16:25","weekday":"Sunday","spread":10.5,"p":0.1795,"share":0.0,"lev":1.414},"ARI":{"opp":"SEA","home":true,"game":"2026_02_SEA_ARI","kick":"16:25","weekday":"Sunday","spread":10.0,"p":0.1739,"share":0.0,"lev":1.138}}},{"id":"W3","label":"Week 3","week":3,"kind":"regular","is_holiday":false,"deadline":"2026-09-26T16:00:00-07:00","deadline_txt":"Sat Sep 26, 4:00 PM PT","days_away":13.1,"field_alive":14465,"field_survive":0.7674736584858739,"field_known":true,"teams":{"SF":{"opp":"ARI","home":true,"game":"2026_03_ARI_SF","kick":"16:05","weekday":"Sunday","spread":-11.5,"p":0.8248,"share":0.3991,"lev":0.917},"DET":{"opp":"NYJ","home":true,"game":"2026_03_NYJ_DET","kick":"13:00","weekday":"Sunday","spread":-9.5,"p":0.7945,"share":0.2647,"lev":0.934},"GB":{"opp":"ATL","home":true,"game":"2026_03_ATL_GB","kick":"20:15","weekday":"Thursday","spread":-7.5,"p":0.7416,"share":0.0819,"lev":0.973},"KC":{"opp":"MIA","home":false,"game":"2026_03_KC_MIA","kick":"13:00","weekday":"Sunday","spread":-7.5,"p":0.7413,"share":0.1191,"lev":0.961},"SEA":{"opp":"WAS","home":false,"game":"2026_03_SEA_WAS","kick":"13:00","weekday":"Sunday","spread":-3.5,"p":0.6204,"share":0.0074,"lev":0.996},"NO":{"opp":"LV","home":true,"game":"2026_03_LV_NO","kick":"16:25","weekday":"Sunday","spread":-3.5,"p":0.6201,"share":0.0441,"lev":0.979},"NYG":{"opp":"TEN","home":true,"game":"2026_03_TEN_NYG","kick":"13:00","weekday":"Sunday","spread":-3.0,"p":0.6047,"share":0.0285,"lev":0.986},"BUF":{"opp":"LAC","home":true,"game":"2026_03_LAC_BUF","kick":"13:00","weekday":"Sunday","spread":-3.0,"p":0.6031,"share":0.0056,"lev":0.997},"LA":{"opp":"DEN","home":false,"game":"2026_03_LA_DEN","kick":"20:20","weekday":"Sunday","spread":-3.0,"p":0.6025,"share":0.0031,"lev":0.998},"BAL":{"opp":"DAL","home":false,"game":"2026_03_BAL_DAL","kick":"16:25","weekday":"Sunday","spread":-2.5,"p":0.5857,"share":0.0053,"lev":0.997},"CIN":{"opp":"PIT","home":false,"game":"2026_03_CIN_PIT","kick":"13:00","weekday":"Sunday","spread":-1.5,"p":0.5827,"share":0.0078,"lev":0.996},"HOU":{"opp":"IND","home":false,"game":"2026_03_HOU_IND","kick":"13:00","weekday":"Sunday","spread":-1.5,"p":0.5805,"share":0.0057,"lev":0.997},"JAX":{"opp":"NE","home":true,"game":"2026_03_NE_JAX","kick":"13:00","weekday":"Sunday","spread":-1.5,"p":0.5525,"share":0.0046,"lev":0.998},"CHI":{"opp":"PHI","home":true,"game":"2026_03_PHI_CHI","kick":"20:15","weekday":"Monday","spread":-1.5,"p":0.5524,"share":0.0027,"lev":0.999},"TB":{"opp":"MIN","home":true,"game":"2026_03_MIN_TB","kick":"16:05","weekday":"Sunday","spread":-1.5,"p":0.5507,"share":0.0073,"lev":0.996},"CAR":{"opp":"CLE","home":false,"game":"2026_03_CAR_CLE","kick":"13:00","weekday":"Sunday","spread":-1.5,"p":0.5504,"share":0.0064,"lev":0.997},"CLE":{"opp":"CAR","home":true,"game":"2026_03_CAR_CLE","kick":"13:00","weekday":"Sunday","spread":1.5,"p":0.4496,"share":0.0015,"lev":1.004},"MIN":{"opp":"TB","home":false,"game":"2026_03_MIN_TB","kick":"16:05","weekday":"Sunday","spread":1.5,"p":0.4493,"share":0.0006,"lev":1.005},"PHI":{"opp":"CHI","home":false,"game":"2026_03_PHI_CHI","kick":"20:15","weekday":"Monday","spread":1.5,"p":0.4476,"share":0.0002,"lev":1.002},"NE":{"opp":"JAX","home":false,"game":"2026_03_NE_JAX","kick":"13:00","weekday":"Sunday","spread":1.5,"p":0.4475,"share":0.0004,"lev":1.003},"IND":{"opp":"HOU","home":true,"game":"2026_03_HOU_IND","kick":"13:00","weekday":"Sunday","spread":1.5,"p":0.4195,"share":0.0006,"lev":1.004},"PIT":{"opp":"CIN","home":true,"game":"2026_03_CIN_PIT","kick":"13:00","weekday":"Sunday","spread":1.5,"p":0.4173,"share":0.0003,"lev":1.006},"DAL":{"opp":"BAL","home":true,"game":"2026_03_BAL_DAL","kick":"16:25","weekday":"Sunday","spread":2.5,"p":0.4143,"share":0.0002,"lev":1.004},"DEN":{"opp":"LA","home":true,"game":"2026_03_LA_DEN","kick":"20:20","weekday":"Sunday","spread":3.0,"p":0.3975,"share":0.0001,"lev":1.002},"LAC":{"opp":"BUF","home":false,"game":"2026_03_LAC_BUF","kick":"13:00","weekday":"Sunday","spread":3.0,"p":0.3969,"share":0.0001,"lev":1.004},"TEN":{"opp":"NYG","home":false,"game":"2026_03_TEN_NYG","kick":"13:00","weekday":"Sunday","spread":3.0,"p":0.3953,"share":0.0003,"lev":1.023},"LV":{"opp":"NO","home":false,"game":"2026_03_LV_NO","kick":"16:25","weekday":"Sunday","spread":3.5,"p":0.3799,"share":0.0002,"lev":1.037},"WAS":{"opp":"SEA","home":true,"game":"2026_03_SEA_WAS","kick":"13:00","weekday":"Sunday","spread":3.5,"p":0.3796,"share":0.0002,"lev":1.006},"MIA":{"opp":"KC","home":true,"game":"2026_03_KC_MIA","kick":"13:00","weekday":"Sunday","spread":7.5,"p":0.2587,"share":0.0,"lev":1.13},"ATL":{"opp":"GB","home":false,"game":"2026_03_ATL_GB","kick":"20:15","weekday":"Thursday","spread":7.5,"p":0.2584,"share":0.0,"lev":1.086},"NYJ":{"opp":"DET","home":false,"game":"2026_03_NYJ_DET","kick":"13:00","weekday":"Sunday","spread":9.5,"p":0.2055,"share":0.0,"lev":1.378},"ARI":{"opp":"SF","home":false,"game":"2026_03_ARI_SF","kick":"16:05","weekday":"Sunday","spread":11.5,"p":0.1752,"share":0.0,"lev":1.751}}},{"id":"W4","label":"Week 4","week":4,"kind":"regular","is_holiday":false,"deadline":"2026-10-03T16:00:00-07:00","deadline_txt":"Sat Oct 3, 4:00 PM PT","days_away":20.1,"field_alive":11017,"field_survive":0.7360612674271597,"field_known":true,"teams":{"BAL":{"opp":"TEN","home":true,"game":"2026_04_TEN_BAL","kick":"13:00","weekday":"Sunday","spread":-8.5,"p":0.7689,"share":0.2086,"lev":0.939},"CHI":{"opp":"NYJ","home":true,"game":"2026_04_NYJ_CHI","kick":"13:00","weekday":"Sunday","spread":-8.5,"p":0.7673,"share":0.1331,"lev":0.96},"MIN":{"opp":"MIA","home":true,"game":"2026_04_MIA_MIN","kick":"16:05","weekday":"Sunday","spread":-7.5,"p":0.7422,"share":0.2624,"lev":0.916},"NYG":{"opp":"ARI","home":true,"game":"2026_04_ARI_NYG","kick":"13:00","weekday":"Sunday","spread":-7.0,"p":0.7274,"share":0.3112,"lev":0.897},"KC":{"opp":"LV","home":false,"game":"2026_04_KC_LV","kick":"16:25","weekday":"Sunday","spread":-5.5,"p":0.7055,"share":0.0379,"lev":0.985},"PIT":{"opp":"CLE","home":false,"game":"2026_04_PIT_CLE","kick":"20:15","weekday":"Thursday","spread":-2.5,"p":0.6109,"share":0.0043,"lev":0.998},"SEA":{"opp":"LAC","home":true,"game":"2026_04_LAC_SEA","kick":"16:25","weekday":"Sunday","spread":-3.0,"p":0.6049,"share":0.0046,"lev":0.998},"DET":{"opp":"CAR","home":false,"game":"2026_04_DET_CAR","kick":"20:20","weekday":"Sunday","spread":-3.0,"p":0.6014,"share":0.0024,"lev":0.999},"CIN":{"opp":"JAX","home":true,"game":"2026_04_JAX_CIN","kick":"13:00","weekday":"Sunday","spread":-2.5,"p":0.5884,"share":0.0079,"lev":0.996},"SF":{"opp":"DEN","home":true,"game":"2026_04_DEN_SF","kick":"16:25","weekday":"Sunday","spread":-2.5,"p":0.5883,"share":0.0022,"lev":0.999},"HOU":{"opp":"DAL","home":true,"game":"2026_04_DAL_HOU","kick":"13:00","weekday":"Sunday","spread":-2.5,"p":0.5864,"share":0.0058,"lev":0.997},"BUF":{"opp":"NE","home":true,"game":"2026_04_NE_BUF","kick":"13:00","weekday":"Sunday","spread":-3.0,"p":0.5741,"share":0.0018,"lev":0.999},"NO":{"opp":"ATL","home":true,"game":"2026_04_ATL_NO","kick":"20:15","weekday":"Monday","spread":-2.5,"p":0.557,"share":0.0065,"lev":0.996},"WAS":{"opp":"IND","home":true,"game":"2026_04_IND_WAS","kick":"09:30","weekday":"Sunday","spread":-1.5,"p":0.552,"share":0.0053,"lev":0.997},"GB":{"opp":"TB","home":false,"game":"2026_04_GB_TB","kick":"13:00","weekday":"Sunday","spread":-1.5,"p":0.5512,"share":0.0008,"lev":1.0},"LA":{"opp":"PHI","home":false,"game":"2026_04_LA_PHI","kick":"13:00","weekday":"Sunday","spread":-1.5,"p":0.5511,"share":0.0006,"lev":1.0},"PHI":{"opp":"LA","home":true,"game":"2026_04_LA_PHI","kick":"13:00","weekday":"Sunday","spread":1.5,"p":0.4489,"share":0.0002,"lev":1.0},"TB":{"opp":"GB","home":true,"game":"2026_04_GB_TB","kick":"13:00","weekday":"Sunday","spread":1.5,"p":0.4488,"share":0.0005,"lev":1.0},"IND":{"opp":"WAS","home":false,"game":"2026_04_IND_WAS","kick":"09:30","weekday":"Sunday","spread":1.5,"p":0.448,"share":0.0004,"lev":1.004},"ATL":{"opp":"NO","home":false,"game":"2026_04_ATL_NO","kick":"20:15","weekday":"Monday","spread":2.5,"p":0.443,"share":0.0004,"lev":1.005},"NE":{"opp":"BUF","home":false,"game":"2026_04_NE_BUF","kick":"13:00","weekday":"Sunday","spread":3.0,"p":0.4259,"share":0.0002,"lev":1.001},"DAL":{"opp":"HOU","home":false,"game":"2026_04_DAL_HOU","kick":"13:00","weekday":"Sunday","spread":2.5,"p":0.4136,"share":0.0001,"lev":1.005},"DEN":{"opp":"SF","home":false,"game":"2026_04_DEN_SF","kick":"16:25","weekday":"Sunday","spread":2.5,"p":0.4117,"share":0.0001,"lev":1.002},"JAX":{"opp":"CIN","home":false,"game":"2026_04_JAX_CIN","kick":"13:00","weekday":"Sunday","spread":2.5,"p":0.4116,"share":0.0001,"lev":1.006},"CAR":{"opp":"DET","home":true,"game":"2026_04_DET_CAR","kick":"20:20","weekday":"Sunday","spread":3.0,"p":0.3986,"share":0.0002,"lev":1.002},"LAC":{"opp":"SEA","home":false,"game":"2026_04_LAC_SEA","kick":"16:25","weekday":"Sunday","spread":3.0,"p":0.3951,"share":0.0001,"lev":1.004},"CLE":{"opp":"PIT","home":true,"game":"2026_04_PIT_CLE","kick":"20:15","weekday":"Thursday","spread":2.5,"p":0.3891,"share":0.0002,"lev":1.003},"LV":{"opp":"KC","home":true,"game":"2026_04_KC_LV","kick":"16:25","weekday":"Sunday","spread":5.5,"p":0.2945,"share":0.0,"lev":1.038},"ARI":{"opp":"NYG","home":false,"game":"2026_04_ARI_NYG","kick":"13:00","weekday":"Sunday","spread":7.0,"p":0.2726,"share":0.0,"lev":1.444},"MIA":{"opp":"MIN","home":false,"game":"2026_04_MIA_MIN","kick":"16:05","weekday":"Sunday","spread":7.5,"p":0.2578,"share":0.0,"lev":1.36},"NYJ":{"opp":"CHI","home":false,"game":"2026_04_NYJ_CHI","kick":"13:00","weekday":"Sunday","spread":8.5,"p":0.2327,"share":0.0,"lev":1.161},"TEN":{"opp":"BAL","home":false,"game":"2026_04_TEN_BAL","kick":"13:00","weekday":"Sunday","spread":8.5,"p":0.2311,"share":0.0,"lev":1.279}}},{"id":"W5","label":"Week 5","week":5,"kind":"regular","is_holiday":false,"deadline":"2026-10-10T16:00:00-07:00","deadline_txt":"Sat Oct 10, 4:00 PM PT","days_away":27.1,"field_alive":8177,"field_survive":0.7333824328883378,"field_known":true,"teams":{"NE":{"opp":"LV","home":true,"game":"2026_05_LV_NE","kick":"13:00","weekday":"Sunday","spread":-8.5,"p":0.7659,"share":0.6149,"lev":0.836},"DET":{"opp":"ARI","home":false,"game":"2026_05_DET_ARI","kick":"16:25","weekday":"Sunday","spread":-8.5,"p":0.764,"share":0.1256,"lev":0.961},"CIN":{"opp":"MIA","home":false,"game":"2026_05_CIN_MIA","kick":"13:00","weekday":"Sunday","spread":-6.0,"p":0.6966,"share":0.1275,"lev":0.95},"BAL":{"opp":"ATL","home":false,"game":"2026_05_BAL_ATL","kick":"20:20","weekday":"Sunday","spread":-4.5,"p":0.6456,"share":0.018,"lev":0.991},"HOU":{"opp":"TEN","home":false,"game":"2026_05_HOU_TEN","kick":"13:00","weekday":"Sunday","spread":-3.5,"p":0.6456,"share":0.0301,"lev":0.986},"DAL":{"opp":"TB","home":true,"game":"2026_05_TB_DAL","kick":"20:15","weekday":"Thursday","spread":-3.5,"p":0.619,"share":0.0146,"lev":0.993},"LA":{"opp":"BUF","home":true,"game":"2026_05_BUF_LA","kick":"20:15","weekday":"Monday","spread":-3.0,"p":0.6022,"share":0.0055,"lev":0.997},"SEA":{"opp":"SF","home":true,"game":"2026_05_SF_SEA","kick":"16:25","weekday":"Sunday","spread":-3.5,"p":0.5906,"share":0.0065,"lev":0.996},"PIT":{"opp":"IND","home":true,"game":"2026_05_IND_PIT","kick":"13:00","weekday":"Sunday","spread":-2.5,"p":0.5846,"share":0.0107,"lev":0.994},"GB":{"opp":"CHI","home":true,"game":"2026_05_CHI_GB","kick":"16:25","weekday":"Sunday","spread":-3.0,"p":0.5741,"share":0.004,"lev":0.998},"LAC":{"opp":"DEN","home":true,"game":"2026_05_DEN_LAC","kick":"16:05","weekday":"Sunday","spread":-2.5,"p":0.5568,"share":0.0046,"lev":0.997},"WAS":{"opp":"NYG","home":true,"game":"2026_05_NYG_WAS","kick":"13:00","weekday":"Sunday","spread":-2.5,"p":0.5544,"share":0.011,"lev":0.994},"NYJ":{"opp":"CLE","home":true,"game":"2026_05_CLE_NYJ","kick":"13:00","weekday":"Sunday","spread":-1.5,"p":0.5526,"share":0.0141,"lev":0.992},"PHI":{"opp":"JAX","home":false,"game":"2026_05_PHI_JAX","kick":"09:30","weekday":"Sunday","spread":-1.5,"p":0.5511,"share":0.0017,"lev":0.999},"MIN":{"opp":"NO","home":false,"game":"2026_05_MIN_NO","kick":"13:00","weekday":"Sunday","spread":-1.5,"p":0.5505,"share":0.0043,"lev":0.998},"NO":{"opp":"MIN","home":true,"game":"2026_05_MIN_NO","kick":"13:00","weekday":"Sunday","spread":1.5,"p":0.4495,"share":0.0014,"lev":1.002},"JAX":{"opp":"PHI","home":true,"game":"2026_05_PHI_JAX","kick":"09:30","weekday":"Sunday","spread":1.5,"p":0.4489,"share":0.0006,"lev":1.001},"CLE":{"opp":"NYJ","home":false,"game":"2026_05_CLE_NYJ","kick":"13:00","weekday":"Sunday","spread":1.5,"p":0.4474,"share":0.0011,"lev":1.01},"NYG":{"opp":"WAS","home":false,"game":"2026_05_NYG_WAS","kick":"13:00","weekday":"Sunday","spread":2.5,"p":0.4456,"share":0.0006,"lev":1.008},"DEN":{"opp":"LAC","home":false,"game":"2026_05_DEN_LAC","kick":"16:05","weekday":"Sunday","spread":2.5,"p":0.4432,"share":0.0002,"lev":1.003},"CHI":{"opp":"GB","home":false,"game":"2026_05_CHI_GB","kick":"16:25","weekday":"Sunday","spread":3.0,"p":0.4259,"share":0.0001,"lev":1.003},"IND":{"opp":"PIT","home":false,"game":"2026_05_IND_PIT","kick":"13:00","weekday":"Sunday","spread":2.5,"p":0.4154,"share":0.0004,"lev":1.008},"SF":{"opp":"SEA","home":false,"game":"2026_05_SF_SEA","kick":"16:25","weekday":"Sunday","spread":3.5,"p":0.4094,"share":0.0001,"lev":1.005},"BUF":{"opp":"LA","home":false,"game":"2026_05_BUF_LA","kick":"20:15","weekday":"Monday","spread":3.0,"p":0.3978,"share":0.0001,"lev":1.004},"TB":{"opp":"DAL","home":false,"game":"2026_05_TB_DAL","kick":"20:15","weekday":"Thursday","spread":3.5,"p":0.381,"share":0.0001,"lev":1.012},"TEN":{"opp":"HOU","home":true,"game":"2026_05_HOU_TEN","kick":"13:00","weekday":"Sunday","spread":3.5,"p":0.3544,"share":0.0002,"lev":1.027},"ATL":{"opp":"BAL","home":true,"game":"2026_05_BAL_ATL","kick":"20:20","weekday":"Sunday","spread":4.5,"p":0.3544,"share":0.0002,"lev":1.016},"MIA":{"opp":"CIN","home":true,"game":"2026_05_CIN_MIA","kick":"13:00","weekday":"Sunday","spread":6.0,"p":0.3034,"share":0.0001,"lev":1.138},"ARI":{"opp":"DET","home":true,"game":"2026_05_DET_ARI","kick":"16:25","weekday":"Sunday","spread":8.5,"p":0.236,"share":0.0,"lev":1.15},"LV":{"opp":"NE","home":false,"game":"2026_05_LV_NE","kick":"13:00","weekday":"Sunday","spread":8.5,"p":0.2341,"share":0.0,"lev":2.795}}},{"id":"W6","label":"Week 6","week":6,"kind":"regular","is_holiday":false,"deadline":"2026-10-17T16:00:00-07:00","deadline_txt":"Sat Oct 17, 4:00 PM PT","days_away":34.1,"field_alive":6146,"field_survive":0.7702131410971997,"field_known":true,"teams":{"LA":{"opp":"ARI","home":true,"game":"2026_06_ARI_LA","kick":"16:05","weekday":"Sunday","spread":-13.5,"p":0.8595,"share":0.4173,"lev":0.929},"NE":{"opp":"NYJ","home":true,"game":"2026_06_NYJ_NE","kick":"13:00","weekday":"Sunday","spread":-9.5,"p":0.7689,"share":0.1518,"lev":0.956},"BAL":{"opp":"CLE","home":false,"game":"2026_06_BAL_CLE","kick":"13:00","weekday":"Sunday","spread":-6.5,"p":0.7299,"share":0.1177,"lev":0.96},"PHI":{"opp":"CAR","home":true,"game":"2026_06_CAR_PHI","kick":"13:00","weekday":"Sunday","spread":-6.5,"p":0.7109,"share":0.1226,"lev":0.956},"BUF":{"opp":"LV","home":false,"game":"2026_06_BUF_LV","kick":"16:25","weekday":"Sunday","spread":-6.5,"p":0.7067,"share":0.0646,"lev":0.976},"SF":{"opp":"WAS","home":true,"game":"2026_06_WAS_SF","kick":"20:15","weekday":"Monday","spread":-5.5,"p":0.6847,"share":0.0444,"lev":0.982},"GB":{"opp":"DAL","home":true,"game":"2026_06_DAL_GB","kick":"20:20","weekday":"Sunday","spread":-3.0,"p":0.6021,"share":0.008,"lev":0.996},"CHI":{"opp":"ATL","home":false,"game":"2026_06_CHI_ATL","kick":"13:00","weekday":"Sunday","spread":-3.0,"p":0.5957,"share":0.0053,"lev":0.998},"IND":{"opp":"TEN","home":true,"game":"2026_06_TEN_IND","kick":"13:00","weekday":"Sunday","spread":-3.5,"p":0.5907,"share":0.0269,"lev":0.986},"NYG":{"opp":"NO","home":true,"game":"2026_06_NO_NYG","kick":"13:00","weekday":"Sunday","spread":-2.5,"p":0.5848,"share":0.0178,"lev":0.991},"KC":{"opp":"LAC","home":true,"game":"2026_06_LAC_KC","kick":"16:25","weekday":"Sunday","spread":-2.5,"p":0.5563,"share":0.0036,"lev":0.998},"SEA":{"opp":"DEN","home":false,"game":"2026_06_SEA_DEN","kick":"20:15","weekday":"Thursday","spread":-1.5,"p":0.554,"share":0.0015,"lev":0.999},"TB":{"opp":"PIT","home":true,"game":"2026_06_PIT_TB","kick":"13:00","weekday":"Sunday","spread":-1.5,"p":0.5527,"share":0.0095,"lev":0.995},"JAX":{"opp":"HOU","home":true,"game":"2026_06_HOU_JAX","kick":"09:30","weekday":"Sunday","spread":-1.5,"p":0.5225,"share":0.0031,"lev":0.999},"HOU":{"opp":"JAX","home":false,"game":"2026_06_HOU_JAX","kick":"09:30","weekday":"Sunday","spread":1.5,"p":0.4775,"share":0.0008,"lev":1.002},"PIT":{"opp":"TB","home":false,"game":"2026_06_PIT_TB","kick":"13:00","weekday":"Sunday","spread":1.5,"p":0.4473,"share":0.0004,"lev":1.007},"DEN":{"opp":"SEA","home":true,"game":"2026_06_SEA_DEN","kick":"20:15","weekday":"Thursday","spread":1.5,"p":0.446,"share":0.0003,"lev":1.001},"LAC":{"opp":"KC","home":false,"game":"2026_06_LAC_KC","kick":"16:25","weekday":"Sunday","spread":2.5,"p":0.4437,"share":0.0003,"lev":1.002},"NO":{"opp":"NYG","home":false,"game":"2026_06_NO_NYG","kick":"13:00","weekday":"Sunday","spread":2.5,"p":0.4152,"share":0.0005,"lev":1.013},"TEN":{"opp":"IND","home":false,"game":"2026_06_TEN_IND","kick":"13:00","weekday":"Sunday","spread":3.5,"p":0.4093,"share":0.0005,"lev":1.021},"ATL":{"opp":"CHI","home":true,"game":"2026_06_CHI_ATL","kick":"13:00","weekday":"Sunday","spread":3.0,"p":0.4043,"share":0.0006,"lev":1.004},"DAL":{"opp":"GB","home":false,"game":"2026_06_DAL_GB","kick":"20:20","weekday":"Sunday","spread":3.0,"p":0.3979,"share":0.0001,"lev":1.006},"WAS":{"opp":"SF","home":false,"game":"2026_06_WAS_SF","kick":"20:15","weekday":"Monday","spread":5.5,"p":0.3153,"share":0.0,"lev":1.041},"LV":{"opp":"BUF","home":true,"game":"2026_06_BUF_LV","kick":"16:25","weekday":"Sunday","spread":6.5,"p":0.2933,"share":0.0001,"lev":1.063},"CAR":{"opp":"PHI","home":false,"game":"2026_06_CAR_PHI","kick":"13:00","weekday":"Sunday","spread":6.5,"p":0.2891,"share":0.0,"lev":1.128},"CLE":{"opp":"BAL","home":true,"game":"2026_06_BAL_CLE","kick":"13:00","weekday":"Sunday","spread":6.5,"p":0.2701,"share":0.0,"lev":1.126},"NYJ":{"opp":"NE","home":false,"game":"2026_06_NYJ_NE","kick":"13:00","weekday":"Sunday","spread":9.5,"p":0.2311,"share":0.0,"lev":1.179},"ARI":{"opp":"LA","home":false,"game":"2026_06_ARI_LA","kick":"16:05","weekday":"Sunday","spread":13.5,"p":0.1405,"share":0.0,"lev":1.872}}},{"id":"W7","label":"Week 7","week":7,"kind":"regular","is_holiday":false,"deadline":"2026-10-24T16:00:00-07:00","deadline_txt":"Sat Oct 24, 4:00 PM PT","days_away":41.1,"field_alive":4855,"field_survive":0.6769509491984894,"field_known":true,"teams":{"LA":{"opp":"LV","home":false,"game":"2026_07_LA_LV","kick":"16:25","weekday":"Sunday","spread":-7.5,"p":0.7326,"share":0.1101,"lev":0.958},"DEN":{"opp":"ARI","home":false,"game":"2026_07_DEN_ARI","kick":"16:05","weekday":"Sunday","spread":-7.5,"p":0.7325,"share":0.3954,"lev":0.865},"HOU":{"opp":"NYG","home":true,"game":"2026_07_NYG_HOU","kick":"13:00","weekday":"Sunday","spread":-5.5,"p":0.677,"share":0.2197,"lev":0.905},"SF":{"opp":"ATL","home":false,"game":"2026_07_SF_ATL","kick":"13:00","weekday":"Sunday","spread":-4.5,"p":0.6473,"share":0.0279,"lev":0.986},"SEA":{"opp":"KC","home":true,"game":"2026_07_KC_SEA","kick":"20:20","weekday":"Sunday","spread":-3.0,"p":0.606,"share":0.0231,"lev":0.987},"MIN":{"opp":"IND","home":true,"game":"2026_07_IND_MIN","kick":"13:00","weekday":"Sunday","spread":-2.5,"p":0.5885,"share":0.0379,"lev":0.978},"BAL":{"opp":"CIN","home":true,"game":"2026_07_CIN_BAL","kick":"13:00","weekday":"Sunday","spread":-3.5,"p":0.5836,"share":0.0135,"lev":0.992},"TEN":{"opp":"CLE","home":true,"game":"2026_07_CLE_TEN","kick":"13:00","weekday":"Sunday","spread":-2.5,"p":0.5802,"share":0.06,"lev":0.965},"TB":{"opp":"CAR","home":false,"game":"2026_07_TB_CAR","kick":"13:00","weekday":"Sunday","spread":-1.5,"p":0.579,"share":0.0249,"lev":0.986},"PIT":{"opp":"NO","home":false,"game":"2026_07_PIT_NO","kick":"09:30","weekday":"Sunday","spread":-2.5,"p":0.5781,"share":0.0156,"lev":0.992},"PHI":{"opp":"DAL","home":true,"game":"2026_07_DAL_PHI","kick":"20:15","weekday":"Monday","spread":-3.0,"p":0.5726,"share":0.0092,"lev":0.995},"NYJ":{"opp":"MIA","home":true,"game":"2026_07_MIA_NYJ","kick":"13:00","weekday":"Sunday","spread":-2.5,"p":0.5566,"share":0.0388,"lev":0.977},"DET":{"opp":"GB","home":true,"game":"2026_07_GB_DET","kick":"16:25","weekday":"Sunday","spread":-2.5,"p":0.5561,"share":0.0054,"lev":0.997},"CHI":{"opp":"NE","home":true,"game":"2026_07_NE_CHI","kick":"20:15","weekday":"Thursday","spread":-1.5,"p":0.5517,"share":0.0047,"lev":0.997},"NE":{"opp":"CHI","home":false,"game":"2026_07_NE_CHI","kick":"20:15","weekday":"Thursday","spread":1.5,"p":0.4483,"share":0.0002,"lev":1.004},"GB":{"opp":"DET","home":false,"game":"2026_07_GB_DET","kick":"16:25","weekday":"Sunday","spread":2.5,"p":0.4439,"share":0.0004,"lev":1.004},"MIA":{"opp":"NYJ","home":false,"game":"2026_07_MIA_NYJ","kick":"13:00","weekday":"Sunday","spread":2.5,"p":0.4434,"share":0.0027,"lev":1.031},"DAL":{"opp":"PHI","home":false,"game":"2026_07_DAL_PHI","kick":"20:15","weekday":"Monday","spread":3.0,"p":0.4274,"share":0.0006,"lev":1.007},"NO":{"opp":"PIT","home":true,"game":"2026_07_PIT_NO","kick":"09:30","weekday":"Sunday","spread":2.5,"p":0.4219,"share":0.002,"lev":1.012},"CAR":{"opp":"TB","home":true,"game":"2026_07_TB_CAR","kick":"13:00","weekday":"Sunday","spread":1.5,"p":0.421,"share":0.0019,"lev":1.02},"CLE":{"opp":"TEN","home":false,"game":"2026_07_CLE_TEN","kick":"13:00","weekday":"Sunday","spread":2.5,"p":0.4198,"share":0.0016,"lev":1.053},"CIN":{"opp":"BAL","home":false,"game":"2026_07_CIN_BAL","kick":"13:00","weekday":"Sunday","spread":3.5,"p":0.4164,"share":0.0006,"lev":1.011},"IND":{"opp":"MIN","home":false,"game":"2026_07_IND_MIN","kick":"13:00","weekday":"Sunday","spread":2.5,"p":0.4115,"share":0.0009,"lev":1.033},"KC":{"opp":"SEA","home":false,"game":"2026_07_KC_SEA","kick":"20:20","weekday":"Sunday","spread":3.0,"p":0.394,"share":0.0002,"lev":1.021},"ATL":{"opp":"SF","home":true,"game":"2026_07_SF_ATL","kick":"13:00","weekday":"Sunday","spread":4.5,"p":0.3527,"share":0.0005,"lev":1.027},"NYG":{"opp":"HOU","home":false,"game":"2026_07_NYG_HOU","kick":"13:00","weekday":"Sunday","spread":5.5,"p":0.323,"share":0.0001,"lev":1.282},"ARI":{"opp":"DEN","home":true,"game":"2026_07_DEN_ARI","kick":"16:05","weekday":"Sunday","spread":7.5,"p":0.2675,"share":0.0001,"lev":1.748},"LV":{"opp":"LA","home":true,"game":"2026_07_LA_LV","kick":"16:25","weekday":"Sunday","spread":7.5,"p":0.2674,"share":0.0001,"lev":1.135}}},{"id":"W8","label":"Week 8","week":8,"kind":"regular","is_holiday":false,"deadline":"2026-10-31T16:00:00-07:00","deadline_txt":"Sat Oct 31, 4:00 PM PT","days_away":48.1,"field_alive":3323,"field_survive":0.7532155757533625,"field_known":true,"teams":{"DAL":{"opp":"ARI","home":true,"game":"2026_08_ARI_DAL","kick":"13:00","weekday":"Sunday","spread":-10.5,"p":0.8079,"share":0.5365,"lev":0.88},"NE":{"opp":"MIA","home":false,"game":"2026_08_NE_MIA","kick":"16:25","weekday":"Sunday","spread":-7.0,"p":0.7405,"share":0.044,"lev":0.985},"GB":{"opp":"CAR","home":true,"game":"2026_08_CAR_GB","kick":"20:15","weekday":"Thursday","spread":-7.0,"p":0.7229,"share":0.0634,"lev":0.977},"CIN":{"opp":"TEN","home":true,"game":"2026_08_TEN_CIN","kick":"13:00","weekday":"Sunday","spread":-6.5,"p":0.7135,"share":0.2173,"lev":0.924},"PIT":{"opp":"CLE","home":true,"game":"2026_08_CLE_PIT","kick":"13:00","weekday":"Sunday","spread":-6.0,"p":0.6628,"share":0.0486,"lev":0.979},"SEA":{"opp":"CHI","home":true,"game":"2026_08_CHI_SEA","kick":"20:15","weekday":"Monday","spread":-4.5,"p":0.654,"share":0.0207,"lev":0.991},"LA":{"opp":"LAC","home":true,"game":"2026_08_LAC_LA","kick":"16:05","weekday":"Sunday","spread":-4.5,"p":0.648,"share":0.0047,"lev":0.998},"JAX":{"opp":"IND","home":true,"game":"2026_08_IND_JAX","kick":"13:00","weekday":"Sunday","spread":-4.5,"p":0.6208,"share":0.0173,"lev":0.991},"DET":{"opp":"MIN","home":true,"game":"2026_08_MIN_DET","kick":"13:00","weekday":"Sunday","spread":-4.5,"p":0.6158,"share":0.0057,"lev":0.997},"TB":{"opp":"ATL","home":true,"game":"2026_08_ATL_TB","kick":"13:00","weekday":"Sunday","spread":-4.5,"p":0.6152,"share":0.0225,"lev":0.989},"BUF":{"opp":"BAL","home":true,"game":"2026_08_BAL_BUF","kick":"13:00","weekday":"Sunday","spread":-2.5,"p":0.5863,"share":0.0032,"lev":0.998},"PHI":{"opp":"WAS","home":false,"game":"2026_08_PHI_WAS","kick":"20:20","weekday":"Sunday","spread":-1.5,"p":0.5769,"share":0.0018,"lev":0.999},"NYJ":{"opp":"LV","home":true,"game":"2026_08_LV_NYJ","kick":"13:00","weekday":"Sunday","spread":-1.5,"p":0.5525,"share":0.0095,"lev":0.995},"DEN":{"opp":"KC","home":true,"game":"2026_08_KC_DEN","kick":"16:25","weekday":"Sunday","spread":-1.5,"p":0.5232,"share":0.0007,"lev":1.0},"KC":{"opp":"DEN","home":false,"game":"2026_08_KC_DEN","kick":"16:25","weekday":"Sunday","spread":1.5,"p":0.4768,"share":0.0003,"lev":1.0},"LV":{"opp":"NYJ","home":false,"game":"2026_08_LV_NYJ","kick":"13:00","weekday":"Sunday","spread":1.5,"p":0.4475,"share":0.0007,"lev":1.007},"WAS":{"opp":"PHI","home":true,"game":"2026_08_PHI_WAS","kick":"20:20","weekday":"Sunday","spread":1.5,"p":0.4231,"share":0.0005,"lev":1.001},"BAL":{"opp":"BUF","home":false,"game":"2026_08_BAL_BUF","kick":"13:00","weekday":"Sunday","spread":2.5,"p":0.4137,"share":0.0001,"lev":1.002},"ATL":{"opp":"TB","home":false,"game":"2026_08_ATL_TB","kick":"13:00","weekday":"Sunday","spread":4.5,"p":0.3848,"share":0.0002,"lev":1.019},"MIN":{"opp":"DET","home":false,"game":"2026_08_MIN_DET","kick":"13:00","weekday":"Sunday","spread":4.5,"p":0.3842,"share":0.0001,"lev":1.005},"IND":{"opp":"JAX","home":false,"game":"2026_08_IND_JAX","kick":"13:00","weekday":"Sunday","spread":4.5,"p":0.3792,"share":0.0001,"lev":1.014},"LAC":{"opp":"LA","home":false,"game":"2026_08_LAC_LA","kick":"16:05","weekday":"Sunday","spread":4.5,"p":0.352,"share":0.0,"lev":1.004},"CHI":{"opp":"SEA","home":false,"game":"2026_08_CHI_SEA","kick":"20:15","weekday":"Monday","spread":4.5,"p":0.346,"share":0.0,"lev":1.018},"CLE":{"opp":"PIT","home":false,"game":"2026_08_CLE_PIT","kick":"13:00","weekday":"Sunday","spread":6.0,"p":0.3372,"share":0.0001,"lev":1.045},"TEN":{"opp":"CIN","home":false,"game":"2026_08_TEN_CIN","kick":"13:00","weekday":"Sunday","spread":6.5,"p":0.2865,"share":0.0,"lev":1.259},"CAR":{"opp":"GB","home":false,"game":"2026_08_CAR_GB","kick":"20:15","weekday":"Thursday","spread":7.0,"p":0.2771,"share":0.0,"lev":1.065},"MIA":{"opp":"NE","home":true,"game":"2026_08_NE_MIA","kick":"16:25","weekday":"Sunday","spread":7.0,"p":0.2595,"share":0.0,"lev":1.045},"ARI":{"opp":"DAL","home":false,"game":"2026_08_ARI_DAL","kick":"13:00","weekday":"Sunday","spread":10.5,"p":0.1921,"share":0.0,"lev":2.355}}},{"id":"W9","label":"Week 9","week":9,"kind":"regular","is_holiday":false,"deadline":"2026-11-07T16:00:00-08:00","deadline_txt":"Sat Nov 7, 4:00 PM PT","days_away":55.1,"field_alive":2432,"field_survive":0.7874886301659882,"field_known":true,"teams":{"SEA":{"opp":"ARI","home":true,"game":"2026_09_ARI_SEA","kick":"16:25","weekday":"Sunday","spread":-13.5,"p":0.856,"share":0.4669,"lev":0.921},"KC":{"opp":"NYJ","home":true,"game":"2026_09_NYJ_KC","kick":"13:00","weekday":"Sunday","spread":-9.5,"p":0.7818,"share":0.2499,"lev":0.935},"SF":{"opp":"LV","home":true,"game":"2026_09_LV_SF","kick":"16:05","weekday":"Sunday","spread":-8.5,"p":0.7622,"share":0.0859,"lev":0.975},"DET":{"opp":"MIA","home":false,"game":"2026_09_DET_MIA","kick":"13:00","weekday":"Sunday","spread":-6.5,"p":0.6993,"share":0.039,"lev":0.985},"CIN":{"opp":"ATL","home":false,"game":"2026_09_CIN_ATL","kick":"09:30","weekday":"Sunday","spread":-5.5,"p":0.6763,"share":0.0508,"lev":0.98},"LA":{"opp":"WAS","home":false,"game":"2026_09_LA_WAS","kick":"13:00","weekday":"Sunday","spread":-5.5,"p":0.6749,"share":0.0072,"lev":0.997},"BAL":{"opp":"JAX","home":true,"game":"2026_09_JAX_BAL","kick":"20:15","weekday":"Thursday","spread":-4.5,"p":0.6462,"share":0.0132,"lev":0.994},"PHI":{"opp":"NYG","home":true,"game":"2026_09_NYG_PHI","kick":"13:00","weekday":"Sunday","spread":-5.5,"p":0.6456,"share":0.0164,"lev":0.993},"NO":{"opp":"CLE","home":true,"game":"2026_09_CLE_NO","kick":"13:00","weekday":"Sunday","spread":-3.5,"p":0.6169,"share":0.0412,"lev":0.98},"CHI":{"opp":"TB","home":true,"game":"2026_09_TB_CHI","kick":"20:20","weekday":"Sunday","spread":-3.5,"p":0.6157,"share":0.0099,"lev":0.995},"DEN":{"opp":"CAR","home":false,"game":"2026_09_DEN_CAR","kick":"13:00","weekday":"Sunday","spread":-3.0,"p":0.5978,"share":0.0029,"lev":0.999},"BUF":{"opp":"MIN","home":false,"game":"2026_09_BUF_MIN","kick":"20:15","weekday":"Monday","spread":-3.0,"p":0.5922,"share":0.0029,"lev":0.999},"LAC":{"opp":"HOU","home":true,"game":"2026_09_HOU_LAC","kick":"16:05","weekday":"Sunday","spread":-2.5,"p":0.5839,"share":0.0072,"lev":0.996},"NE":{"opp":"GB","home":true,"game":"2026_09_GB_NE","kick":"16:25","weekday":"Sunday","spread":-1.5,"p":0.5512,"share":0.0008,"lev":1.0},"DAL":{"opp":"IND","home":false,"game":"2026_09_DAL_IND","kick":"13:00","weekday":"Sunday","spread":-1.5,"p":0.5479,"share":0.0011,"lev":1.0},"IND":{"opp":"DAL","home":true,"game":"2026_09_DAL_IND","kick":"13:00","weekday":"Sunday","spread":1.5,"p":0.4521,"share":0.0011,"lev":1.0},"GB":{"opp":"NE","home":false,"game":"2026_09_GB_NE","kick":"16:25","weekday":"Sunday","spread":1.5,"p":0.4488,"share":0.0001,"lev":1.0},"HOU":{"opp":"LAC","home":false,"game":"2026_09_HOU_LAC","kick":"16:05","weekday":"Sunday","spread":2.5,"p":0.4161,"share":0.0001,"lev":1.005},"MIN":{"opp":"BUF","home":true,"game":"2026_09_BUF_MIN","kick":"20:15","weekday":"Monday","spread":3.0,"p":0.4078,"share":0.0003,"lev":1.002},"CAR":{"opp":"DEN","home":true,"game":"2026_09_DEN_CAR","kick":"13:00","weekday":"Sunday","spread":3.0,"p":0.4022,"share":0.0004,"lev":1.002},"TB":{"opp":"CHI","home":false,"game":"2026_09_TB_CHI","kick":"20:20","weekday":"Sunday","spread":3.5,"p":0.3843,"share":0.0001,"lev":1.008},"CLE":{"opp":"NO","home":false,"game":"2026_09_CLE_NO","kick":"13:00","weekday":"Sunday","spread":3.5,"p":0.3831,"share":0.0002,"lev":1.033},"NYG":{"opp":"PHI","home":false,"game":"2026_09_NYG_PHI","kick":"13:00","weekday":"Sunday","spread":5.5,"p":0.3544,"share":0.0001,"lev":1.014},"JAX":{"opp":"BAL","home":false,"game":"2026_09_JAX_BAL","kick":"20:15","weekday":"Thursday","spread":4.5,"p":0.3538,"share":0.0,"lev":1.011},"WAS":{"opp":"LA","home":true,"game":"2026_09_LA_WAS","kick":"13:00","weekday":"Sunday","spread":5.5,"p":0.3251,"share":0.0001,"lev":1.006},"ATL":{"opp":"CIN","home":true,"game":"2026_09_CIN_ATL","kick":"09:30","weekday":"Sunday","spread":5.5,"p":0.3237,"share":0.0001,"lev":1.046},"MIA":{"opp":"DET","home":true,"game":"2026_09_DET_MIA","kick":"13:00","weekday":"Sunday","spread":6.5,"p":0.3007,"share":0.0,"lev":1.036},"LV":{"opp":"SF","home":false,"game":"2026_09_LV_SF","kick":"16:05","weekday":"Sunday","spread":8.5,"p":0.2378,"share":0.0,"lev":1.091},"NYJ":{"opp":"KC","home":false,"game":"2026_09_NYJ_KC","kick":"13:00","weekday":"Sunday","spread":9.5,"p":0.2182,"share":0.0,"lev":1.33},"ARI":{"opp":"SEA","home":false,"game":"2026_09_ARI_SEA","kick":"16:25","weekday":"Sunday","spread":13.5,"p":0.144,"share":0.0,"lev":2.031}}}],"all_legs":["W1","W2","W3","W4","W5","W6","W7","W8","W9","W10","W11","W12a","W12b","W13","W14","W15","W16a","W16b","W17","W18"],"holiday":["W12a","W16a"],"labels":{"W1":"Week 1","W2":"Week 2","W3":"Week 3","W4":"Week 4","W5":"Week 5","W6":"Week 6","W7":"Week 7","W8":"Week 8","W9":"Week 9","W10":"Week 10","W11":"Week 11","W12a":"Week 12a \u2014 holiday games","W12b":"Week 12b \u2014 Sun/Mon","W13":"Week 13","W14":"Week 14","W15":"Week 15","W16a":"Week 16a \u2014 holiday games","W16b":"Week 16b \u2014 Sun/Mon","W17":"Week 17","W18":"Week 18"},"p":{"W1":{"SEA":0.6012,"NE":0.3988,"LA":0.615,"SF":0.385,"CAR":0.3988,"CHI":0.6012,"CIN":0.635,"TB":0.365,"DET":0.7322,"NO":0.2678,"HOU":0.4765,"BUF":0.5235,"IND":0.4025,"BAL":0.5975,"JAX":0.7835,"CLE":0.2165,"PIT":0.717,"ATL":0.283,"TEN":0.5313,"NYJ":0.4687,"LAC":0.7807,"ARI":0.2193,"LV":0.6037,"MIA":0.3963,"MIN":0.5109,"GB":0.4891,"PHI":0.6625,"WAS":0.3375,"NYG":0.3684,"DAL":0.6316,"KC":0.5577,"DEN":0.4423},"W2":{"BUF":0.6035,"DET":0.3965,"ATL":0.5237,"CAR":0.4763,"BAL":0.7429,"NO":0.2571,"CHI":0.574,"MIN":0.426,"HOU":0.5859,"CIN":0.4141,"NE":0.6531,"PIT":0.3469,"NYJ":0.3165,"GB":0.6835,"TB":0.7144,"CLE":0.2856,"TEN":0.3156,"PHI":0.6844,"DEN":0.6036,"JAX":0.3964,"LAC":0.7763,"LV":0.2237,"ARI":0.1739,"SEA":0.8261,"DAL":0.6256,"WAS":0.3744,"SF":0.8205,"MIA":0.1795,"KC":0.7149,"IND":0.2851,"LA":0.7961,"NYG":0.2039},"W3":{"GB":0.7416,"ATL":0.2584,"BUF":0.6031,"LAC":0.3969,"CLE":0.4496,"CAR":0.5504,"DET":0.7945,"NYJ":0.2055,"IND":0.4195,"HOU":0.5805,"JAX":0.5525,"NE":0.4475,"MIA":0.2587,"KC":0.7413,"NYG":0.6047,"TEN":0.3953,"PIT":0.4173,"CIN":0.5827,"WAS":0.3796,"SEA":0.6204,"SF":0.8248,"ARI":0.1752,"TB":0.5507,"MIN":0.4493,"DAL":0.4143,"BAL":0.5857,"NO":0.6201,"LV":0.3799,"DEN":0.3975,"LA":0.6025,"CHI":0.5524,"PHI":0.4476},"W4":{"CLE":0.3891,"PIT":0.6109,"WAS":0.552,"IND":0.448,"BAL":0.7689,"TEN":0.2311,"BUF":0.5741,"NE":0.4259,"CHI":0.7673,"NYJ":0.2327,"CIN":0.5884,"JAX":0.4116,"HOU":0.5864,"DAL":0.4136,"NYG":0.7274,"ARI":0.2726,"PHI":0.4489,"LA":0.5511,"TB":0.4488,"GB":0.5512,"MIN":0.7422,"MIA":0.2578,"LV":0.2945,"KC":0.7055,"SEA":0.6049,"LAC":0.3951,"SF":0.5883,"DEN":0.4117,"CAR":0.3986,"DET":0.6014,"NO":0.557,"ATL":0.443},"W5":{"DAL":0.619,"TB":0.381,"JAX":0.4489,"PHI":0.5511,"MIA":0.3034,"CIN":0.6966,"NE":0.7659,"LV":0.2341,"NO":0.4495,"MIN":0.5505,"NYJ":0.5526,"CLE":0.4474,"PIT":0.5846,"IND":0.4154,"TEN":0.3544,"HOU":0.6456,"WAS":0.5544,"NYG":0.4456,"LAC":0.5568,"DEN":0.4432,"ARI":0.236,"DET":0.764,"GB":0.5741,"CHI":0.4259,"SEA":0.5906,"SF":0.4094,"ATL":0.3544,"BAL":0.6456,"LA":0.6022,"BUF":0.3978},"W6":{"DEN":0.446,"SEA":0.554,"JAX":0.5225,"HOU":0.4775,"ATL":0.4043,"CHI":0.5957,"CLE":0.2701,"BAL":0.7299,"IND":0.5907,"TEN":0.4093,"NE":0.7689,"NYJ":0.2311,"NYG":0.5848,"NO":0.4152,"PHI":0.7109,"CAR":0.2891,"TB":0.5527,"PIT":0.4473,"LA":0.8595,"ARI":0.1405,"KC":0.5563,"LAC":0.4437,"LV":0.2933,"BUF":0.7067,"GB":0.6021,"DAL":0.3979,"SF":0.6847,"WAS":0.3153},"W7":{"CHI":0.5517,"NE":0.4483,"NO":0.4219,"PIT":0.5781,"ATL":0.3527,"SF":0.6473,"BAL":0.5836,"CIN":0.4164,"CAR":0.421,"TB":0.579,"HOU":0.677,"NYG":0.323,"MIN":0.5885,"IND":0.4115,"NYJ":0.5566,"MIA":0.4434,"TEN":0.5802,"CLE":0.4198,"ARI":0.2675,"DEN":0.7325,"DET":0.5561,"GB":0.4439,"LV":0.2674,"LA":0.7326,"SEA":0.606,"KC":0.394,"PHI":0.5726,"DAL":0.4274},"W8":{"GB":0.7229,"CAR":0.2771,"BUF":0.5863,"BAL":0.4137,"CIN":0.7135,"TEN":0.2865,"DAL":0.8079,"ARI":0.1921,"DET":0.6158,"MIN":0.3842,"JAX":0.6208,"IND":0.3792,"NYJ":0.5525,"LV":0.4475,"PIT":0.6628,"CLE":0.3372,"TB":0.6152,"ATL":0.3848,"LA":0.648,"LAC":0.352,"DEN":0.5232,"KC":0.4768,"MIA":0.2595,"NE":0.7405,"WAS":0.4231,"PHI":0.5769,"SEA":0.654,"CHI":0.346},"W9":{"BAL":0.6462,"JAX":0.3538,"ATL":0.3237,"CIN":0.6763,"CAR":0.4022,"DEN":0.5978,"IND":0.4521,"DAL":0.5479,"KC":0.7818,"NYJ":0.2182,"MIA":0.3007,"DET":0.6993,"NO":0.6169,"CLE":0.3831,"PHI":0.6456,"NYG":0.3544,"WAS":0.3251,"LA":0.6749,"LAC":0.5839,"HOU":0.4161,"SF":0.7622,"LV":0.2378,"NE":0.5512,"GB":0.4488,"SEA":0.856,"ARI":0.144,"CHI":0.6157,"TB":0.3843,"MIN":0.4078,"BUF":0.5922},"W10":{"NYG":0.5274,"WAS":0.4726,"DET":0.5498,"NE":0.4502,"ATL":0.364,"KC":0.636,"CLE":0.3622,"HOU":0.6378,"GB":0.6126,"MIN":0.3874,"IND":0.7012,"MIA":0.2988,"NO":0.5283,"CAR":0.4717,"NYJ":0.2656,"BUF":0.7344,"TEN":0.3909,"JAX":0.6091,"ARI":0.182,"LA":0.818,"LV":0.2825,"SEA":0.7175,"DAL":0.5448,"SF":0.4552,"CIN":0.5949,"PIT":0.4051,"BAL":0.6139,"LAC":0.3861},"W11":{"HOU":0.6488,"IND":0.3512,"BUF":0.8052,"MIA":0.1948,"CAR":0.3603,"BAL":0.6397,"CHI":0.697,"NO":0.303,"DAL":0.7044,"TEN":0.2956,"DET":0.6444,"TB":0.3556,"KC":0.8213,"ARI":0.1787,"NYG":0.4595,"JAX":0.5405,"LAC":0.7771,"NYJ":0.2229,"DEN":0.7017,"LV":0.2983,"PHI":0.6772,"PIT":0.3228,"SF":0.6138,"MIN":0.3862,"WAS":0.446,"CIN":0.554},"W12a":{"LA":0.6433,"GB":0.3567,"DET":0.5525,"CHI":0.4475,"DAL":0.5222,"PHI":0.4778,"BUF":0.5821,"KC":0.4179,"PIT":0.4499,"DEN":0.5501},"W12b":{"CIN":0.7019,"NO":0.2981,"CLE":0.5501,"LV":0.4499,"HOU":0.5547,"BAL":0.4453,"IND":0.576,"NYG":0.424,"MIA":0.5202,"NYJ":0.4798,"MIN":0.6422,"ATL":0.3578,"JAX":0.6469,"TEN":0.3531,"ARI":0.3681,"WAS":0.6319,"SF":0.423,"SEA":0.577,"LAC":0.5501,"NE":0.4499,"TB":0.584,"CAR":0.416},"W13":{"LA":0.611,"KC":0.389,"ATL":0.4031,"DET":0.5969,"CHI":0.5972,"JAX":0.4028,"CLE":0.3341,"CIN":0.6659,"NO":0.3694,"GB":0.6306,"NYG":0.406,"SF":0.594,"TB":0.4208,"LAC":0.5792,"TEN":0.4515,"WAS":0.5485,"ARI":0.2586,"PHI":0.7414,"DEN":0.7722,"MIA":0.2278,"MIN":0.6193,"CAR":0.3807,"NE":0.522,"BUF":0.478,"PIT":0.4503,"HOU":0.5497,"SEA":0.6507,"DAL":0.3493},"W14":{"NE":0.6328,"MIN":0.3672,"BAL":0.6825,"TB":0.3175,"CAR":0.5425,"NO":0.4575,"CLE":0.5488,"ATL":0.4512,"DET":0.7249,"TEN":0.2751,"MIA":0.3429,"CHI":0.6571,"NYJ":0.3423,"DEN":0.6577,"PHI":0.6684,"IND":0.3316,"WAS":0.4551,"HOU":0.5449,"LV":0.3152,"LAC":0.6848,"CIN":0.5603,"KC":0.4397,"SEA":0.7254,"NYG":0.2746,"SF":0.4356,"LA":0.5644,"GB":0.5507,"BUF":0.4493,"JAX":0.598,"PIT":0.402},"W15":{"LAC":0.5711,"SF":0.4289,"PHI":0.5404,"SEA":0.4596,"BUF":0.6099,"CHI":0.3901,"CAR":0.4157,"CIN":0.5843,"GB":0.789,"MIA":0.211,"HOU":0.5675,"JAX":0.4325,"NYG":0.6395,"CLE":0.3605,"PIT":0.3962,"BAL":0.6038,"TB":0.5698,"NO":0.4302,"TEN":0.4229,"IND":0.5771,"WAS":0.5994,"ATL":0.4006,"ARI":0.553,"NYJ":0.447,"LA":0.6822,"DAL":0.3178,"LV":0.346,"DEN":0.654,"MIN":0.4365,"DET":0.5635,"KC":0.5797,"NE":0.4203},"W16a":{"PHI":0.5777,"HOU":0.4223,"CHI":0.5195,"GB":0.4805,"DEN":0.4553,"BUF":0.5447,"SEA":0.531,"LA":0.469},"W16b":{"ATL":0.4379,"TB":0.5621,"BAL":0.7517,"CLE":0.2483,"IND":0.4473,"CIN":0.5527,"MIA":0.3036,"LAC":0.6964,"MIN":0.587,"WAS":0.413,"NO":0.6646,"ARI":0.3354,"NYJ":0.2932,"NE":0.7068,"PIT":0.6055,"CAR":0.3945,"LV":0.5597,"TEN":0.4403,"KC":0.585,"SF":0.415,"DAL":0.5951,"JAX":0.4049,"DET":0.6265,"NYG":0.3735},"W17":{"CIN":0.5651,"BAL":0.4349,"ATL":0.5197,"NO":0.4803,"CAR":0.33,"SEA":0.67,"CLE":0.433,"IND":0.567,"DAL":0.5994,"NYG":0.4006,"JAX":0.6062,"WAS":0.3938,"LAC":0.5195,"KC":0.4805,"MIA":0.2696,"BUF":0.7304,"NE":0.5778,"DEN":0.4222,"NYJ":0.3974,"MIN":0.6026,"TB":0.3676,"LA":0.6324,"TEN":0.458,"PIT":0.542,"ARI":0.4589,"LV":0.5411,"CHI":0.5199,"DET":0.4801,"SF":0.5583,"PHI":0.4417,"GB":0.5774,"HOU":0.4226},"W18":{"ARI":0.2386,"SF":0.7614,"BAL":0.6379,"PIT":0.3621,"BUF":0.7493,"NYJ":0.2507,"CAR":0.5383,"ATL":0.4617,"CIN":0.6944,"CLE":0.3056,"DEN":0.5194,"LAC":0.4806,"GB":0.551,"DET":0.449,"HOU":0.6822,"TEN":0.3178,"IND":0.5228,"JAX":0.4772,"KC":0.7121,"LV":0.2879,"LA":0.5538,"SEA":0.4462,"MIN":0.5308,"CHI":0.4692,"NE":0.7639,"MIA":0.2361,"NO":0.4368,"TB":0.5632,"NYG":0.392,"PHI":0.608,"WAS":0.4277,"DAL":0.5723}},"entries":[{"name":"shouldatookdabears-1","alive":true,"used":{"W1":"DET"},"model_plan":{"W1":"DET","W2":"LAC","W3":"SF","W4":"MIN","W5":"CIN","W6":"BAL","W7":"HOU","W8":"DAL","W9":"SEA","W10":"IND","W11":"KC","W12a":"LA","W12b":"JAX","W13":"DEN","W14":"CHI","W15":"GB","W16a":"PHI","W16b":"NO","W17":"BUF","W18":"NE"},"champion_plan":{"W1":"DET","W2":"SF","W3":"GB","W4":"BAL","W5":"NE","W6":"LA","W7":"DEN","W8":"DAL","W9":"SEA","W10":"IND","W11":"KC","W12a":"BUF","W12b":"CIN","W13":"PHI","W14":"LAC","W15":"NYG","W16a":"CHI","W16b":"NO","W17":"JAX","W18":"HOU"}},{"name":"shouldatookdabears-2","alive":true,"used":{"W1":"PIT"},"model_plan":{"W1":"PIT","W2":"LAC","W3":"SF","W4":"MIN","W5":"DET","W6":"LA","W7":"HOU","W8":"DAL","W9":"SEA","W10":"IND","W11":"KC","W12a":"BUF","W12b":"CIN","W13":"DEN","W14":"CHI","W15":"GB","W16a":"PHI","W16b":"BAL","W17":"JAX","W18":"NE"},"champion_plan":{"W1":"PIT","W2":"LAC","W3":"DET","W4":"NYG","W5":"CIN","W6":"NE","W7":"HOU","W8":"GB","W9":"KC","W10":"BUF","W11":"DAL","W12a":"DEN","W12b":"JAX","W13":"MIN","W14":"BAL","W15":"LA","W16a":"SEA","W16b":"LV","W17":"IND","W18":"SF"}},{"name":"shouldatookdabears-3","alive":true,"used":{"W1":"PIT"},"model_plan":{"W1":"PIT","W2":"LAC","W3":"SF","W4":"MIN","W5":"DET","W6":"LA","W7":"HOU","W8":"DAL","W9":"SEA","W10":"IND","W11":"KC","W12a":"BUF","W12b":"CIN","W13":"DEN","W14":"CHI","W15":"GB","W16a":"PHI","W16b":"BAL","W17":"JAX","W18":"NE"},"champion_plan":{"W1":"PIT","W2":"TB","W3":"KC","W4":"MIN","W5":"DET","W6":"BAL","W7":"SF","W8":"CIN","W9":"NO","W10":"SEA","W11":"LAC","W12a":"DAL","W12b":"WAS","W13":"GB","W14":"CHI","W15":"DEN","W16a":"BUF","W16b":"NE","W17":"LA","W18":"PHI"}}],"nick":{"SEA":"Seahawks","SF":"49ers","LA":"Rams","LAC":"Chargers","BAL":"Ravens","KC":"Chiefs","TB":"Buccaneers","PHI":"Eagles","GB":"Packers","NE":"Patriots","DAL":"Cowboys","DEN":"Broncos","BUF":"Bills","HOU":"Texans","CHI":"Bears","ATL":"Falcons","CAR":"Panthers","MIN":"Vikings","CIN":"Bengals","DET":"Lions","JAX":"Jaguars","WAS":"Commanders","PIT":"Steelers","NYJ":"Jets","TEN":"Titans","CLE":"Browns","IND":"Colts","NO":"Saints","LV":"Raiders","NYG":"Giants","MIA":"Dolphins","ARI":"Cardinals"},"field_source":"no 2026 selections PDF yet \u2014 assuming 24,982 entries, all teams available","drift":0.32};</script><script>
+// e-maxx Hungarian, minimising, rows <= cols
+function hungarian(cost){
+  const n=cost.length, m=cost[0].length, INF=1e18;
+  const u=new Array(n+1).fill(0), v=new Array(m+1).fill(0), p=new Array(m+1).fill(0), way=new Array(m+1).fill(0);
+  for(let i=1;i<=n;i++){ p[0]=i; let j0=0; const minv=new Array(m+1).fill(INF), used=new Array(m+1).fill(false);
+    do{ used[j0]=true; const i0=p[j0]; let delta=INF, j1=0;
+      for(let j=1;j<=m;j++) if(!used[j]){ const cur=cost[i0-1][j-1]-u[i0]-v[j]; if(cur<minv[j]){minv[j]=cur; way[j]=j0;} if(minv[j]<delta){delta=minv[j]; j1=j;} }
+      for(let j=0;j<=m;j++){ if(used[j]){u[p[j]]+=delta; v[j]-=delta;} else minv[j]-=delta; }
+      j0=j1; } while(p[j0]!==0);
+    do{ const j1=way[j0]; p[j0]=p[j1]; j0=j1; } while(j0); }
+  const ans=new Array(n).fill(-1); for(let j=1;j<=m;j++) if(p[j]) ans[p[j]-1]=j-1; return ans; }
+
+const LA_BIG = 1e6;
+
+// Best assignment of the teams an entry still has to the legs AFTER legIds[afterIdx] — the same objective as
+// the optimiser: maximising the sum of log win probabilities maximises P(surviving every remaining leg).
+// Returns value = -Infinity and the leg it dies at when the run-out cannot be completed (holiday legs).
+function bestPath(legIds, afterIdx, banned, P){
+  const open = legIds.slice(afterIdx + 1);
+  if (!open.length) return {value: 0, plan: {}, stuck: null};
+  const seen = new Set();
+  for (const l of open) for (const t in (P[l] || {})) if (!banned.has(t)) seen.add(t);
+  const teams = Array.from(seen).sort();
+  if (!teams.length) return {value: -Infinity, plan: {}, stuck: open[0]};
+  const cost = open.map(l => teams.map(t => { const p = (P[l] || {})[t]; return p === undefined ? LA_BIG : -Math.log(Math.max(p, 1e-9)); }));
+  if (teams.length < open.length) for (const row of cost) while (row.length < open.length) row.push(LA_BIG);
+  const a = hungarian(cost);
+  let value = 0, stuck = null; const plan = {};
+  for (let i = 0; i < open.length; i++){ const j = a[i];
+    if (j < 0 || j >= teams.length || cost[i][j] >= LA_BIG){ if (stuck === null) stuck = open[i]; }
+    else { plan[open[i]] = teams[j]; value += -cost[i][j]; } }
+  return stuck === null ? {value, plan, stuck} : {value: -Infinity, plan, stuck};
+}
+
+// Every team one entry could take at legIds[idx] given what it has burned: the value of the rest of the
+// season after taking it, what burning it costs (future cost), and where it would leave the entry stuck.
+function optionsAt(legIds, idx, banned, P){
+  const leg = legIds[idx], out = {};
+  const keep = bestPath(legIds, idx, banned, P);
+  const keepV = keep.value > -Infinity ? keep.value : -50;
+  for (const t in (P[leg] || {})){
+    if (banned.has(t)) continue;
+    const b2 = new Set(banned); b2.add(t);
+    const rest = bestPath(legIds, idx, b2, P);
+    const restV = rest.value > -Infinity ? rest.value : -50;
+    out[t] = {p: P[leg][t], rest: restV, fut: rest.stuck === null ? Math.exp(rest.value) : 0,
+              fv: Math.max(0, keepV - restV), stuck: rest.stuck, plan: rest.plan};
+  }
+  return {keep, options: out};
+}
+
+// One set of picks — one team per alive entry, at one leg — scored the way extras.rank_combos scores this
+// week's. Entries on the same game share a coin; entries on opposite sides of one game hedge exactly.
+//   T = {teams: {abbr: {p, share, lev, opp, game}}, gamma, lw, pot, nStart, finalistRate, nAlive, baseSurvive}
+//   opts[i] = the options map for entry i (from optionsAt), giving its rest-of-season value for each team.
+function scoreSet(picks, opts, T){
+  const teams = T.teams, games = {}, keys = [];
+  for (const t of picks){ const k = teams[t].game; if (!(k in games)){ games[k] = {a: t, p: teams[t].p}; keys.push(k); } }
+  const fut = picks.map((t, i) => { const o = (opts[i] || {})[t]; return (o && o.stuck === null) ? o.fut : 0; });
+  const eq = picks.map((t, i) => fut[i] * Math.pow(Math.max(teams[t].lev, 1e-6), T.lw));
+  let pAny = 0, pWipe = 0, pAll = 0, util = 0;
+  for (let m = 0; m < (1 << keys.length); m++){
+    let pr = 1; const won = {};
+    for (let j = 0; j < keys.length; j++){ const w = !!(m & (1 << j)); won[keys[j]] = w; pr *= w ? games[keys[j]].p : 1 - games[keys[j]].p; }
+    if (!pr) continue;
+    const alive = picks.map(t => { const k = teams[t].game; return games[k].a === t ? won[k] : !won[k]; });
+    if (alive.every(x => x)) pAll += pr;
+    if (!alive.some(x => x)) pWipe += pr;
+    let none = 1;
+    for (let i = 0; i < alive.length; i++) if (alive[i]) none *= 1 - fut[i];
+    pAny += pr * (1 - none);
+    let v = 0;
+    for (let i = 0; i < alive.length; i++) if (alive[i]) v += eq[i];
+    util += pr * Math.pow(v, T.gamma);
+  }
+  const dollars = T.pot / (1 + T.finalistRate * T.nStart);
+  const ev = picks.reduce((s, t, i) => s + teams[t].p * fut[i] * teams[t].lev, 0) * dollars;
+  const mine = new Set(picks), opps = new Set(picks.map(t => teams[t].opp));
+  let surv = 0;
+  for (const t in teams){ const g = teams[t]; surv += mine.has(t) ? g.share : opps.has(t) ? 0 : g.share * g.p; }
+  const others = T.finalistRate * T.nStart * (surv / Math.max(T.baseSurvive, 1e-9));
+  const equityIf = fut.reduce((s, f) => s + f * T.pot / (1 + others), 0);
+  let fieldShare = 0;
+  for (const t of mine) fieldShare += teams[t].share;
+  return {picks: picks.slice(), pAll, pAny, pWipe, util, ev, equityIf, fut,
+          fieldLeft: surv * T.nAlive, fieldShare: fieldShare / picks.length,
+          distinct: mine.size, minP: Math.min.apply(null, picks.map(t => teams[t].p)),
+          stuck: picks.map((t, i) => ((opts[i] || {})[t] || {}).stuck || null)};
+}
+
+// Candidates worth enumerating for one entry: the best few by win probability, every cheap-to-burn team that
+// is still a real favourite, and whatever the champion model would take — the same net extras.rank_combos casts.
+function candidatesFor(options, extra, perEntry){
+  const order = Object.keys(options).sort((a, b) => options[b].p - options[a].p);
+  const out = order.slice(0, perEntry || 10);
+  for (const t of order) if (options[t].p >= 0.6 && options[t].fv < 0.02 && out.indexOf(t) < 0) out.push(t);
+  for (const t of (extra || [])) if (t && options[t] && out.indexOf(t) < 0) out.push(t);
+  return out;
+}
+
+// Every combination across the entries, scored once. Identical availability => the set is unordered, so
+// {A,B,C} is not re-scored as {B,A,C}.
+function allSets(cands, opts, T, sameAvail){
+  const seen = new Set(), out = [];
+  const walk = (i, acc) => {
+    if (i === cands.length){
+      const key = (sameAvail ? acc.slice().sort() : acc).join('|');
+      if (seen.has(key)) return;
+      seen.add(key); out.push(scoreSet(acc, opts, T)); return; }
+    for (const t of cands[i]) walk(i + 1, acc.concat([t]));
+  };
+  walk(0, []);
+  return out;
+}
+
+// The same six lenses the current week's "Top 10 combinations" uses, so the two tabs rank alike.
+function rankSets(sets, nEntries, top){
+  if (!sets.length) return {};
+  const bestAny = Math.max.apply(null, sets.map(r => r.pAny));
+  const ok = sets.filter(r => r.pWipe <= 0.10 && r.minP >= 0.6);
+  const by = (f) => sets.slice().sort(f);
+  const L = {
+    win: ['Most likely to win it all', by((a, b) => b.pAny - a.pAny)],
+    diverse: ['Best season odds with a different team per entry', sets.filter(r => r.distinct === nEntries).sort((a, b) => b.pAny - a.pAny)],
+    balanced: ["Model's balance of season odds and wipeout risk", by((a, b) => b.util - a.util)],
+    safe: ['Safest that week, within 85% of the best season odds', sets.filter(r => r.pAny >= 0.85 * bestAny).sort((a, b) => (a.pWipe - b.pWipe) || (b.pAny - a.pAny))],
+    contrarian: ['Least of the field on your teams (wipeout ≤ 10%, every pick ≥ 60%, within 75% of best odds)',
+                 ok.filter(r => r.pAny >= 0.75 * bestAny).sort((a, b) => (a.fieldShare - b.fieldShare) || (b.pAny - a.pAny))],
+    jackpot: ['Biggest equity if it all hits (wipeout ≤ 10%, within 75% of best odds)',
+              ok.filter(r => r.pAny >= 0.75 * bestAny).sort((a, b) => b.equityIf - a.equityIf)],
+    money: ['Best expected payout', by((a, b) => b.ev - a.ev)],
+  };
+  const out = {};
+  for (const k in L) out[k] = {label: L[k][0], rows: L[k][1].slice(0, top || 10)};
+  return out;
+}
+
+const D = window.__AHEAD__;
+if (D && D.legs && D.legs.length && document.getElementById('ahead')) {
+const root = document.getElementById('ahead');
+const LEG_IDS = D.all_legs, LI = Object.fromEntries(LEG_IDS.map((l,i)=>[l,i]));
+const HOL = new Set(D.holiday), LOCKED = new Set(D.locked || []);
+const ALIVE = D.entries.filter(e=>e.alive);
+const KEY = 'survivor-ahead-v1-' + D.season;
+let store = {leg: D.legs[0].id, source: 'model', bridge: {}, picks: {}, lens: 'win'};
+try { const s = JSON.parse(localStorage.getItem(KEY) || 'null'); if (s) store = Object.assign(store, s); } catch(e) {}
+if (!D.legs.some(l=>l.id===store.leg)) store.leg = D.legs[0].id;
+function save(){ try { localStorage.setItem(KEY, JSON.stringify(store)); } catch(e) {} }
+
+const pct = (x,d)=>(100*x).toFixed(d===undefined?0:d)+'%';
+const usd = x=>'$'+Math.round(x).toLocaleString();
+const esc = s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const short = n=>n.replace(/^shouldatookdabears-/,'Entry ');
+const sp = x=>Math.abs(x)<0.25?'PK':(x>0?'+':'')+x.toFixed(1);
+const legOf = id=>D.legs.find(l=>l.id===id);
+const SRC = {model: "the model's plan", champion: "the champion model's plan", none: 'nothing else burned'};
+
+// --- the bridge: what each entry is assumed to spend between now and the leg being looked at ---------------
+function bridgeLegs(target){ return LEG_IDS.slice(0, LI[target]); }
+function resolve(ei, target){
+  const e = ALIVE[ei], plan = {}, why = {}, used = new Set(Object.values(e.used));
+  const src = store.source==='champion' ? (e.champion_plan||{}) : store.source==='model' ? (e.model_plan||{}) : {};
+  for (const leg of bridgeLegs(target)){
+    if (e.used[leg]){ plan[leg] = e.used[leg]; why[leg] = 'submitted'; continue; }
+    const legal = t => !!t && D.p[leg] && D.p[leg][t] !== undefined && !used.has(t) && !(leg===D.current_leg && LOCKED.has(t));
+    const over = (store.bridge[ei]||{})[leg];
+    let t = null, tag = '';
+    if (legal(over)) { t = over; tag = 'yours'; }
+    else if (store.source !== 'none' && legal(src[leg])) { t = src[leg]; tag = store.source; }
+    else if (store.source !== 'none') {
+      const cs = Object.keys(D.p[leg]||{}).filter(legal).sort((a,b)=>D.p[leg][b]-D.p[leg][a]);
+      t = cs[0] || null; tag = 'auto'; }
+    if (t){ plan[leg] = t; used.add(t); why[leg] = tag; }
+  }
+  return {plan, banned: used, why};
+}
+
+const cache = new Map();          // every leg's solve is reused until the bridge changes
+function stateFor(target){
+  const key = target + '|' + store.source + '|' + JSON.stringify(store.bridge);
+  if (cache.has(key)) return cache.get(key);
+  if (cache.size > 40) cache.clear();
+  const L = legOf(target), idx = LI[target];
+  const T = {teams: L.teams, gamma: D.gamma, lw: D.lw, pot: D.pot, nStart: D.n_start,
+             finalistRate: D.finalist_rate, nAlive: L.field_alive, baseSurvive: L.field_survive || D.base_survive};
+  const per = ALIVE.map((e,i)=>{ const r = resolve(i, target); const o = optionsAt(LEG_IDS, idx, r.banned, D.p);
+                                 return {r, opts: o.options, keep: o.keep}; });
+  const v = {L, idx, T, per};
+  cache.set(key, v);
+  return v;
+}
+function picksFor(target){ return store.picks[target] || {}; }
+function bestBy(S, f){ // one legal team per entry, greedily, without two entries on the same team
+  const taken = new Set(), out = [];
+  for (const p of S.per){ const opts = p.opts;
+    const order = Object.keys(opts).sort((a,b)=>f(opts[b],b,S)-f(opts[a],a,S));
+    const t = order.find(x=>!taken.has(x)) || order[0]; out.push(t); if (t) taken.add(t); }
+  return out;
+}
+function seasonValue(o){ return Math.log(Math.max(o.p,1e-9)) + o.rest; }
+function modelSet(S){
+  const out = ALIVE.map((e,i)=>{ const t = (e.model_plan||{})[S.L.id]; return (t && S.per[i].opts[t]) ? t : null; });
+  if (out.every(t=>t)) return out;
+  return bestBy(S, o=>seasonValue(o));
+}
+
+// --- the sets to compare against, and the ranked table ------------------------------------------------------
+function setsFor(S){
+  const cands = S.per.map((p,i)=>candidatesFor(p.opts, [(ALIVE[i].champion_plan||{})[S.L.id]], 10));
+  const keys = S.per.map(p=>Object.keys(p.opts).sort().join(','));
+  const same = keys.every(k=>k===keys[0]);
+  const sets = allSets(cands, S.per.map(p=>p.opts), S.T, same);
+  return {sets, lenses: rankSets(sets, ALIVE.length, 10)};
+}
+
+// --- rendering ---------------------------------------------------------------------------------------------
+function legBar(){
+  const chips = D.legs.map(l=>`<button class="la-chip${l.id===store.leg?' on':''}${l.is_holiday?' hol':''}" data-leg="${l.id}">`
+    + `<b>${esc(l.id)}</b><small>${esc(l.label.replace(/^Week /,'Wk '))}</small></button>`).join('');
+  return `<div class="la-chips">${chips}</div>`;
+}
+
+function head(S){
+  const L = S.L, stuck = S.per.filter(p=>Object.keys(p.opts).length===0).length;
+  const left = S.per.map((p,i)=>Object.keys(p.opts).length);
+  const cells = [
+    ['<b>'+esc(L.deadline_txt)+'</b>', 'picks due'],
+    ['<b class="num">'+(L.days_away>=1?Math.round(L.days_away)+' days':'&lt;1 day')+'</b>', 'from now'],
+    ['<b class="num">'+L.field_alive.toLocaleString()+'</b>', 'field projected alive'],
+    ['<b class="num">'+pct(L.field_survive,1)+'</b>', 'of them expected to survive it'],
+    ['<b class="num">'+left.join(' / ')+'</b>', (ALIVE.length>1?'teams left per entry':'teams left')],
+  ];
+  return `<div class="strip">${cells.map(c=>`<div class="cell">${c[0]}<span>${c[1]}</span></div>`).join('')}</div>`
+    + (stuck ? `<div class="la-warn crit">${stuck} of your entries has no legal team in ${esc(L.id)} under this assumption — it would be eliminated at that leg. Change the bridge below, or pick a different leg.</div>` : '');
+}
+
+function bridge(S){
+  const legs = bridgeLegs(S.L.id);
+  const btn = (k,lab)=>`<button class="la-src${store.source===k?' on':''}" data-src="${k}">${lab}</button>`;
+  const opts = (ei,leg,cur)=>{
+    const ts = Object.keys(D.p[leg]||{}).sort((a,b)=>D.p[leg][b]-D.p[leg][a]);
+    return ts.map(t=>`<option value="${t}"${t===cur?' selected':''}>${t} ${pct(D.p[leg][t])}</option>`).join('');
+  };
+  const rows = legs.map(leg=>{
+    const tds = S.per.map((p,i)=>{
+      const t = p.r.plan[leg], w = p.r.why[leg] || '';
+      if (w==='submitted') return `<td class="sub" title="already submitted at Circa"><b>${esc(t)}</b> <small>submitted</small></td>`;
+      const dis = (leg===D.current_leg && LOCKED.size) ? '' : '';
+      return `<td class="${w==='yours'?'mine':''}"><select data-bridge="${i}" data-leg="${leg}">${opts(i,leg,t)}</select>`
+           + `<small>${w==='yours'?'your assumption':w==='auto'?'best available':w==='none'?'':esc(SRC[w]||w)}</small></td>`;
+    }).join('');
+    return `<tr class="${HOL.has(leg)?'hol':''}"><td class="lg"><b>${esc(leg)}</b><small>${esc(D.labels[leg]||'')}</small></td>${tds}</tr>`;
+  }).join('');
+  const heads = S.per.map((p,i)=>`<th>${esc(short(ALIVE[i].name))}</th>`).join('');
+  const body = legs.length
+    ? `<div class="scroll"><table class="la-bridge"><thead><tr><th>Leg</th>${heads}</tr></thead><tbody>${rows}</tbody></table></div>`
+    : '<p class="note">Nothing sits between now and this leg.</p>';
+  return `<div class="la-srcbar"><span class="eyebrow">Between now and ${esc(S.L.id)}, assume</span>`
+       + btn('model',"The model's plan") + btn('champion',"A champion's plan") + btn('none','Nothing else burned')
+       + `<button id="la-clear" class="la-ghost">Reset my overrides</button></div>${body}`
+       + `<p class="note" style="margin-top:8px">Every number on this tab is conditional on these picks: they are what each entry would have spent by ${esc(S.L.id)}, so they are what it can no longer use there. `
+       + `Change any one of them and the board, the combinations and the verdict below re-solve. <b>Nothing else burned</b> is the ceiling — what ${esc(S.L.id)} would look like if you could get there without spending anything, which you cannot.</p>`;
+}
+
+function combos(S, sets){
+  const lenses = sets.lenses, keys = Object.keys(lenses).filter(k=>lenses[k].rows.length);
+  if (!keys.length) return '<p class="note">No legal combination — see the warning above.</p>';
+  if (keys.indexOf(store.lens) < 0) store.lens = keys[0];
+  const tabs = keys.map(k=>`<button class="la-lens${k===store.lens?' on':''}" data-lens="${k}">${esc(lenses[k].label.split(' (')[0])}</button>`).join('');
+  const L = lenses[store.lens];
+  const rows = L.rows.map((r,j)=>`<tr><td class="n">${j+1}</td><td><b>${r.picks.join(' · ')}</b></td>`
+    + `<td class="n">${pct(r.pAll)}</td><td class="n">${pct(r.pWipe,1)}</td><td class="n">${pct(r.fieldShare,1)}</td>`
+    + `<td class="n">${usd(r.equityIf)}</td><td class="n"><b>${pct(r.pAny,2)}</b></td><td class="n">${usd(r.ev)}</td>`
+    + `<td><button class="la-try" data-picks="${r.picks.join(',')}">Try it</button></td></tr>`).join('');
+  return `<div class="la-lenses">${tabs}</div><p class="note" style="margin:6px 0">${esc(L.label)} — ${sets.sets.length.toLocaleString()} combinations priced.</p>`
+    + `<div class="scroll"><table><thead><tr><th class="n">#</th><th>Picks</th><th class="n">All win</th><th class="n">Lose all</th>`
+    + `<th class="n">Avg field on it</th><th class="n">Equity after</th><th class="n">Win it all</th><th class="n">Expected payout</th><th></th></tr></thead><tbody>${rows}</tbody></table></div>`;
+}
+
+function verdict(r, r0, same){
+  if (same) return ['good', 'This is the set the model would take that week.'];
+  const upside = r.pAny / Math.max(r0.pAny, 1e-12), safer = r.pWipe < r0.pWipe - 0.005, riskier = r.pWipe > r0.pWipe + 0.005;
+  if (r.util >= r0.util) return ['good', 'The model likes this at least as much as its own set.'];
+  if (upside >= 0.9 && safer) return ['good', 'A sound choice: safer that week, and you keep ' + pct(upside) + ' of the season upside.'];
+  if (upside >= 0.9 && !riskier) return ['warn', 'Close to the model — slightly less season upside for about the same risk.'];
+  if (upside > 1.0 && riskier) return ['warn', 'More upside, but all your entries die that week ' + pct(r.pWipe) + ' of the time (vs ' + pct(r0.pWipe) + ').'];
+  return ['crit', 'Weaker than the model: ' + pct(upside) + ' of the season upside' + (riskier ? ' and more risk that week' : '') + '.'];
+}
+
+function chooser(S, sets){
+  const L = S.L, chosen = picksFor(L.id);
+  const cur = S.per.map((p,i)=>{ const t = chosen[i]; return (t && p.opts[t]) ? t : null; });
+  const ref = modelSet(S);
+  const picks = cur.map((t,i)=>t || ref[i]).filter(t=>t);
+  if (picks.length !== ALIVE.length) return '<p class="note">No legal set to price yet.</p>';
+  const sel = S.per.map((p,i)=>{
+    const order = Object.keys(p.opts).sort((a,b)=>p.opts[b].p-p.opts[a].p);
+    const os = order.map(t=>`<option value="${t}"${t===picks[i]?' selected':''}>${t} ${pct(p.opts[t].p)} ${L.teams[t].home?'vs':'@'} ${L.teams[t].opp}</option>`).join('');
+    return `<label class="la-sel"><span>${esc(short(ALIVE[i].name))}</span><select data-pick="${i}">${os}</select></label>`;
+  }).join('');
+  const opts = S.per.map(p=>p.opts);
+  const r = scoreSet(picks, opts, S.T), r0 = scoreSet(ref, opts, S.T);
+  const same = picks.every((t,i)=>t===ref[i]);
+  const v = verdict(r, r0, same);
+  const top = Object.keys(L.teams).filter(t=>S.per[0].opts[t]).sort((a,b)=>L.teams[b].p-L.teams[a].p)[0];
+  const allin = ALIVE.map((_,i)=>S.per[i].opts[top] ? top : bestBy(S,o=>o.p)[i]);
+  const distinct = []; for (const t of Object.keys(L.teams).sort((a,b)=>L.teams[b].p-L.teams[a].p)){
+    if (distinct.length >= ALIVE.length) break;
+    if (!distinct.some(d=>L.teams[d].game===L.teams[t].game)) distinct.push(t); }
+  const split = ALIVE.map((_,i)=>S.per[i].opts[distinct[i]] ? distinct[i] : bestBy(S,o=>o.p)[i]);
+  const named = [['Your picks', r, 'mine'], ["The model's set", r0, ''],
+                 [(sets.lenses.win && sets.lenses.win.rows[0]) ? 'Most likely to win it all' : null,
+                  (sets.lenses.win && sets.lenses.win.rows[0]) || null, ''],
+                 ['All on ' + top, scoreSet(allin, opts, S.T), ''],
+                 ['A different favourite each', scoreSet(split, opts, S.T), '']].filter(x=>x[0] && x[1]);
+  const row = a=>`<tr class="${a[2]}"><td>${esc(a[0])}<div class="tp">${a[1].picks.join(' · ')}</div></td>`
+    + `<td class="n">${pct(a[1].pAll)}</td><td class="n">${pct(a[1].pWipe,1)}</td><td class="n">${Math.round(a[1].fieldLeft).toLocaleString()}</td>`
+    + `<td class="n">${usd(a[1].equityIf)}</td><td class="n">${pct(a[1].pAny,2)}</td><td class="n">${usd(a[1].ev)}</td></tr>`;
+  const why = picks.map((t,i)=>{ const o = S.per[i].opts[t], g = L.teams[t]; const fvp = 1-Math.exp(-o.fv);
+    const fld = g.share>=0.2 ? 'about '+pct(g.share)+' of the field is projected on it'
+              : g.share>=0.05 ? pct(g.share)+' of the field is projected on it'
+              : 'barely any of the field ('+pct(g.share,1)+') — a win is worth ×'+g.lev.toFixed(2)+' the average share';
+    const fut = o.stuck ? '<b>taking it leaves no team for '+esc(o.stuck)+'</b>'
+              : fvp<0.01 ? 'burning it there costs nothing after' : 'burning it costs '+pct(fvp)+' of that entry\'s remaining path';
+    return `<li><b>${t}</b> (${esc(short(ALIVE[i].name))}): ${pct(o.p)} to win ${g.home?'vs':'at'} ${g.opp} at ${sp(g.spread)}; ${fld}; ${fut}.</li>`; }).join('');
+  return `<div class="la-sels">${sel}<button id="la-model">The model's set</button><button id="la-best">Best odds</button></div>`
+    + `<div class="la-verdict ${v[0]}">${v[1]}</div>`
+    + `<div class="scroll"><table class="la-cmp"><thead><tr><th></th><th class="n" colspan="2">Risk that week</th><th class="n" colspan="2">Reward if all win</th><th class="n" colspan="2">Whole season</th></tr>`
+    + `<tr><th>Set</th><th class="n">All win</th><th class="n">Lose all</th><th class="n">Field left</th><th class="n">Equity after</th><th class="n">Win it all</th><th class="n">Expected payout</th></tr></thead><tbody>${named.map(row).join('')}</tbody></table></div>`
+    + `<details class="la-more"><summary>Why these numbers</summary><ul>${why}</ul>`
+    + `<p class="note">Columns mean exactly what they mean on this week's card, one leg (or several) later: "All win" is the chance every pick in the set wins ${esc(L.id)}; "Lose all" the chance every entry is eliminated there; "Field left" and "Equity after" assume all your picks win and the field's losers are gone; "Win it all" and "Expected payout" run the rest of the season out from there. They are all conditional on the bridge above — your entries have to actually get to ${esc(L.id)} first.</p></details>`;
+}
+
+function board(S){
+  const L = S.L, chosen = picksFor(L.id);
+  const order = Object.keys(L.teams).sort((a,b)=>L.teams[b].p-L.teams[a].p);
+  const trs = order.map(t=>{
+    const g = L.teams[t];
+    const who = S.per.map((p,i)=>p.opts[t] ? `<i class="la-dot e${i+1}" title="${esc(short(ALIVE[i].name))} can take it">${i+1}</i>` : '').join('');
+    const gone = S.per.every(p=>!p.opts[t]);
+    const o = S.per.map(p=>p.opts[t]).find(x=>x);
+    const fv = o ? pct(1-Math.exp(-o.fv),1) : '—';
+    const mine = S.per.some((p,i)=>(chosen[i]||'')===t);
+    return `<tr class="${mine?'ours':''}${gone?' gone':''}"><td><b>${esc(t)}</b> <span class="note">${esc(D.nick&&D.nick[t]||'')}</span></td>`
+      + `<td>${g.home?'vs':'@'} ${esc(g.opp)}</td><td class="n">${sp(g.spread)}</td><td class="n"><b>${pct(g.p,1)}</b></td>`
+      + `<td class="n">${pct(g.share,1)}</td><td class="n">×${g.lev.toFixed(2)}</td><td class="n">${fv}</td>`
+      + `<td>${esc(g.weekday.slice(0,3))} ${esc(g.kick)} ET</td><td>${who || '<span class="note">spent by every entry</span>'}</td></tr>`;
+  }).join('');
+  return `<div class="scroll"><table><thead><tr><th>Team</th><th>Opp</th><th class="n">Line</th><th class="n">Model win</th>`
+    + `<th class="n">Projected field %</th><th class="n">Leverage</th><th class="n">Future cost</th><th>Kick</th><th>Still available to</th></tr></thead><tbody>${trs}</tbody></table></div>`
+    + `<p class="note">Line and win probability are ${esc(L.id)}'s current number widened for the ${LI[L.id]} week${LI[L.id]===1?'':'s'} of lookahead `
+    + `(±${D.drift.toFixed(2)} pts of spread per week, calibrated to how much ratings actually move) — a future week is a forecast of a line, not a line. `
+    + `Projected field % comes from rolling the whole Circa field forward through the same choice model that projects this week's: every entry spends teams on the way here too, which is why the names on this list are not the ones the field is on right now. `
+    + `Future cost and availability are for the bridge above. No injury report or weather here — those are only real for the week being played.</p>`;
+}
+
+function outlook(){
+  const rows = D.legs.map(l=>{
+    const S = stateFor(l.id);
+    const tds = S.per.map(p=>{
+      const order = Object.keys(p.opts).sort((a,b)=>p.opts[b].p-p.opts[a].p);
+      const t = order[0];
+      return t ? `<td><b>${esc(t)}</b> <span class="note">${pct(p.opts[t].p)}</span> <span class="note">· ${order.length} left</span></td>`
+               : '<td class="none">no legal team</td>'; }).join('');
+    return `<tr class="${l.id===store.leg?'on':''}${l.is_holiday?' hol':''}"><td><button class="la-jump" data-leg="${l.id}">${esc(l.id)}</button> <span class="note">${esc(l.label)}</span></td>`
+      + `<td class="n">${l.field_alive.toLocaleString()}</td><td class="n">${pct(l.field_survive,1)}</td>${tds}</tr>`; }).join('');
+  const heads = ALIVE.map(e=>`<th>${esc(short(e.name))} — best available</th>`).join('');
+  return `<div class="scroll"><table><thead><tr><th>Leg</th><th class="n">Field alive</th><th class="n">Field survives</th>${heads}</tr></thead><tbody>${rows}</tbody></table></div>`
+    + `<p class="note">Each row assumes the same source for the bridge, resolved leg by leg, so it answers "if we keep picking this way, what is left when we get there". Holiday legs are shaded: an entry with no eligible team in one is eliminated at it, which is the single most common way a good season ends. Click a leg to open it above.</p>`;
+}
+
+function render(){
+  const S = stateFor(store.leg);
+  const sets = setsFor(S);
+  root.innerHTML =
+      legBar()
+    + `<div class="la-sub eyebrow">${esc(S.L.label)}${S.L.is_holiday?' · holiday leg':''} · ${bridgeLegs(S.L.id).length} leg${bridgeLegs(S.L.id).length===1?'':'s'} between now and then</div>`
+    + head(S)
+    + `<h2>Between now and then</h2><div class="box">${bridge(S)}</div>`
+    + `<h2>Best combinations for ${esc(S.L.id)}</h2><div class="box">${combos(S, sets)}</div>`
+    + `<h2>Try any combination</h2><div class="box">${chooser(S, sets)}</div>`
+    + `<h2>The ${esc(S.L.id)} board</h2>${board(S)}`
+    + `<h2>The next ${D.legs.length} legs</h2><div class="box">${outlook()}</div>`;
+}
+
+root.addEventListener('click', ev=>{
+  const c = ev.target.closest('[data-leg]');
+  if (c && (c.classList.contains('la-chip') || c.classList.contains('la-jump'))){
+    store.leg = c.dataset.leg; save(); render(); root.scrollIntoView({behavior:'smooth', block:'start'}); return; }
+  const s = ev.target.closest('[data-src]'); if (s){ store.source = s.dataset.src; save(); render(); return; }
+  const l = ev.target.closest('[data-lens]'); if (l){ store.lens = l.dataset.lens; save(); render(); return; }
+  const t = ev.target.closest('.la-try'); if (t){ const p = t.dataset.picks.split(',');
+    store.picks[store.leg] = {}; p.forEach((x,i)=>{ store.picks[store.leg][i] = x; }); save(); render();
+    document.getElementById('ahead').querySelector('.la-sels').scrollIntoView({behavior:'smooth', block:'center'}); return; }
+  if (ev.target.id === 'la-clear'){ store.bridge = {}; save(); render(); return; }
+  if (ev.target.id === 'la-model'){ const S = stateFor(store.leg); const m = modelSet(S);
+    store.picks[store.leg] = {}; m.forEach((x,i)=>{ store.picks[store.leg][i] = x; }); save(); render(); return; }
+  if (ev.target.id === 'la-best'){ const S = stateFor(store.leg); const sets = setsFor(S);
+    const r = (sets.lenses.win && sets.lenses.win.rows[0]); if (!r) return;
+    store.picks[store.leg] = {}; r.picks.forEach((x,i)=>{ store.picks[store.leg][i] = x; }); save(); render(); return; }
+});
+root.addEventListener('change', ev=>{
+  const b = ev.target.closest('[data-bridge]');
+  if (b){ const i = b.dataset.bridge; store.bridge[i] = store.bridge[i] || {}; store.bridge[i][b.dataset.leg] = b.value; save(); render(); return; }
+  const p = ev.target.closest('[data-pick]');
+  if (p){ store.picks[store.leg] = store.picks[store.leg] || {}; store.picks[store.leg][p.dataset.pick] = p.value; save(); render(); }
+});
+render();
+window.__survivorAhead = {stateFor, setsFor, resolve, store, render};
+}
+</script></body></html>
