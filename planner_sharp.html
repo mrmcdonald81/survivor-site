@@ -1,0 +1,473 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Season Map</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap"><style>
+:root{--font-display:"Space Grotesk","Inter",system-ui,sans-serif;--font-body:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif;
+--bg:#F3F7FB;--surface:#FFFFFF;--surface-2:#EEF4FA;--ink:#0B1F36;--muted:#56708A;--line:#D6E2EE;
+--accent:#C7871F;--accent-ink:#8A5A0E;--accent-soft:#FDF0DA;--pick:#2A73A8;--pick-soft:#E1EEF8;
+--good:#178A5C;--warn:#B8740C;--crit:#D3455B;--bar:#9DB4CC;
+--q1:#EAF3FA;--q2:#CFE4F4;--q3:#9EC8E8;--q4:#5A9FD0;--q5:#2A73A8;--q5-ink:#FFFFFF;--dead:#E1E8F0;
+--e1:#2A73A8;--e2:#C7871F;--e3:#7B5CD6;--e4:#D3455B;--e5:#178A5C;--e6:#C2417F;
+--brand-grad:linear-gradient(120deg,#4B9CD3 0%,#7BAFD4 45%,#8E9BF0 100%);
+--glow:0 10px 30px rgba(42,115,168,.10);
+--aurora:radial-gradient(1100px 520px at 8% -12%,rgba(123,175,212,.28),transparent 60%),radial-gradient(800px 420px at 100% -8%,rgba(142,155,240,.16),transparent 60%);}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#07111F;--surface:#0D1A2C;--surface-2:#122339;--ink:#E9F2FB;--muted:#8EA6BF;
+--line:#1D3150;--accent:#F6C35B;--accent-ink:#FFD98A;--accent-soft:#3A2C0C;--pick:#7BAFD4;--pick-soft:#13304B;
+--good:#4ADE9C;--warn:#F5B94A;--crit:#FF6B7A;--bar:#33506F;
+--q1:#0F2136;--q2:#153553;--q3:#1E5683;--q4:#3D85BC;--q5:#7BAFD4;--q5-ink:#07111F;--dead:#16233A;
+--e1:#7BAFD4;--e2:#F6C35B;--e3:#B7A4FF;--e4:#FF6B7A;--e5:#4ADE9C;--e6:#F48FC7;
+--brand-grad:linear-gradient(120deg,#4B9CD3 0%,#7BAFD4 45%,#A3AFFF 100%);
+--glow:0 12px 40px rgba(75,156,211,.16);
+--aurora:radial-gradient(1100px 520px at 8% -12%,rgba(75,156,211,.22),transparent 60%),radial-gradient(800px 420px at 100% -8%,rgba(163,175,255,.12),transparent 60%);}}
+:root[data-theme="dark"]{--bg:#07111F;--surface:#0D1A2C;--surface-2:#122339;--ink:#E9F2FB;--muted:#8EA6BF;
+--line:#1D3150;--accent:#F6C35B;--accent-ink:#FFD98A;--accent-soft:#3A2C0C;--pick:#7BAFD4;--pick-soft:#13304B;
+--good:#4ADE9C;--warn:#F5B94A;--crit:#FF6B7A;--bar:#33506F;
+--q1:#0F2136;--q2:#153553;--q3:#1E5683;--q4:#3D85BC;--q5:#7BAFD4;--q5-ink:#07111F;--dead:#16233A;
+--e1:#7BAFD4;--e2:#F6C35B;--e3:#B7A4FF;--e4:#FF6B7A;--e5:#4ADE9C;--e6:#F48FC7;
+--brand-grad:linear-gradient(120deg,#4B9CD3 0%,#7BAFD4 45%,#A3AFFF 100%);
+--glow:0 12px 40px rgba(75,156,211,.16);
+--aurora:radial-gradient(1100px 520px at 8% -12%,rgba(75,156,211,.22),transparent 60%),radial-gradient(800px 420px at 100% -8%,rgba(163,175,255,.12),transparent 60%);}
+
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{margin:0;background:var(--aurora),var(--bg);background-attachment:fixed;color:var(--ink);font-family:var(--font-body);font-size:15px;line-height:1.5;
+  -webkit-font-smoothing:antialiased;font-feature-settings:"cv11","ss01"}
+h1,h2,h3{font-family:var(--font-display);text-wrap:balance;margin:0;letter-spacing:-.01em}
+h1{font-size:40px;font-weight:700;line-height:1.05;letter-spacing:-.025em}
+h2{font-size:22px;font-weight:600;margin:38px 0 12px;padding-bottom:8px;border-bottom:1px solid var(--line)}
+h3{font-size:17px;font-weight:600}
+.eyebrow{font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;background:var(--brand-grad);-webkit-background-clip:text;background-clip:text;color:transparent;width:fit-content}
+.num{font-variant-numeric:tabular-nums}
+.note{color:var(--muted);font-size:13.5px;max-width:72ch}
+a{color:var(--pick)}
+button{font:inherit;cursor:pointer;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:8px;padding:6px 12px;transition:border-color .15s,background .15s}
+button:hover{border-color:var(--pick)}
+button:focus-visible,.cell:focus-visible{outline:2px solid var(--pick);outline-offset:1px}
+button.primary{background:var(--brand-grad);border-color:transparent;color:#fff;font-weight:600}
+.pill{display:inline-block;padding:2px 8px;border-radius:999px;font-size:12px;font-weight:600}
+.pill.good{background:color-mix(in srgb,var(--good) 18%,transparent);color:var(--good)}
+.pill.warn{background:color-mix(in srgb,var(--warn) 18%,transparent);color:var(--warn)}
+.pill.crit{background:color-mix(in srgb,var(--crit) 18%,transparent);color:var(--crit)}
+@media (prefers-reduced-motion: reduce){*{transition:none!important}}
+html{-webkit-text-size-adjust:100%}
+img,svg{max-width:100%}
+/* sticky first column inside any horizontally scrolling table, so the team stays visible on a phone */
+.scroll table th:first-child,.scroll table td:first-child{position:sticky;left:0;background:var(--surface);z-index:1}
+.scroll tbody tr:nth-child(even) td:first-child{background:var(--surface-2)}
+.scroll tr.ours td:first-child{background:var(--accent-soft)}
+@media (max-width:640px){
+  body{font-size:14.5px}
+  h1{font-size:29px}h2{font-size:19px;margin-top:28px}h3{font-size:16px}
+  table{font-size:13px}th,td{padding:6px 7px}
+  .note{max-width:none}
+}
+
+.disclaim{margin:10px 0 14px;padding:11px 14px;border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:8px;background:var(--surface);color:var(--muted);font-size:13.5px;line-height:1.5}
+.disclaim b{color:var(--ink)}
+.wrap{max-width:1600px;margin:0 auto;padding:22px 18px 60px}
+.top{display:flex;flex-wrap:wrap;gap:14px 26px;align-items:end;justify-content:space-between}
+.stats{display:flex;flex-wrap:wrap;gap:10px 22px}
+.stat b{display:block;font-family:var(--font-display);font-size:28px;font-weight:600;line-height:1}
+.stat span{font-size:12px;color:var(--muted)}
+.stat.pf b{color:var(--pick)}
+.tabs{display:flex;gap:6px;margin:16px 0 10px;flex-wrap:wrap}
+.tabs button.on{background:var(--accent);border-color:var(--accent);color:#1A1405;font-weight:700}
+.tabs button .dot{display:inline-block;width:14px;height:14px;border-radius:50%;font-size:10px;line-height:14px;text-align:center;color:#fff;font-weight:700;margin-right:6px;vertical-align:1px}
+.mbtn.on,.stbtn.on{background:var(--pick);border-color:var(--pick);color:var(--q5-ink);font-weight:600}
+.pfbtn.on{background:var(--pick);border-color:var(--pick);color:var(--q5-ink);font-weight:700}
+.toolbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:8px 0 12px}
+.toolbar .sp{flex:1}
+.legend{display:flex;flex-wrap:wrap;gap:14px;font-size:12.5px;color:var(--muted);margin:6px 0 12px}
+.legend i{display:inline-block;width:16px;height:12px;vertical-align:-1px;margin-right:5px;border-radius:2px;border:1px solid var(--line)}
+.gridwrap{overflow:auto;border:1px solid var(--line);border-radius:8px;background:var(--surface);max-height:78vh}
+table.grid{border-collapse:separate;border-spacing:0;font-size:12.5px;min-width:max-content}
+.grid th,.grid td{padding:0;border-bottom:1px solid var(--line);border-right:1px solid var(--line)}
+.grid thead th{position:sticky;top:0;background:var(--surface-2);z-index:3;padding:6px 6px 4px;text-align:center;font-family:var(--font-display);font-size:15px;font-weight:600;min-width:74px}
+.grid thead th small{display:block;font-family:var(--font-body);font-size:10.5px;font-weight:400;color:var(--muted);letter-spacing:.02em}
+.grid thead th.hol{color:var(--accent-ink);box-shadow:inset 0 3px 0 var(--accent)}
+.grid thead th.cur{box-shadow:inset 0 3px 0 var(--pick)}
+.grid tbody th{position:sticky;left:0;background:var(--surface-2);z-index:2;text-align:left;padding:4px 8px;font-family:var(--font-display);font-size:16px;font-weight:600;min-width:118px;white-space:nowrap}
+.grid tbody th small{font-family:var(--font-body);font-size:11px;font-weight:400;color:var(--muted);margin-left:4px}
+.grid tbody th .x{float:right;font-size:11px;color:var(--muted);cursor:pointer;padding:0 4px;border-radius:3px}
+.grid tbody th .x:hover{color:var(--crit)}
+.grid tbody tr.excl th{text-decoration:line-through;color:var(--muted)}
+.cell{position:relative;display:block;width:100%;height:100%;min-height:44px;padding:4px 5px;text-align:center;cursor:pointer;border:0;background:transparent;color:var(--ink);font:inherit;line-height:1.15}
+.cell b{display:block;font-family:var(--font-display);font-size:15px;font-weight:600}
+.cell small{font-size:10.5px;color:inherit;opacity:.85}
+.cell small.m2{display:block;font-size:10px;opacity:.7;margin-top:1px}
+.cell.q1{background:var(--q1)}.cell.q2{background:var(--q2)}.cell.q3{background:var(--q3)}.cell.q4{background:var(--q4);color:var(--q5-ink)}.cell.q5{background:var(--q5);color:var(--q5-ink)}
+.cell.q4 small,.cell.q5 small{opacity:.9}
+.cell.dog{color:var(--muted)}
+.cell.off{background:var(--dead);color:var(--muted);cursor:default}
+.cell.used{opacity:.35;text-decoration:line-through;cursor:pointer}
+.cell.plan{box-shadow:inset 0 0 0 2px var(--pick)}
+.cell.pin{box-shadow:inset 0 0 0 2px var(--pick)}
+.cell.card{box-shadow:inset 0 0 0 3px var(--pick)}
+.cell.card::after{content:"card";position:absolute;right:3px;top:2px;font-size:9px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;opacity:.85}
+.cell.pin b::before{content:"⇄ ";font-size:11px;opacity:.8}
+.cell.lock{background:var(--accent);color:#1A1405;box-shadow:inset 0 0 0 2px var(--accent-ink)}
+.cell.sub{background:var(--accent);color:#1A1405;box-shadow:inset 0 0 0 2px var(--ink)}
+.cell.won{box-shadow:inset 0 0 0 2px var(--good)}
+.cell.lost{background:var(--crit);color:#fff}
+.cell:hover:not(.off){filter:brightness(1.08)}
+.who{position:absolute;top:2px;left:3px;display:flex;gap:2px}
+.who i{display:inline-block;width:12px;height:12px;border-radius:50%;font-size:9px;line-height:12px;font-style:normal;font-weight:700;color:#fff;text-align:center;opacity:.95}
+.who i.e1{background:var(--e1)}.who i.e2{background:var(--e2)}.who i.e3{background:var(--e3)}.who i.e4{background:var(--e4)}.who i.e5{background:var(--e5)}.who i.e6{background:var(--e6)}
+.dot.e1{background:var(--e1)}.dot.e2{background:var(--e2)}.dot.e3{background:var(--e3)}.dot.e4{background:var(--e4)}.dot.e5{background:var(--e5)}.dot.e6{background:var(--e6)}
+.side{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(260px,100%),1fr));gap:14px;margin-top:14px}
+.box{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:12px 14px}
+.box h3{margin-bottom:6px}
+.chips{display:flex;flex-wrap:wrap;gap:5px}
+.chip{font-size:12px;padding:2px 7px;border-radius:4px;border:1px solid var(--line);background:var(--surface-2)}
+.chip.on{border-color:var(--pick);color:var(--pick);font-weight:600}
+.chip.gone{opacity:.4;text-decoration:line-through}
+ol.plan{margin:6px 0 0;padding:0;list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:2px 14px;font-size:13px}
+ol.plan li{display:flex;justify-content:space-between;border-bottom:1px dotted var(--line);padding:2px 0}
+ol.plan li .lg{color:var(--muted)}
+ol.plan li.hol{background:var(--accent-soft);padding:2px 4px;border-radius:3px}
+.warnbox{border-left:4px solid var(--crit);background:var(--surface);padding:8px 12px;border-radius:0 6px 6px 0;margin-top:10px}
+table.cmp{border-collapse:collapse;font-size:13px;width:100%;margin-top:6px}
+table.cmp th,table.cmp td{padding:5px 8px;border-bottom:1px solid var(--line);text-align:right;white-space:nowrap}
+table.cmp th:first-child,table.cmp td:first-child{text-align:left;white-space:normal}
+table.cmp thead th{font-size:11.5px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.04em}
+table.cmp tr.on td{background:var(--pick-soft);font-weight:600}
+table.all{border-collapse:collapse;font-size:13px;width:100%;margin-top:6px}
+table.all th,table.all td{padding:3px 8px;border-bottom:1px dotted var(--line);text-align:center;white-space:nowrap}
+table.all th:first-child,table.all td:first-child{text-align:left;color:var(--muted)}
+table.all thead th{font-family:var(--font-display);font-size:15px}
+table.all tr.hol td:first-child{color:var(--accent-ink);font-weight:600}
+table.all td.shared{background:color-mix(in srgb,var(--warn) 22%,transparent)}
+table.all td.hedge{background:color-mix(in srgb,var(--pick) 18%,transparent)}
+table.all td.none{color:var(--crit);font-weight:600}
+table.all td.pin::after{content:" ⇄";opacity:.7;font-size:11px}
+table.all td.fixed{font-weight:700}
+@media (max-width:700px){.wrap{padding:14px 10px 40px}.grid tbody th{min-width:72px;font-size:14px;padding:4px 5px}.grid tbody th small{display:none}.grid thead th{min-width:64px;font-size:13px}.cell{min-height:42px;padding:3px 3px}.cell b{font-size:14px}.cell small{font-size:9.5px}.gridwrap{max-height:70vh}.stat b{font-size:22px}.toolbar button{padding:6px 9px;font-size:13px}ol.plan{grid-template-columns:1fr 1fr}.who i{width:10px;height:10px;font-size:8px;line-height:10px}}
+</style></head><body></head><body><div class="wrap">
+<div class="top"><div><div class="eyebrow">Warren Sharp&#x27;s $100K 2026 · from W6 onward</div><h1>Season Map</h1>
+<p class="note" style="margin-top:6px">Warren Sharp's $100K: 1 live entry; picks read from Splash.</p></div>
+<div class="stats" id="stats"></div></div>
+<div class="disclaim"><b>Every path on this map is a model suggestion, not a committed plan.</b> The grid re-solves the best surviving route from the current numbers each time you lock a cell — it shows what the maths would do, not what has been entered on Splash. Only cells marked <b>submitted / locked</b> are real picks.</div>
+<div class="tabs" id="tabs"></div>
+<div class="toolbar"><button id="model">Model's suggested plan</button><button id="champ">Champion's plan</button><button id="clear">Clear locks & exclusions</button><button id="copy">Copy plan</button>
+<span class="note">Under the win %, also show:</span><button data-m="p" class="mbtn on">nothing</button><button data-m="fv" class="mbtn">future value</button><button data-m="field" class="mbtn">field % (this week)</button><span class="sp"></span>
+<span class="note">Click a cell to lock that team for that leg; the rest of the season re-solves for the best surviving path. Click ✕ on a team to exclude it (injury, "never again"). Everything you set stays in this browser.</span></div>
+<div class="toolbar"><button id="pf" class="pfbtn">Plan entries together</button><span class="note">Stance:</span><button data-s="all_in" class="stbtn" title="γ=1, leverage weight 0.25">All-in</button><button data-s="balanced" class="stbtn" title="γ=0.5, leverage weight 0.35">Balanced</button><button data-s="spread" class="stbtn" title="γ=0.25, leverage weight 0.5">Spread out</button><button data-s="max_ev" class="stbtn" title="γ=1, leverage weight 1">Max EV</button><button data-s="at_least_one" class="stbtn" title="γ=0, leverage weight 0">≥1 finalist</button>
+<span class="note">Numbered dots show which entries are on a cell. "Together" re-solves all alive entries as one portfolio under the stance (the same γ the card uses) so they do not all die on the same Sunday; your locks always win.</span></div>
+<div class="legend"><span><i style="background:var(--q1)"></i>50–55%</span><span><i style="background:var(--q2)"></i>55–62%</span><span><i style="background:var(--q3)"></i>62–70%</span><span><i style="background:var(--q4)"></i>70–78%</span><span><i style="background:var(--q5)"></i>78%+</span>
+<span><i style="background:var(--accent)"></i>submitted / locked pick</span><span><i style="box-shadow:inset 0 0 0 3px var(--pick)"></i>this week = the card's pick (lock a cell to override)</span><span><i style="box-shadow:inset 0 0 0 2px var(--pick)"></i>suggested (model re-solve)</span><span>⇄ = placed by the together-solver</span><span>Champion's plan = locks loaded from the champion model</span><span><i style="background:var(--dead)"></i>bye / past / already kicked off</span><span>struck-through = team already submitted or locked (used up)</span><span>blue stripe = this week</span></div>
+<div id="warn"></div>
+<div class="gridwrap"><table class="grid" id="grid"></table></div>
+<div class="side"><div class="box"><h3>All entries this week — suggested</h3><div id="multi"></div></div><div class="box"><h3>What a champion would do, leg by leg</h3><div id="champbox"></div></div><div class="box" style="display:none"><h3>Holiday reserves</h3><div id="holiday"></div></div>
+<div class="box" style="grid-column:1/-1"><h3>All entries, whole season</h3><div id="together"></div></div>
+<div class="box" style="grid-column:1/-1"><h3>EV calculator — W6</h3><p class="note">Edit the field % column to test a different read of the field; leverage, EV (win % × leverage) and the field's expected survival recompute. Future cost is the model's (fixed).</p><div class="gridwrap" style="max-height:none"><table class="grid" id="ev"></table></div></div>
+<div class="box"><h3>This path — model suggestion</h3><ol class="plan" id="planlist"></ol><p class="note" style="margin-top:8px">Percentages are horizon-widened win odds (a 15-week-out number is pulled toward 50% for injuries and drift). They refresh every time the card is regenerated.</p></div></div>
+</div>
+<script>window.__DATA__ = {"season":2026,"current_leg":"W6","generated_at":"2026-10-12T19:59:49+00:00","legs":[{"id":"W3","label":"Week 3","week":3,"kind":"regular","teams":["ARI","ATL","BAL","BUF","CAR","CHI","CIN","CLE","DAL","DEN","DET","GB","HOU","IND","JAX","KC","LA","LAC","LV","MIA","MIN","NE","NO","NYG","NYJ","PHI","PIT","SEA","SF","TB","TEN","WAS"],"dates":"09/24\u201309/28","deadline":"Sun Sep 27 10:00 AM PT"},{"id":"W4","label":"Week 4","week":4,"kind":"regular","teams":["ARI","ATL","BAL","BUF","CAR","CHI","CIN","CLE","DAL","DEN","DET","GB","HOU","IND","JAX","KC","LA","LAC","LV","MIA","MIN","NE","NO","NYG","NYJ","PHI","PIT","SEA","SF","TB","TEN","WAS"],"dates":"10/01\u201310/05","deadline":"Sun Oct 4 10:00 AM PT"},{"id":"W5","label":"Week 5","week":5,"kind":"regular","teams":["ARI","ATL","BAL","BUF","CHI","CIN","CLE","DAL","DEN","DET","GB","HOU","IND","JAX","LA","LAC","LV","MIA","MIN","NE","NO","NYG","NYJ","PHI","PIT","SEA","SF","TB","TEN","WAS"],"dates":"10/08\u201310/12","deadline":"Sun Oct 11 10:00 AM PT"},{"id":"W6","label":"Week 6","week":6,"kind":"regular","teams":["ARI","ATL","BAL","BUF","CAR","CHI","CLE","DAL","DEN","GB","HOU","IND","JAX","KC","LA","LAC","LV","NE","NO","NYG","NYJ","PHI","PIT","SEA","SF","TB","TEN","WAS"],"dates":"10/15\u201310/19","deadline":"Sun Oct 18 10:00 AM PT"},{"id":"W7","label":"Week 7","week":7,"kind":"regular","teams":["ARI","ATL","BAL","CAR","CHI","CIN","CLE","DAL","DEN","DET","GB","HOU","IND","KC","LA","LV","MIA","MIN","NE","NO","NYG","NYJ","PHI","PIT","SEA","SF","TB","TEN"],"dates":"10/22\u201310/26","deadline":"Sun Oct 25 10:00 AM PT"},{"id":"W8","label":"Week 8","week":8,"kind":"regular","teams":["ARI","ATL","BAL","BUF","CAR","CHI","CIN","CLE","DAL","DEN","DET","GB","IND","JAX","KC","LA","LAC","LV","MIA","MIN","NE","NYJ","PHI","PIT","SEA","TB","TEN","WAS"],"dates":"10/29\u201311/02","deadline":"Sun Nov 1 10:00 AM PT"},{"id":"W9","label":"Week 9","week":9,"kind":"regular","teams":["ARI","ATL","BAL","BUF","CAR","CHI","CIN","CLE","DAL","DEN","DET","GB","HOU","IND","JAX","KC","LA","LAC","LV","MIA","MIN","NE","NO","NYG","NYJ","PHI","SEA","SF","TB","WAS"],"dates":"11/05\u201311/09","deadline":"Sun Nov 8 10:00 AM PT"},{"id":"W10","label":"Week 10","week":10,"kind":"regular","teams":["ARI","ATL","BAL","BUF","CAR","CIN","CLE","DAL","DET","GB","HOU","IND","JAX","KC","LA","LAC","LV","MIA","MIN","NE","NO","NYG","NYJ","PIT","SEA","SF","TEN","WAS"],"dates":"11/12\u201311/16","deadline":"Sun Nov 15 10:00 AM PT"},{"id":"W11","label":"Week 11","week":11,"kind":"regular","teams":["ARI","BAL","BUF","CAR","CHI","CIN","DAL","DEN","DET","HOU","IND","JAX","KC","LAC","LV","MIA","MIN","NO","NYG","NYJ","PHI","PIT","SF","TB","TEN","WAS"],"dates":"11/19\u201311/23","deadline":"Sun Nov 22 10:00 AM PT"},{"id":"W12","label":"Week 12","week":12,"kind":"regular","teams":["ARI","ATL","BAL","BUF","CAR","CHI","CIN","CLE","DAL","DEN","DET","GB","HOU","IND","JAX","KC","LA","LAC","LV","MIA","MIN","NE","NO","NYG","NYJ","PHI","PIT","SEA","SF","TB","TEN","WAS"],"dates":"11/25\u201311/30","deadline":"Sun Nov 29 10:00 AM PT"},{"id":"W13","label":"Week 13","week":13,"kind":"regular","teams":["ARI","ATL","BUF","CAR","CHI","CIN","CLE","DAL","DEN","DET","GB","HOU","JAX","KC","LA","LAC","MIA","MIN","NE","NO","NYG","PHI","PIT","SEA","SF","TB","TEN","WAS"],"dates":"12/03\u201312/07","deadline":"Sun Dec 6 10:00 AM PT"},{"id":"W14","label":"Week 14","week":14,"kind":"regular","teams":["ATL","BAL","BUF","CAR","CHI","CIN","CLE","DEN","DET","GB","HOU","IND","JAX","KC","LA","LAC","LV","MIA","MIN","NE","NO","NYG","NYJ","PHI","PIT","SEA","SF","TB","TEN","WAS"],"dates":"12/10\u201312/14","deadline":"Sun Dec 13 10:00 AM PT"},{"id":"W15","label":"Week 15","week":15,"kind":"regular","teams":["ARI","ATL","BAL","BUF","CAR","CHI","CIN","CLE","DAL","DEN","DET","GB","HOU","IND","JAX","KC","LA","LAC","LV","MIA","MIN","NE","NO","NYG","NYJ","PHI","PIT","SEA","SF","TB","TEN","WAS"],"dates":"12/17\u201312/21","deadline":"Sun Dec 20 10:00 AM PT"},{"id":"W16","label":"Week 16","week":16,"kind":"regular","teams":["ARI","ATL","BAL","BUF","CAR","CHI","CIN","CLE","DAL","DEN","DET","GB","HOU","IND","JAX","KC","LA","LAC","LV","MIA","MIN","NE","NO","NYG","NYJ","PHI","PIT","SEA","SF","TB","TEN","WAS"],"dates":"12/24\u201312/28","deadline":"Sun Dec 27 10:00 AM PT"},{"id":"W17","label":"Week 17","week":17,"kind":"regular","teams":["ARI","ATL","BAL","BUF","CAR","CHI","CIN","CLE","DAL","DEN","DET","GB","HOU","IND","JAX","KC","LA","LAC","LV","MIA","MIN","NE","NO","NYG","NYJ","PHI","PIT","SEA","SF","TB","TEN","WAS"],"dates":"01/03\u201312/31","deadline":"Sun Jan 3 10:00 AM PT"},{"id":"W18","label":"Week 18","week":18,"kind":"regular","teams":["ARI","ATL","BAL","BUF","CAR","CHI","CIN","CLE","DAL","DEN","DET","GB","HOU","IND","JAX","KC","LA","LAC","LV","MIA","MIN","NE","NO","NYG","NYJ","PHI","PIT","SEA","SF","TB","TEN","WAS"],"dates":"01/10","deadline":"Sun Jan 10 10:00 AM PT"}],"teams":[{"abbr":"LA","name":"Los Angeles Rams","rating":3.2064346493911087,"tilt":-0.3278603498517615,"why":"rated +3.2: teams this strong moved -0.4 pts by December on average"},{"abbr":"KC","name":"Kansas City Chiefs","rating":2.9259017546144532,"tilt":-0.30910167998942795,"why":"rated +2.9: teams this strong moved -0.4 pts by December on average"},{"abbr":"BUF","name":"Buffalo Bills","rating":2.9151807721124783,"tilt":-0.3083847894746293,"why":"rated +2.9: teams this strong moved -0.4 pts by December on average"},{"abbr":"SEA","name":"Seattle Seahawks","rating":2.8926948620556034,"tilt":0.011748467981275046,"why":"rated +2.9: teams this strong moved -0.4 pts by December on average; new starting QB (veteran): +0.6 pts by December on average (z +2.6)"},{"abbr":"JAX","name":"Jacksonville Jaguars","rating":2.3369034879507113,"tilt":-0.2697165517582868,"why":""},{"abbr":"DET","name":"Detroit Lions","rating":2.1413736854294685,"tilt":-0.2566418675339522,"why":""},{"abbr":"BAL","name":"Baltimore Ravens","rating":1.9336879448270328,"tilt":-0.3147845795189117,"why":"new head coach: -0.1 pts by December on average (z -0.5)"},{"abbr":"SF","name":"San Francisco 49ers","rating":1.8233940982943098,"tilt":0.08325045717547899,"why":"new starting QB (veteran): +0.6 pts by December on average (z +2.6)"},{"abbr":"CIN","name":"Cincinnati Bengals","rating":1.8083058033792418,"tilt":0.0842593810784053,"why":"new starting QB (veteran): +0.6 pts by December on average (z +2.6)"},{"abbr":"HOU","name":"Houston Texans","rating":1.2497356590994593,"tilt":-0.19701982789420325,"why":""},{"abbr":"CHI","name":"Chicago Bears","rating":1.2370035286485856,"tilt":-0.19616845596520988,"why":""},{"abbr":"MIN","name":"Minnesota Vikings","rating":1.0999884685862138,"tilt":0.13162313516410284,"why":"new starting QB (veteran): +0.6 pts by December on average (z +2.6)"},{"abbr":"DEN","name":"Denver Broncos","rating":0.9503811648970472,"tilt":-0.17700259557276865,"why":""},{"abbr":"DAL","name":"Dallas Cowboys","rating":0.9220901934127426,"tilt":-0.17511083526928883,"why":""},{"abbr":"NE","name":"New England Patriots","rating":0.6708063333169679,"tilt":-0.15830798946747204,"why":""},{"abbr":"GB","name":"Green Bay Packers","rating":0.6479734404265971,"tilt":-0.15678119989053674,"why":""},{"abbr":"PIT","name":"Pittsburgh Steelers","rating":0.5273895472347675,"tilt":-0.22074823704519062,"why":"new head coach: -0.1 pts by December on average (z -0.5)"},{"abbr":"PHI","name":"Philadelphia Eagles","rating":0.052244827276258995,"tilt":-0.11694602694039144,"why":""},{"abbr":"IND","name":"Indianapolis Colts","rating":-0.09190308591981537,"tilt":-0.10730714620541647,"why":""},{"abbr":"CAR","name":"Carolina Panthers","rating":-0.3180832384892441,"tilt":-0.09218293478329413,"why":""},{"abbr":"ATL","name":"Atlanta Falcons","rating":-0.9910960565353548,"tilt":0.27144974727039234,"why":"new starting QB (veteran): +0.6 pts by December on average (z +2.6)"},{"abbr":"NO","name":"New Orleans Saints","rating":-1.1157683284677384,"tilt":0.2797863310853798,"why":"new starting QB (veteran): +0.6 pts by December on average (z +2.6)"},{"abbr":"LAC","name":"Los Angeles Chargers","rating":-1.3165875925853932,"tilt":-0.02541495896532643,"why":""},{"abbr":"NYJ","name":"New York Jets","rating":-2.032518446224156,"tilt":0.3410875657193406,"why":"new starting QB (veteran): +0.6 pts by December on average (z +2.6)"},{"abbr":"TB","name":"Tampa Bay Buccaneers","rating":-2.037424080693418,"tilt":0.02278592569708625,"why":""},{"abbr":"LV","name":"Las Vegas Raiders","rating":-2.27799317398652,"tilt":0.2854717272232439,"why":"new head coach: -0.1 pts by December on average (z -0.5); new starting QB (veteran): +0.6 pts by December on average (z +2.6)"},{"abbr":"WAS","name":"Washington Commanders","rating":-2.3618823636386237,"tilt":0.04448179782899565,"why":""},{"abbr":"NYG","name":"New York Giants","rating":-2.785515411493326,"tilt":0.31940871742456284,"why":"rated -2.8: teams this weak moved +0.4 pts by December on average; new head coach: -0.1 pts by December on average (z -0.5); new starting QB (veteran): +0.6 pts by December on average (z +2.6)"},{"abbr":"ARI","name":"Arizona Cardinals","rating":-2.902122569892426,"tilt":0.3992362426500945,"why":"rated -2.9: teams this weak moved +0.4 pts by December on average; new starting QB (veteran): +0.6 pts by December on average (z +2.6)"},{"abbr":"CLE","name":"Cleveland Browns","rating":-2.9273044857962462,"tilt":0.3288898673519249,"why":"rated -2.9: teams this weak moved +0.4 pts by December on average; new head coach: -0.1 pts by December on average (z -0.5); new starting QB (veteran): +0.6 pts by December on average (z +2.6)"},{"abbr":"TEN","name":"Tennessee Titans","rating":-3.9333430152250104,"tilt":0.0775319683829934,"why":"rated -3.9: teams this weak moved +0.5 pts by December on average; new head coach: -0.1 pts by December on average (z -0.5)"},{"abbr":"MIA","name":"Miami Dolphins","rating":-4.249948372005776,"tilt":0.41733240107543534,"why":"rated -4.2: teams this weak moved +0.6 pts by December on average; new head coach: -0.1 pts by December on average (z -0.5); new starting QB (veteran): +0.6 pts by December on average (z +2.6)"}],"p":{"W3":{"GB":0.6625,"ATL":0.3375,"BUF":0.7319,"LAC":0.2681,"CLE":0.4346,"CAR":0.5654,"DET":0.7319,"NYJ":0.2681,"IND":0.4297,"HOU":0.5703,"JAX":0.5974,"NE":0.4026,"MIA":0.1831,"KC":0.8169,"NYG":0.5602,"TEN":0.4398,"PIT":0.3539,"CIN":0.6461,"WAS":0.2287,"SEA":0.7713,"SF":0.734,"ARI":0.266,"TB":0.4766,"MIN":0.5234,"DAL":0.3964,"BAL":0.6036,"NO":0.6266,"LV":0.3734,"DEN":0.5234,"LA":0.4766,"CHI":0.3698,"PHI":0.6302},"W4":{"CLE":0.3929,"PIT":0.6071,"WAS":0.3375,"IND":0.6625,"BAL":0.8484,"TEN":0.1516,"BUF":0.7141,"NE":0.2859,"CHI":0.6266,"NYJ":0.3734,"CIN":0.5778,"JAX":0.4222,"HOU":0.5911,"DAL":0.4089,"NYG":0.4346,"ARI":0.5654,"PHI":0.3698,"LA":0.6302,"TB":0.4089,"GB":0.5911,"MIN":0.8084,"MIA":0.1916,"LV":0.314,"KC":0.686,"SEA":0.7382,"LAC":0.2618,"SF":0.6011,"DEN":0.3989,"CAR":0.3407,"DET":0.6593,"NO":0.501,"ATL":0.499},"W5":{"DAL":0.8035,"TB":0.1965,"JAX":0.7535,"PHI":0.2465,"GB":0.4297,"CHI":0.5703,"MIA":0.2595,"CIN":0.7405,"NE":0.6179,"LV":0.3821,"NO":0.4273,"MIN":0.5727,"NYJ":0.5727,"CLE":0.4273,"PIT":0.5974,"IND":0.4026,"TEN":0.2549,"HOU":0.7451,"WAS":0.5889,"NYG":0.4111,"LAC":0.3455,"DEN":0.6545,"ARI":0.3087,"DET":0.6913,"SEA":0.5717,"SF":0.4283,"ATL":0.6136,"BAL":0.3864,"LA":0.6201,"BUF":0.3799},"W6":{"DEN":0.3967,"SEA":0.6033,"JAX":0.574,"HOU":0.426,"ATL":0.3967,"CHI":0.6033,"CLE":0.3202,"BAL":0.6798,"IND":0.7049,"TEN":0.2951,"NE":0.7049,"NYJ":0.2951,"NYG":0.4479,"NO":0.5521,"PHI":0.5521,"CAR":0.4479,"TB":0.3967,"PIT":0.6033,"LA":0.8475,"ARI":0.1525,"KC":0.7489,"LAC":0.2511,"LV":0.3001,"BUF":0.6999,"GB":0.5521,"DAL":0.4479,"SF":0.7438,"WAS":0.2562},"W7":{"CHI":0.5425,"NE":0.4575,"NO":0.4072,"PIT":0.5928,"ATL":0.4167,"SF":0.5833,"BAL":0.5517,"CIN":0.4483,"CAR":0.5783,"TB":0.4217,"HOU":0.6778,"NYG":0.3222,"MIN":0.6564,"IND":0.3436,"NYJ":0.5881,"MIA":0.4119,"TEN":0.4716,"CLE":0.5284,"ARI":0.3742,"DEN":0.6258,"DET":0.578,"GB":0.422,"LV":0.3602,"LA":0.6398,"SEA":0.5987,"KC":0.4013,"PHI":0.5382,"DAL":0.4618},"W8":{"GB":0.605,"CAR":0.395,"BUF":0.6054,"BAL":0.3946,"CIN":0.7718,"TEN":0.2282,"DAL":0.6747,"ARI":0.3253,"DET":0.5205,"MIN":0.4795,"JAX":0.6539,"IND":0.3461,"NYJ":0.5485,"LV":0.4515,"PIT":0.6438,"CLE":0.3562,"TB":0.4901,"ATL":0.5099,"LA":0.726,"LAC":0.274,"DEN":0.493,"KC":0.507,"MIA":0.3196,"NE":0.6804,"WAS":0.43,"PHI":0.57,"SEA":0.6504,"CHI":0.3496},"W9":{"BAL":0.5277,"JAX":0.4723,"ATL":0.4127,"CIN":0.5873,"CAR":0.4731,"DEN":0.5269,"IND":0.5396,"DAL":0.4604,"KC":0.7357,"NYJ":0.2643,"MIA":0.338,"DET":0.662,"NO":0.5835,"CLE":0.4165,"PHI":0.6172,"NYG":0.3828,"WAS":0.3575,"LA":0.6425,"LAC":0.4537,"HOU":0.5463,"SF":0.736,"LV":0.264,"NE":0.5959,"GB":0.4041,"SEA":0.7679,"ARI":0.2321,"CHI":0.6704,"TB":0.3296,"MIN":0.5174,"BUF":0.4826},"W10":{"NYG":0.538,"WAS":0.462,"DET":0.5107,"NE":0.4893,"ATL":0.43,"KC":0.57,"CLE":0.4265,"HOU":0.5735,"GB":0.4699,"MIN":0.5301,"IND":0.683,"MIA":0.317,"NO":0.484,"CAR":0.516,"NYJ":0.3204,"BUF":0.6796,"TEN":0.2589,"JAX":0.7411,"ARI":0.3048,"LA":0.6952,"LV":0.3407,"SEA":0.6593,"DAL":0.4486,"SF":0.5514,"CIN":0.562,"PIT":0.438,"BAL":0.6906,"LAC":0.3094},"W11":{"HOU":0.5882,"IND":0.4118,"BUF":0.7755,"MIA":0.2245,"CAR":0.4614,"BAL":0.5386,"CHI":0.6641,"NO":0.3359,"DAL":0.7243,"TEN":0.2757,"DET":0.6928,"TB":0.3072,"KC":0.7531,"ARI":0.2469,"NYG":0.3762,"JAX":0.6238,"LAC":0.5854,"NYJ":0.4146,"DEN":0.6674,"LV":0.3326,"PHI":0.5455,"PIT":0.4545,"SF":0.5267,"MIN":0.4733,"WAS":0.4148,"CIN":0.5852},"W12":{"LA":0.6438,"GB":0.3562,"DET":0.555,"CHI":0.445,"DAL":0.5182,"PHI":0.4818,"BUF":0.5828,"KC":0.4172,"PIT":0.5179,"DEN":0.4821,"CIN":0.6736,"NO":0.3264,"CLE":0.5487,"LV":0.4513,"HOU":0.5244,"BAL":0.4756,"IND":0.6139,"NYG":0.3861,"MIA":0.4702,"NYJ":0.5298,"MIN":0.6658,"ATL":0.3342,"JAX":0.785,"TEN":0.215,"ARI":0.5305,"WAS":0.4695,"SF":0.4977,"SEA":0.5023,"LAC":0.4347,"NE":0.5653,"TB":0.4804,"CAR":0.5196},"W13":{"LA":0.5737,"KC":0.4263,"ATL":0.4596,"DET":0.5404,"CHI":0.4973,"JAX":0.5027,"CLE":0.3854,"CIN":0.6146,"NO":0.4714,"GB":0.5286,"NYG":0.3752,"SF":0.6248,"TB":0.5512,"LAC":0.4488,"TEN":0.4676,"WAS":0.5324,"ARI":0.436,"PHI":0.564,"DEN":0.7468,"MIA":0.2532,"MIN":0.6592,"CAR":0.3408,"NE":0.4683,"BUF":0.5317,"PIT":0.5396,"HOU":0.4604,"SEA":0.6911,"DAL":0.3089},"W14":{"NE":0.5344,"MIN":0.4656,"BAL":0.6908,"TB":0.3092,"CAR":0.5674,"NO":0.4326,"CLE":0.4988,"ATL":0.5012,"DET":0.7765,"TEN":0.2235,"MIA":0.3735,"CHI":0.6265,"NYJ":0.4111,"DEN":0.5889,"PHI":0.5854,"IND":0.4146,"WAS":0.433,"HOU":0.567,"LV":0.5127,"LAC":0.4873,"CIN":0.5204,"KC":0.4796,"SEA":0.7515,"NYG":0.2485,"SF":0.5269,"LA":0.4731,"GB":0.4621,"BUF":0.5379,"JAX":0.6377,"PIT":0.3623},"W15":{"LAC":0.3883,"SF":0.6117,"PHI":0.4278,"SEA":0.5722,"BUF":0.63,"CHI":0.37,"CAR":0.4788,"CIN":0.5212,"GB":0.7105,"MIA":0.2895,"HOU":0.4634,"JAX":0.5366,"NYG":0.5691,"CLE":0.4309,"PIT":0.4762,"BAL":0.5238,"TB":0.52,"NO":0.48,"TEN":0.3746,"IND":0.6254,"WAS":0.4984,"ATL":0.5016,"ARI":0.5322,"NYJ":0.4678,"LA":0.663,"DAL":0.337,"LV":0.3927,"DEN":0.6073,"MIN":0.5418,"DET":0.4582,"KC":0.5902,"NE":0.4098},"W16":{"PHI":0.5273,"HOU":0.4727,"CHI":0.5464,"GB":0.4536,"DEN":0.5007,"BUF":0.4993,"SEA":0.557,"LA":0.443,"ATL":0.5687,"TB":0.4313,"BAL":0.6749,"CLE":0.3251,"IND":0.4808,"CIN":0.5192,"MIA":0.479,"LAC":0.521,"MIN":0.7133,"WAS":0.2867,"NO":0.6043,"ARI":0.3957,"NYJ":0.3865,"NE":0.6135,"PIT":0.5977,"CAR":0.4023,"LV":0.652,"TEN":0.348,"KC":0.54,"SF":0.46,"DAL":0.454,"JAX":0.546,"DET":0.6884,"NYG":0.3116},"W17":{"CIN":0.5139,"BAL":0.4861,"ATL":0.5604,"NO":0.4396,"CAR":0.3991,"SEA":0.6009,"CLE":0.4946,"IND":0.5054,"DAL":0.5933,"NYG":0.4067,"JAX":0.7262,"WAS":0.2738,"LAC":0.3776,"KC":0.6224,"MIA":0.2871,"BUF":0.7129,"NE":0.5555,"DEN":0.4445,"NYJ":0.3931,"MIN":0.6069,"TB":0.3858,"LA":0.6142,"TEN":0.3685,"PIT":0.6315,"ARI":0.5231,"LV":0.4769,"CHI":0.5008,"DET":0.4992,"SF":0.6528,"PHI":0.3472,"GB":0.5411,"HOU":0.4589},"W18":{"ARI":0.321,"SF":0.679,"BAL":0.5747,"PIT":0.4253,"BUF":0.7097,"NYJ":0.2903,"CAR":0.5274,"ATL":0.4726,"CIN":0.6587,"CLE":0.3413,"DEN":0.6415,"LAC":0.3585,"GB":0.4815,"DET":0.5185,"HOU":0.7211,"TEN":0.2789,"IND":0.4087,"JAX":0.5913,"KC":0.6807,"LV":0.3193,"LA":0.4943,"SEA":0.5057,"MIN":0.5679,"CHI":0.4321,"NE":0.7087,"MIA":0.2913,"NO":0.5346,"TB":0.4654,"NYG":0.4498,"PHI":0.5502,"WAS":0.446,"DAL":0.554}},"opp":{"W3":{"GB":"vs ATL","ATL":"@ GB","BUF":"vs LAC","LAC":"@ BUF","CLE":"vs CAR","CAR":"@ CLE","DET":"vs NYJ","NYJ":"@ DET","IND":"vs HOU","HOU":"@ IND","JAX":"vs NE","NE":"@ JAX","MIA":"vs KC","KC":"@ MIA","NYG":"vs TEN","TEN":"@ NYG","PIT":"vs CIN","CIN":"@ PIT","WAS":"vs SEA","SEA":"@ WAS","SF":"vs ARI","ARI":"@ SF","TB":"vs MIN","MIN":"@ TB","DAL":"vs BAL","BAL":"@ DAL","NO":"vs LV","LV":"@ NO","DEN":"vs LA","LA":"@ DEN","CHI":"vs PHI","PHI":"@ CHI"},"W4":{"CLE":"vs PIT","PIT":"@ CLE","WAS":"vs IND","IND":"@ WAS","BAL":"vs TEN","TEN":"@ BAL","BUF":"vs NE","NE":"@ BUF","CHI":"vs NYJ","NYJ":"@ CHI","CIN":"vs JAX","JAX":"@ CIN","HOU":"vs DAL","DAL":"@ HOU","NYG":"vs ARI","ARI":"@ NYG","PHI":"vs LA","LA":"@ PHI","TB":"vs GB","GB":"@ TB","MIN":"vs MIA","MIA":"@ MIN","LV":"vs KC","KC":"@ LV","SEA":"vs LAC","LAC":"@ SEA","SF":"vs DEN","DEN":"@ SF","CAR":"vs DET","DET":"@ CAR","NO":"vs ATL","ATL":"@ NO"},"W5":{"DAL":"vs TB","TB":"@ DAL","JAX":"vs PHI","PHI":"@ JAX","GB":"vs CHI","CHI":"@ GB","MIA":"vs CIN","CIN":"@ MIA","NE":"vs LV","LV":"@ NE","NO":"vs MIN","MIN":"@ NO","NYJ":"vs CLE","CLE":"@ NYJ","PIT":"vs IND","IND":"@ PIT","TEN":"vs HOU","HOU":"@ TEN","WAS":"vs NYG","NYG":"@ WAS","LAC":"vs DEN","DEN":"@ LAC","ARI":"vs DET","DET":"@ ARI","SEA":"vs SF","SF":"@ SEA","ATL":"vs BAL","BAL":"@ ATL","LA":"vs BUF","BUF":"@ LA"},"W6":{"DEN":"vs SEA","SEA":"@ DEN","JAX":"vs HOU","HOU":"@ JAX","ATL":"vs CHI","CHI":"@ ATL","CLE":"vs BAL","BAL":"@ CLE","IND":"vs TEN","TEN":"@ IND","NE":"vs NYJ","NYJ":"@ NE","NYG":"vs NO","NO":"@ NYG","PHI":"vs CAR","CAR":"@ PHI","TB":"vs PIT","PIT":"@ TB","LA":"vs ARI","ARI":"@ LA","KC":"vs LAC","LAC":"@ KC","LV":"vs BUF","BUF":"@ LV","GB":"vs DAL","DAL":"@ GB","SF":"vs WAS","WAS":"@ SF"},"W7":{"CHI":"vs NE","NE":"@ CHI","NO":"vs PIT","PIT":"@ NO","ATL":"vs SF","SF":"@ ATL","BAL":"vs CIN","CIN":"@ BAL","CAR":"vs TB","TB":"@ CAR","HOU":"vs NYG","NYG":"@ HOU","MIN":"vs IND","IND":"@ MIN","NYJ":"vs MIA","MIA":"@ NYJ","TEN":"vs CLE","CLE":"@ TEN","ARI":"vs DEN","DEN":"@ ARI","DET":"vs GB","GB":"@ DET","LV":"vs LA","LA":"@ LV","SEA":"vs KC","KC":"@ SEA","PHI":"vs DAL","DAL":"@ PHI"},"W8":{"GB":"vs CAR","CAR":"@ GB","BUF":"vs BAL","BAL":"@ BUF","CIN":"vs TEN","TEN":"@ CIN","DAL":"vs ARI","ARI":"@ DAL","DET":"vs MIN","MIN":"@ DET","JAX":"vs IND","IND":"@ JAX","NYJ":"vs LV","LV":"@ NYJ","PIT":"vs CLE","CLE":"@ PIT","TB":"vs ATL","ATL":"@ TB","LA":"vs LAC","LAC":"@ LA","DEN":"vs KC","KC":"@ DEN","MIA":"vs NE","NE":"@ MIA","WAS":"vs PHI","PHI":"@ WAS","SEA":"vs CHI","CHI":"@ SEA"},"W9":{"BAL":"vs JAX","JAX":"@ BAL","ATL":"vs CIN","CIN":"@ ATL","CAR":"vs DEN","DEN":"@ CAR","IND":"vs DAL","DAL":"@ IND","KC":"vs NYJ","NYJ":"@ KC","MIA":"vs DET","DET":"@ MIA","NO":"vs CLE","CLE":"@ NO","PHI":"vs NYG","NYG":"@ PHI","WAS":"vs LA","LA":"@ WAS","LAC":"vs HOU","HOU":"@ LAC","SF":"vs LV","LV":"@ SF","NE":"vs GB","GB":"@ NE","SEA":"vs ARI","ARI":"@ SEA","CHI":"vs TB","TB":"@ CHI","MIN":"vs BUF","BUF":"@ MIN"},"W10":{"NYG":"vs WAS","WAS":"@ NYG","DET":"vs NE","NE":"@ DET","ATL":"vs KC","KC":"@ ATL","CLE":"vs HOU","HOU":"@ CLE","GB":"vs MIN","MIN":"@ GB","IND":"vs MIA","MIA":"@ IND","NO":"vs CAR","CAR":"@ NO","NYJ":"vs BUF","BUF":"@ NYJ","TEN":"vs JAX","JAX":"@ TEN","ARI":"vs LA","LA":"@ ARI","LV":"vs SEA","SEA":"@ LV","DAL":"vs SF","SF":"@ DAL","CIN":"vs PIT","PIT":"@ CIN","BAL":"vs LAC","LAC":"@ BAL"},"W11":{"HOU":"vs IND","IND":"@ HOU","BUF":"vs MIA","MIA":"@ BUF","CAR":"vs BAL","BAL":"@ CAR","CHI":"vs NO","NO":"@ CHI","DAL":"vs TEN","TEN":"@ DAL","DET":"vs TB","TB":"@ DET","KC":"vs ARI","ARI":"@ KC","NYG":"vs JAX","JAX":"@ NYG","LAC":"vs NYJ","NYJ":"@ LAC","DEN":"vs LV","LV":"@ DEN","PHI":"vs PIT","PIT":"@ PHI","SF":"vs MIN","MIN":"@ SF","WAS":"vs CIN","CIN":"@ WAS"},"W12":{"LA":"vs GB","GB":"@ LA","DET":"vs CHI","CHI":"@ DET","DAL":"vs PHI","PHI":"@ DAL","BUF":"vs KC","KC":"@ BUF","PIT":"vs DEN","DEN":"@ PIT","CIN":"vs NO","NO":"@ CIN","CLE":"vs LV","LV":"@ CLE","HOU":"vs BAL","BAL":"@ HOU","IND":"vs NYG","NYG":"@ IND","MIA":"vs NYJ","NYJ":"@ MIA","MIN":"vs ATL","ATL":"@ MIN","JAX":"vs TEN","TEN":"@ JAX","ARI":"vs WAS","WAS":"@ ARI","SF":"vs SEA","SEA":"@ SF","LAC":"vs NE","NE":"@ LAC","TB":"vs CAR","CAR":"@ TB"},"W13":{"LA":"vs KC","KC":"@ LA","ATL":"vs DET","DET":"@ ATL","CHI":"vs JAX","JAX":"@ CHI","CLE":"vs CIN","CIN":"@ CLE","NO":"vs GB","GB":"@ NO","NYG":"vs SF","SF":"@ NYG","TB":"vs LAC","LAC":"@ TB","TEN":"vs WAS","WAS":"@ TEN","ARI":"vs PHI","PHI":"@ ARI","DEN":"vs MIA","MIA":"@ DEN","MIN":"vs CAR","CAR":"@ MIN","NE":"vs BUF","BUF":"@ NE","PIT":"vs HOU","HOU":"@ PIT","SEA":"vs DAL","DAL":"@ SEA"},"W14":{"NE":"vs MIN","MIN":"@ NE","BAL":"vs TB","TB":"@ BAL","CAR":"vs NO","NO":"@ CAR","CLE":"vs ATL","ATL":"@ CLE","DET":"vs TEN","TEN":"@ DET","MIA":"vs CHI","CHI":"@ MIA","NYJ":"vs DEN","DEN":"@ NYJ","PHI":"vs IND","IND":"@ PHI","WAS":"vs HOU","HOU":"@ WAS","LV":"vs LAC","LAC":"@ LV","CIN":"vs KC","KC":"@ CIN","SEA":"vs NYG","NYG":"@ SEA","SF":"vs LA","LA":"@ SF","GB":"vs BUF","BUF":"@ GB","JAX":"vs PIT","PIT":"@ JAX"},"W15":{"LAC":"vs SF","SF":"@ LAC","PHI":"vs SEA","SEA":"@ PHI","BUF":"vs CHI","CHI":"@ BUF","CAR":"vs CIN","CIN":"@ CAR","GB":"vs MIA","MIA":"@ GB","HOU":"vs JAX","JAX":"@ HOU","NYG":"vs CLE","CLE":"@ NYG","PIT":"vs BAL","BAL":"@ PIT","TB":"vs NO","NO":"@ TB","TEN":"vs IND","IND":"@ TEN","WAS":"vs ATL","ATL":"@ WAS","ARI":"vs NYJ","NYJ":"@ ARI","LA":"vs DAL","DAL":"@ LA","LV":"vs DEN","DEN":"@ LV","MIN":"vs DET","DET":"@ MIN","KC":"vs NE","NE":"@ KC"},"W16":{"PHI":"vs HOU","HOU":"@ PHI","CHI":"vs GB","GB":"@ CHI","DEN":"vs BUF","BUF":"@ DEN","SEA":"vs LA","LA":"@ SEA","ATL":"vs TB","TB":"@ ATL","BAL":"vs CLE","CLE":"@ BAL","IND":"vs CIN","CIN":"@ IND","MIA":"vs LAC","LAC":"@ MIA","MIN":"vs WAS","WAS":"@ MIN","NO":"vs ARI","ARI":"@ NO","NYJ":"vs NE","NE":"@ NYJ","PIT":"vs CAR","CAR":"@ PIT","LV":"vs TEN","TEN":"@ LV","KC":"vs SF","SF":"@ KC","DAL":"vs JAX","JAX":"@ DAL","DET":"vs NYG","NYG":"@ DET"},"W17":{"CIN":"vs BAL","BAL":"@ CIN","ATL":"vs NO","NO":"@ ATL","CAR":"vs SEA","SEA":"@ CAR","CLE":"vs IND","IND":"@ CLE","DAL":"vs NYG","NYG":"@ DAL","JAX":"vs WAS","WAS":"@ JAX","LAC":"vs KC","KC":"@ LAC","MIA":"vs BUF","BUF":"@ MIA","NE":"vs DEN","DEN":"@ NE","NYJ":"vs MIN","MIN":"@ NYJ","TB":"vs LA","LA":"@ TB","TEN":"vs PIT","PIT":"@ TEN","ARI":"vs LV","LV":"@ ARI","CHI":"vs DET","DET":"@ CHI","SF":"vs PHI","PHI":"@ SF","GB":"vs HOU","HOU":"@ GB"},"W18":{"ARI":"vs SF","SF":"@ ARI","BAL":"vs PIT","PIT":"@ BAL","BUF":"vs NYJ","NYJ":"@ BUF","CAR":"vs ATL","ATL":"@ CAR","CIN":"vs CLE","CLE":"@ CIN","DEN":"vs LAC","LAC":"@ DEN","GB":"vs DET","DET":"@ GB","HOU":"vs TEN","TEN":"@ HOU","IND":"vs JAX","JAX":"@ IND","KC":"vs LV","LV":"@ KC","LA":"vs SEA","SEA":"@ LA","MIN":"vs CHI","CHI":"@ MIN","NE":"vs MIA","MIA":"@ NE","NO":"vs TB","TB":"@ NO","NYG":"vs PHI","PHI":"@ NYG","WAS":"vs DAL","DAL":"@ WAS"}},"game":{"W3":{"GB":"2026_03_ATL_GB","ATL":"2026_03_ATL_GB","BUF":"2026_03_LAC_BUF","LAC":"2026_03_LAC_BUF","CLE":"2026_03_CAR_CLE","CAR":"2026_03_CAR_CLE","DET":"2026_03_NYJ_DET","NYJ":"2026_03_NYJ_DET","IND":"2026_03_HOU_IND","HOU":"2026_03_HOU_IND","JAX":"2026_03_NE_JAX","NE":"2026_03_NE_JAX","MIA":"2026_03_KC_MIA","KC":"2026_03_KC_MIA","NYG":"2026_03_TEN_NYG","TEN":"2026_03_TEN_NYG","PIT":"2026_03_CIN_PIT","CIN":"2026_03_CIN_PIT","WAS":"2026_03_SEA_WAS","SEA":"2026_03_SEA_WAS","SF":"2026_03_ARI_SF","ARI":"2026_03_ARI_SF","TB":"2026_03_MIN_TB","MIN":"2026_03_MIN_TB","DAL":"2026_03_BAL_DAL","BAL":"2026_03_BAL_DAL","NO":"2026_03_LV_NO","LV":"2026_03_LV_NO","DEN":"2026_03_LA_DEN","LA":"2026_03_LA_DEN","CHI":"2026_03_PHI_CHI","PHI":"2026_03_PHI_CHI"},"W4":{"CLE":"2026_04_PIT_CLE","PIT":"2026_04_PIT_CLE","WAS":"2026_04_IND_WAS","IND":"2026_04_IND_WAS","BAL":"2026_04_TEN_BAL","TEN":"2026_04_TEN_BAL","BUF":"2026_04_NE_BUF","NE":"2026_04_NE_BUF","CHI":"2026_04_NYJ_CHI","NYJ":"2026_04_NYJ_CHI","CIN":"2026_04_JAX_CIN","JAX":"2026_04_JAX_CIN","HOU":"2026_04_DAL_HOU","DAL":"2026_04_DAL_HOU","NYG":"2026_04_ARI_NYG","ARI":"2026_04_ARI_NYG","PHI":"2026_04_LA_PHI","LA":"2026_04_LA_PHI","TB":"2026_04_GB_TB","GB":"2026_04_GB_TB","MIN":"2026_04_MIA_MIN","MIA":"2026_04_MIA_MIN","LV":"2026_04_KC_LV","KC":"2026_04_KC_LV","SEA":"2026_04_LAC_SEA","LAC":"2026_04_LAC_SEA","SF":"2026_04_DEN_SF","DEN":"2026_04_DEN_SF","CAR":"2026_04_DET_CAR","DET":"2026_04_DET_CAR","NO":"2026_04_ATL_NO","ATL":"2026_04_ATL_NO"},"W5":{"DAL":"2026_05_TB_DAL","TB":"2026_05_TB_DAL","JAX":"2026_05_PHI_JAX","PHI":"2026_05_PHI_JAX","GB":"2026_05_CHI_GB","CHI":"2026_05_CHI_GB","MIA":"2026_05_CIN_MIA","CIN":"2026_05_CIN_MIA","NE":"2026_05_LV_NE","LV":"2026_05_LV_NE","NO":"2026_05_MIN_NO","MIN":"2026_05_MIN_NO","NYJ":"2026_05_CLE_NYJ","CLE":"2026_05_CLE_NYJ","PIT":"2026_05_IND_PIT","IND":"2026_05_IND_PIT","TEN":"2026_05_HOU_TEN","HOU":"2026_05_HOU_TEN","WAS":"2026_05_NYG_WAS","NYG":"2026_05_NYG_WAS","LAC":"2026_05_DEN_LAC","DEN":"2026_05_DEN_LAC","ARI":"2026_05_DET_ARI","DET":"2026_05_DET_ARI","SEA":"2026_05_SF_SEA","SF":"2026_05_SF_SEA","ATL":"2026_05_BAL_ATL","BAL":"2026_05_BAL_ATL","LA":"2026_05_BUF_LA","BUF":"2026_05_BUF_LA"},"W6":{"DEN":"2026_06_SEA_DEN","SEA":"2026_06_SEA_DEN","JAX":"2026_06_HOU_JAX","HOU":"2026_06_HOU_JAX","ATL":"2026_06_CHI_ATL","CHI":"2026_06_CHI_ATL","CLE":"2026_06_BAL_CLE","BAL":"2026_06_BAL_CLE","IND":"2026_06_TEN_IND","TEN":"2026_06_TEN_IND","NE":"2026_06_NYJ_NE","NYJ":"2026_06_NYJ_NE","NYG":"2026_06_NO_NYG","NO":"2026_06_NO_NYG","PHI":"2026_06_CAR_PHI","CAR":"2026_06_CAR_PHI","TB":"2026_06_PIT_TB","PIT":"2026_06_PIT_TB","LA":"2026_06_ARI_LA","ARI":"2026_06_ARI_LA","KC":"2026_06_LAC_KC","LAC":"2026_06_LAC_KC","LV":"2026_06_BUF_LV","BUF":"2026_06_BUF_LV","GB":"2026_06_DAL_GB","DAL":"2026_06_DAL_GB","SF":"2026_06_WAS_SF","WAS":"2026_06_WAS_SF"},"W7":{"CHI":"2026_07_NE_CHI","NE":"2026_07_NE_CHI","NO":"2026_07_PIT_NO","PIT":"2026_07_PIT_NO","ATL":"2026_07_SF_ATL","SF":"2026_07_SF_ATL","BAL":"2026_07_CIN_BAL","CIN":"2026_07_CIN_BAL","CAR":"2026_07_TB_CAR","TB":"2026_07_TB_CAR","HOU":"2026_07_NYG_HOU","NYG":"2026_07_NYG_HOU","MIN":"2026_07_IND_MIN","IND":"2026_07_IND_MIN","NYJ":"2026_07_MIA_NYJ","MIA":"2026_07_MIA_NYJ","TEN":"2026_07_CLE_TEN","CLE":"2026_07_CLE_TEN","ARI":"2026_07_DEN_ARI","DEN":"2026_07_DEN_ARI","DET":"2026_07_GB_DET","GB":"2026_07_GB_DET","LV":"2026_07_LA_LV","LA":"2026_07_LA_LV","SEA":"2026_07_KC_SEA","KC":"2026_07_KC_SEA","PHI":"2026_07_DAL_PHI","DAL":"2026_07_DAL_PHI"},"W8":{"GB":"2026_08_CAR_GB","CAR":"2026_08_CAR_GB","BUF":"2026_08_BAL_BUF","BAL":"2026_08_BAL_BUF","CIN":"2026_08_TEN_CIN","TEN":"2026_08_TEN_CIN","DAL":"2026_08_ARI_DAL","ARI":"2026_08_ARI_DAL","DET":"2026_08_MIN_DET","MIN":"2026_08_MIN_DET","JAX":"2026_08_IND_JAX","IND":"2026_08_IND_JAX","NYJ":"2026_08_LV_NYJ","LV":"2026_08_LV_NYJ","PIT":"2026_08_CLE_PIT","CLE":"2026_08_CLE_PIT","TB":"2026_08_ATL_TB","ATL":"2026_08_ATL_TB","LA":"2026_08_LAC_LA","LAC":"2026_08_LAC_LA","DEN":"2026_08_KC_DEN","KC":"2026_08_KC_DEN","MIA":"2026_08_NE_MIA","NE":"2026_08_NE_MIA","WAS":"2026_08_PHI_WAS","PHI":"2026_08_PHI_WAS","SEA":"2026_08_CHI_SEA","CHI":"2026_08_CHI_SEA"},"W9":{"BAL":"2026_09_JAX_BAL","JAX":"2026_09_JAX_BAL","ATL":"2026_09_CIN_ATL","CIN":"2026_09_CIN_ATL","CAR":"2026_09_DEN_CAR","DEN":"2026_09_DEN_CAR","IND":"2026_09_DAL_IND","DAL":"2026_09_DAL_IND","KC":"2026_09_NYJ_KC","NYJ":"2026_09_NYJ_KC","MIA":"2026_09_DET_MIA","DET":"2026_09_DET_MIA","NO":"2026_09_CLE_NO","CLE":"2026_09_CLE_NO","PHI":"2026_09_NYG_PHI","NYG":"2026_09_NYG_PHI","WAS":"2026_09_LA_WAS","LA":"2026_09_LA_WAS","LAC":"2026_09_HOU_LAC","HOU":"2026_09_HOU_LAC","SF":"2026_09_LV_SF","LV":"2026_09_LV_SF","NE":"2026_09_GB_NE","GB":"2026_09_GB_NE","SEA":"2026_09_ARI_SEA","ARI":"2026_09_ARI_SEA","CHI":"2026_09_TB_CHI","TB":"2026_09_TB_CHI","MIN":"2026_09_BUF_MIN","BUF":"2026_09_BUF_MIN"},"W10":{"NYG":"2026_10_WAS_NYG","WAS":"2026_10_WAS_NYG","DET":"2026_10_NE_DET","NE":"2026_10_NE_DET","ATL":"2026_10_KC_ATL","KC":"2026_10_KC_ATL","CLE":"2026_10_HOU_CLE","HOU":"2026_10_HOU_CLE","GB":"2026_10_MIN_GB","MIN":"2026_10_MIN_GB","IND":"2026_10_MIA_IND","MIA":"2026_10_MIA_IND","NO":"2026_10_CAR_NO","CAR":"2026_10_CAR_NO","NYJ":"2026_10_BUF_NYJ","BUF":"2026_10_BUF_NYJ","TEN":"2026_10_JAX_TEN","JAX":"2026_10_JAX_TEN","ARI":"2026_10_LA_ARI","LA":"2026_10_LA_ARI","LV":"2026_10_SEA_LV","SEA":"2026_10_SEA_LV","DAL":"2026_10_SF_DAL","SF":"2026_10_SF_DAL","CIN":"2026_10_PIT_CIN","PIT":"2026_10_PIT_CIN","BAL":"2026_10_LAC_BAL","LAC":"2026_10_LAC_BAL"},"W11":{"HOU":"2026_11_IND_HOU","IND":"2026_11_IND_HOU","BUF":"2026_11_MIA_BUF","MIA":"2026_11_MIA_BUF","CAR":"2026_11_BAL_CAR","BAL":"2026_11_BAL_CAR","CHI":"2026_11_NO_CHI","NO":"2026_11_NO_CHI","DAL":"2026_11_TEN_DAL","TEN":"2026_11_TEN_DAL","DET":"2026_11_TB_DET","TB":"2026_11_TB_DET","KC":"2026_11_ARI_KC","ARI":"2026_11_ARI_KC","NYG":"2026_11_JAX_NYG","JAX":"2026_11_JAX_NYG","LAC":"2026_11_NYJ_LAC","NYJ":"2026_11_NYJ_LAC","DEN":"2026_11_LV_DEN","LV":"2026_11_LV_DEN","PHI":"2026_11_PIT_PHI","PIT":"2026_11_PIT_PHI","SF":"2026_11_MIN_SF","MIN":"2026_11_MIN_SF","WAS":"2026_11_CIN_WAS","CIN":"2026_11_CIN_WAS"},"W12":{"LA":"2026_12_GB_LA","GB":"2026_12_GB_LA","DET":"2026_12_CHI_DET","CHI":"2026_12_CHI_DET","DAL":"2026_12_PHI_DAL","PHI":"2026_12_PHI_DAL","BUF":"2026_12_KC_BUF","KC":"2026_12_KC_BUF","PIT":"2026_12_DEN_PIT","DEN":"2026_12_DEN_PIT","CIN":"2026_12_NO_CIN","NO":"2026_12_NO_CIN","CLE":"2026_12_LV_CLE","LV":"2026_12_LV_CLE","HOU":"2026_12_BAL_HOU","BAL":"2026_12_BAL_HOU","IND":"2026_12_NYG_IND","NYG":"2026_12_NYG_IND","MIA":"2026_12_NYJ_MIA","NYJ":"2026_12_NYJ_MIA","MIN":"2026_12_ATL_MIN","ATL":"2026_12_ATL_MIN","JAX":"2026_12_TEN_JAX","TEN":"2026_12_TEN_JAX","ARI":"2026_12_WAS_ARI","WAS":"2026_12_WAS_ARI","SF":"2026_12_SEA_SF","SEA":"2026_12_SEA_SF","LAC":"2026_12_NE_LAC","NE":"2026_12_NE_LAC","TB":"2026_12_CAR_TB","CAR":"2026_12_CAR_TB"},"W13":{"LA":"2026_13_KC_LA","KC":"2026_13_KC_LA","ATL":"2026_13_DET_ATL","DET":"2026_13_DET_ATL","CHI":"2026_13_JAX_CHI","JAX":"2026_13_JAX_CHI","CLE":"2026_13_CIN_CLE","CIN":"2026_13_CIN_CLE","NO":"2026_13_GB_NO","GB":"2026_13_GB_NO","NYG":"2026_13_SF_NYG","SF":"2026_13_SF_NYG","TB":"2026_13_LAC_TB","LAC":"2026_13_LAC_TB","TEN":"2026_13_WAS_TEN","WAS":"2026_13_WAS_TEN","ARI":"2026_13_PHI_ARI","PHI":"2026_13_PHI_ARI","DEN":"2026_13_MIA_DEN","MIA":"2026_13_MIA_DEN","MIN":"2026_13_CAR_MIN","CAR":"2026_13_CAR_MIN","NE":"2026_13_BUF_NE","BUF":"2026_13_BUF_NE","PIT":"2026_13_HOU_PIT","HOU":"2026_13_HOU_PIT","SEA":"2026_13_DAL_SEA","DAL":"2026_13_DAL_SEA"},"W14":{"NE":"2026_14_MIN_NE","MIN":"2026_14_MIN_NE","BAL":"2026_14_TB_BAL","TB":"2026_14_TB_BAL","CAR":"2026_14_NO_CAR","NO":"2026_14_NO_CAR","CLE":"2026_14_ATL_CLE","ATL":"2026_14_ATL_CLE","DET":"2026_14_TEN_DET","TEN":"2026_14_TEN_DET","MIA":"2026_14_CHI_MIA","CHI":"2026_14_CHI_MIA","NYJ":"2026_14_DEN_NYJ","DEN":"2026_14_DEN_NYJ","PHI":"2026_14_IND_PHI","IND":"2026_14_IND_PHI","WAS":"2026_14_HOU_WAS","HOU":"2026_14_HOU_WAS","LV":"2026_14_LAC_LV","LAC":"2026_14_LAC_LV","CIN":"2026_14_KC_CIN","KC":"2026_14_KC_CIN","SEA":"2026_14_NYG_SEA","NYG":"2026_14_NYG_SEA","SF":"2026_14_LA_SF","LA":"2026_14_LA_SF","GB":"2026_14_BUF_GB","BUF":"2026_14_BUF_GB","JAX":"2026_14_PIT_JAX","PIT":"2026_14_PIT_JAX"},"W15":{"LAC":"2026_15_SF_LAC","SF":"2026_15_SF_LAC","PHI":"2026_15_SEA_PHI","SEA":"2026_15_SEA_PHI","BUF":"2026_15_CHI_BUF","CHI":"2026_15_CHI_BUF","CAR":"2026_15_CIN_CAR","CIN":"2026_15_CIN_CAR","GB":"2026_15_MIA_GB","MIA":"2026_15_MIA_GB","HOU":"2026_15_JAX_HOU","JAX":"2026_15_JAX_HOU","NYG":"2026_15_CLE_NYG","CLE":"2026_15_CLE_NYG","PIT":"2026_15_BAL_PIT","BAL":"2026_15_BAL_PIT","TB":"2026_15_NO_TB","NO":"2026_15_NO_TB","TEN":"2026_15_IND_TEN","IND":"2026_15_IND_TEN","WAS":"2026_15_ATL_WAS","ATL":"2026_15_ATL_WAS","ARI":"2026_15_NYJ_ARI","NYJ":"2026_15_NYJ_ARI","LA":"2026_15_DAL_LA","DAL":"2026_15_DAL_LA","LV":"2026_15_DEN_LV","DEN":"2026_15_DEN_LV","MIN":"2026_15_DET_MIN","DET":"2026_15_DET_MIN","KC":"2026_15_NE_KC","NE":"2026_15_NE_KC"},"W16":{"PHI":"2026_16_HOU_PHI","HOU":"2026_16_HOU_PHI","CHI":"2026_16_GB_CHI","GB":"2026_16_GB_CHI","DEN":"2026_16_BUF_DEN","BUF":"2026_16_BUF_DEN","SEA":"2026_16_LA_SEA","LA":"2026_16_LA_SEA","ATL":"2026_16_TB_ATL","TB":"2026_16_TB_ATL","BAL":"2026_16_CLE_BAL","CLE":"2026_16_CLE_BAL","IND":"2026_16_CIN_IND","CIN":"2026_16_CIN_IND","MIA":"2026_16_LAC_MIA","LAC":"2026_16_LAC_MIA","MIN":"2026_16_WAS_MIN","WAS":"2026_16_WAS_MIN","NO":"2026_16_ARI_NO","ARI":"2026_16_ARI_NO","NYJ":"2026_16_NE_NYJ","NE":"2026_16_NE_NYJ","PIT":"2026_16_CAR_PIT","CAR":"2026_16_CAR_PIT","LV":"2026_16_TEN_LV","TEN":"2026_16_TEN_LV","KC":"2026_16_SF_KC","SF":"2026_16_SF_KC","DAL":"2026_16_JAX_DAL","JAX":"2026_16_JAX_DAL","DET":"2026_16_NYG_DET","NYG":"2026_16_NYG_DET"},"W17":{"CIN":"2026_17_BAL_CIN","BAL":"2026_17_BAL_CIN","ATL":"2026_17_NO_ATL","NO":"2026_17_NO_ATL","CAR":"2026_17_SEA_CAR","SEA":"2026_17_SEA_CAR","CLE":"2026_17_IND_CLE","IND":"2026_17_IND_CLE","DAL":"2026_17_NYG_DAL","NYG":"2026_17_NYG_DAL","JAX":"2026_17_WAS_JAX","WAS":"2026_17_WAS_JAX","LAC":"2026_17_KC_LAC","KC":"2026_17_KC_LAC","MIA":"2026_17_BUF_MIA","BUF":"2026_17_BUF_MIA","NE":"2026_17_DEN_NE","DEN":"2026_17_DEN_NE","NYJ":"2026_17_MIN_NYJ","MIN":"2026_17_MIN_NYJ","TB":"2026_17_LA_TB","LA":"2026_17_LA_TB","TEN":"2026_17_PIT_TEN","PIT":"2026_17_PIT_TEN","ARI":"2026_17_LV_ARI","LV":"2026_17_LV_ARI","CHI":"2026_17_DET_CHI","DET":"2026_17_DET_CHI","SF":"2026_17_PHI_SF","PHI":"2026_17_PHI_SF","GB":"2026_17_HOU_GB","HOU":"2026_17_HOU_GB"},"W18":{"ARI":"2026_18_SF_ARI","SF":"2026_18_SF_ARI","BAL":"2026_18_PIT_BAL","PIT":"2026_18_PIT_BAL","BUF":"2026_18_NYJ_BUF","NYJ":"2026_18_NYJ_BUF","CAR":"2026_18_ATL_CAR","ATL":"2026_18_ATL_CAR","CIN":"2026_18_CLE_CIN","CLE":"2026_18_CLE_CIN","DEN":"2026_18_LAC_DEN","LAC":"2026_18_LAC_DEN","GB":"2026_18_DET_GB","DET":"2026_18_DET_GB","HOU":"2026_18_TEN_HOU","TEN":"2026_18_TEN_HOU","IND":"2026_18_JAX_IND","JAX":"2026_18_JAX_IND","KC":"2026_18_LV_KC","LV":"2026_18_LV_KC","LA":"2026_18_SEA_LA","SEA":"2026_18_SEA_LA","MIN":"2026_18_CHI_MIN","CHI":"2026_18_CHI_MIN","NE":"2026_18_MIA_NE","MIA":"2026_18_MIA_NE","NO":"2026_18_TB_NO","TB":"2026_18_TB_NO","NYG":"2026_18_PHI_NYG","PHI":"2026_18_PHI_NYG","WAS":"2026_18_DAL_WAS","DAL":"2026_18_DAL_WAS"}},"results":{"W3":{"GB":"L","ATL":"W","BUF":"W","LAC":"L","CLE":"W","CAR":"L","DET":"W","NYJ":"L","IND":"W","HOU":"L","JAX":"W","NE":"L","MIA":"L","KC":"W","NYG":"W","TEN":"L","PIT":"W","CIN":"L","WAS":"W","SEA":"L","SF":"W","ARI":"L","TB":"L","MIN":"W","DAL":"L","BAL":"W","NO":"L","LV":"W","DEN":"W","LA":"L","CHI":"W","PHI":"L"},"W4":{"CLE":"W","PIT":"L","WAS":"L","IND":"W","BAL":"W","TEN":"L","BUF":"L","NE":"W","CHI":"W","NYJ":"L","CIN":"L","JAX":"W","HOU":"L","DAL":"W","NYG":"W","ARI":"L","PHI":"L","LA":"W","TB":"L","GB":"W","MIN":"W","MIA":"L","LV":"L","KC":"W","SEA":"W","LAC":"L","SF":"W","DEN":"L","CAR":"W","DET":"L","NO":"L","ATL":"W"},"W5":{"DAL":"L","TB":"W","JAX":"W","PHI":"L","GB":"W","CHI":"L","MIA":"L","CIN":"W","NE":"W","LV":"L","NO":"L","MIN":"W","NYJ":"W","CLE":"L","PIT":"W","IND":"L","TEN":"L","HOU":"W","WAS":"T","NYG":"T","LAC":"L","DEN":"W","ARI":"L","DET":"W","SEA":"L","SF":"W","ATL":"L","BAL":"W"},"W6":{},"W7":{},"W8":{},"W9":{},"W10":{},"W11":{},"W12":{},"W13":{},"W14":{},"W15":{},"W16":{},"W17":{},"W18":{}},"field":{"LA":0.2664,"KC":0.1037,"SF":0.0995,"IND":0.1783,"NE":0.085,"BUF":0.0516,"BAL":0.0467,"SEA":0.011,"CHI":0.0266,"PIT":0.0268,"JAX":0.007,"PHI":0.0166,"GB":0.0128,"NO":0.0202,"NYG":0.0097,"CAR":0.0066,"DAL":0.0046,"HOU":0.002,"DEN":0.0027,"ATL":0.0036,"TB":0.0051,"CLE":0.0025,"LV":0.0017,"TEN":0.0027,"NYJ":0.0018,"WAS":0.0012,"LAC":0.001,"ARI":0.0005},"lev":{"LA":0.9466,"KC":0.9654,"SF":0.9662,"IND":0.9328,"NE":0.967,"BUF":0.9796,"BAL":0.9807,"SEA":0.9955,"CHI":0.9875,"PIT":0.9882,"JAX":0.9971,"PHI":0.9938,"GB":0.9949,"NO":0.9935,"NYG":1.0082,"CAR":1.0078,"DAL":1.0063,"HOU":1.004,"DEN":1.007,"ATL":1.0197,"TB":1.0185,"CLE":1.0436,"LV":1.051,"TEN":1.208,"NYJ":1.0887,"WAS":1.1132,"LAC":1.1198,"ARI":1.4563},"locked":[],"stance":"balanced","stances":{"all_in":{"gamma":1.0,"leverage_weight":0.25},"balanced":{"gamma":0.5,"leverage_weight":0.35},"spread":{"gamma":0.25,"leverage_weight":0.5},"max_ev":{"gamma":1.0,"leverage_weight":1.0}},"entries":[{"name":"Entry 68","alive":true,"picks":{"W3":"BUF","W4":"IND","W5":"JAX"},"eliminated_at":null,"model_plan":{"W6":"LA","W7":"HOU","W8":"DAL","W9":"SF","W10":"BAL","W11":"KC","W12":"CLE","W13":"DEN","W14":"SEA","W15":"GB","W16":"LV","W17":"PIT","W18":"NE"},"champion_plan":{},"champion_choices":{}}],"pool_key":"sharp"};</script><script>
+// Exact joint survival of several entries over the remaining legs.
+//   legIds: leg ids in season order; from: index of the first leg to evaluate; plans: one {leg: team} per entry
+//   (a leg missing from a plan = that entry dies there); p[leg][team] = win prob; results[leg][team] = 'W'/'L'/'T'
+//   for finished games; game[leg][team] = game id (entries on the same game are on the same coin);
+//   gamma: risk aversion on the surviving entries' equity; weights: equity of each entry if it goes the distance
+//   (1 = plain count); onlyLeg: evaluate this single leg instead of the whole run-out.
+// Returns pAny = P(at least one entry survives everything), eN = expected survivors, util = E[(sum equity)^gamma],
+// byN = distribution of the number of survivors, wipeNow = P(every entry dies in the first leg evaluated),
+// wipeBy[leg] = P(all dead after that leg), shared / hedged = leg-by-leg pairs on the same team / opposite sides.
+function portfolioStats(legIds, from, plans, p, results, game, gamma, weights, onlyLeg){
+  const n = plans.length; if (!n) return null;
+  const w = weights || plans.map(()=>1);
+  let dist = new Float64Array(1<<n); dist[(1<<n)-1] = 1;
+  const shared = [], hedged = [], wipeBy = {}; let wipeNow = null;
+  for (let li = from; li < legIds.length; li++){ const leg = legIds[li]; if (onlyLeg && leg !== onlyLeg) continue;
+    const games = [], gidx = {}, side = new Array(n).fill(null);
+    for (let i = 0; i < n; i++){ const t = plans[i][leg]; if (!t || !p[leg] || p[leg][t] === undefined) continue;
+      const res = (results[leg]||{})[t]; const k = (game[leg]||{})[t] || (leg + ':' + t);
+      if (!(k in gidx)){ gidx[k] = games.length; games.push({a: t, p: res === 'W' ? 1 : (res ? 0 : p[leg][t])}); }
+      side[i] = [gidx[k], games[gidx[k]].a === t]; }
+    for (let i = 0; i < n; i++) for (let j = i+1; j < n; j++){ if (!side[i] || !side[j] || side[i][0] !== side[j][0]) continue;
+      (side[i][1] === side[j][1] ? shared : hedged).push({leg, a: i, b: j, team: plans[i][leg], other: plans[j][leg]}); }
+    const m = games.length, next = new Float64Array(1<<n);
+    for (let S = 0; S < (1<<n); S++){ const pS = dist[S]; if (!pS) continue;
+      for (let mask = 0; mask < (1<<m); mask++){ let pr = pS;
+        for (let g = 0; g < m && pr; g++){ const won = !!(mask & (1<<g)); pr *= won ? games[g].p : 1 - games[g].p; }
+        if (!pr) continue; let T = 0;
+        for (let i = 0; i < n; i++){ if (!(S & (1<<i))) continue; const s = side[i]; if (!s) continue; if (!!(mask & (1<<s[0])) === s[1]) T |= (1<<i); }
+        next[T] += pr; } }
+    dist = next; if (wipeNow === null) wipeNow = dist[0]; wipeBy[leg] = dist[0]; }
+  let pAny = 0, eN = 0, util = 0; const byN = new Array(n+1).fill(0);
+  for (let S = 0; S < (1<<n); S++){ const pr = dist[S]; if (!pr) continue; let k = 0, v = 0;
+    for (let i = 0; i < n; i++) if (S & (1<<i)){ k++; v += w[i]; }
+    byN[k] += pr; if (k){ pAny += pr; util += pr * Math.pow(v, gamma); } eN += k*pr; }
+  return {pAny, eN, util, byN, wipeNow: wipeNow || 0, wipeBy, shared, hedged};
+}
+
+// e-maxx Hungarian, minimising, rows <= cols
+function hungarian(cost){
+  const n=cost.length, m=cost[0].length, INF=1e18;
+  const u=new Array(n+1).fill(0), v=new Array(m+1).fill(0), p=new Array(m+1).fill(0), way=new Array(m+1).fill(0);
+  for(let i=1;i<=n;i++){ p[0]=i; let j0=0; const minv=new Array(m+1).fill(INF), used=new Array(m+1).fill(false);
+    do{ used[j0]=true; const i0=p[j0]; let delta=INF, j1=0;
+      for(let j=1;j<=m;j++) if(!used[j]){ const cur=cost[i0-1][j-1]-u[i0]-v[j]; if(cur<minv[j]){minv[j]=cur; way[j]=j0;} if(minv[j]<delta){delta=minv[j]; j1=j;} }
+      for(let j=0;j<=m;j++){ if(used[j]){u[p[j]]+=delta; v[j]-=delta;} else minv[j]-=delta; }
+      j0=j1; } while(p[j0]!==0);
+    do{ const j1=way[j0]; p[j0]=p[j1]; j0=j1; } while(j0); }
+  const ans=new Array(n).fill(-1); for(let j=1;j<=m;j++) if(p[j]) ans[p[j]-1]=j-1; return ans; }
+
+const D = window.__DATA__;
+const LEGS = D.legs, TEAMS = D.teams, LI = Object.fromEntries(LEGS.map((l,i)=>[l.id,i])), LEG_IDS = LEGS.map(l=>l.id);
+const CUR = LI[D.current_leg];
+const LOCKED = new Set(D.locked || []);            // kicked off already this leg: not pickable now
+const STANCES = Object.assign({}, D.stances || {balanced: {gamma: 0.5, leverage_weight: 0.35}}, {at_least_one: {gamma: 0, leverage_weight: 0}});
+const N_ALIVE = D.entries.filter(e=>e.alive).length;
+const KEY = 'survivor-planner-v2-' + D.season + (D.pool_key ? '-' + D.pool_key : '');
+let store = {entry: 0, locks: {}, excl: {}, metric: 'p', together: false, stance: D.stance || 'balanced'};
+try { const s = JSON.parse(localStorage.getItem(KEY) || 'null'); if (s) store = Object.assign(store, s); } catch (e) {}
+if (!(store.entry >= 0 && store.entry < D.entries.length)) store.entry = 0;
+if (!STANCES[store.stance]) store.stance = STANCES[D.stance] ? D.stance : Object.keys(STANCES)[0];
+// The current leg defaults to the card's pick (This week's suggestions) unless you lock something else yourself;
+// that default is never stored, so the map always agrees with the latest card. Older stores wrote the model pick
+// into the locks on first sight, which then went stale when the card re-priced: drop those once.
+if (store.__v !== 3){ for (const L of Object.values(store.locks || {})){ if (L && typeof L === 'object'){ delete L[D.current_leg]; delete L.__seen_; } } store.together = false; store.__v = 3; }
+function save(){ try { localStorage.setItem(KEY, JSON.stringify(store)); } catch (e) {} }
+function locksFor(i){ return store.locks[i] = store.locks[i] || {}; }
+function exclFor(i){ return store.excl[i] = store.excl[i] || {}; }
+function subTeams(e){ return new Set(Object.values(e.picks)); }
+function short(n){ return n.replace(/^shouldatookdabears-/, 'Entry '); }
+function dot(k){ return `<i class="e${k+1}">${k+1}</i>`; }
+
+const BIG = 1e6;
+// One entry's best surviving path given its submitted picks, the user's locks/exclusions and (optionally) the
+// portfolio solver's pins. A lock on a team already submitted, or on a team that has kicked off this leg, is ignored.
+function solve(entryIdx, penalty){
+  const e = D.entries[entryIdx], locks = locksFor(entryIdx), excl = exclFor(entryIdx), subs = subTeams(e);
+  const fixed = {};                                     // leg -> team
+  for (const [leg,t] of Object.entries(e.picks)) fixed[leg] = t;
+  const usable = (leg,t) => !(leg in fixed) && !subs.has(t) && !Object.values(fixed).includes(t) && !!D.p[leg] && D.p[leg][t] !== undefined
+                            && !(leg === D.current_leg && LOCKED.has(t));
+  for (const [leg,t] of Object.entries(locks)) if (leg !== '__seen_' && usable(leg,t)) fixed[leg] = t;
+  let card = null;                                      // this leg falls back to the card's pick
+  const rec = e.model_plan[D.current_leg];
+  if (e.alive && rec && !(D.current_leg in fixed) && usable(D.current_leg, rec) && !excl[rec]){ fixed[D.current_leg] = rec; card = rec; }
+  const pen = penalty || (() => 0);                      // extra cost (log units) per cell, from the together-solver
+  const usedTeams = new Set(Object.values(fixed));
+  const open = LEGS.filter(l => LI[l.id] >= CUR && !(l.id in fixed)).map(l => l.id);
+  const pool = TEAMS.map(t=>t.abbr).filter(t => !usedTeams.has(t) && !excl[t]);
+  const plan = Object.assign({}, fixed);
+  let stuck = null;
+  if (open.length){
+    const cost = open.map(leg => pool.map(t => { const p = D.p[leg][t]; return (p === undefined || (leg === D.current_leg && LOCKED.has(t))) ? BIG : -Math.log(Math.max(p,1e-9)) + pen(leg, t); }));
+    if (pool.length < open.length) for (const row of cost) while (row.length < open.length) row.push(BIG);
+    const a = hungarian(cost);
+    open.forEach((leg,i) => { const j=a[i]; if (j>=0 && j<pool.length && cost[i][j] < BIG) plan[leg]=pool[j]; else if (!stuck || LI[leg] < LI[stuck]) stuck = leg; });
+  }
+  let logp = 0; const rows = [];
+  for (const l of LEGS){ if (LI[l.id] < CUR) continue; const t = plan[l.id]; if (!t){ rows.push({leg:l.id, team:null}); continue; }
+    const res = (D.results[l.id]||{})[t]; const p = res==='W' ? 1 : (res ? 0 : (D.p[l.id][t] ?? 0));
+    logp += Math.log(Math.max(p,1e-9)); rows.push({leg:l.id, team:t, p, fixed: l.id in fixed && !(card && l.id===D.current_leg), card: !!card && l.id===D.current_leg, sub: l.id in e.picks}); }
+  if (stuck) logp = -Infinity;
+  return {plan, fixed, card, stuck, pReach: Math.exp(logp), rows, usedTeams, fixedTeams: new Set(Object.values(fixed))};
+}
+
+// ---- entries as a portfolio -------------------------------------------------------------------------------
+const pfStats = (plans, gamma, weights, onlyLeg) => portfolioStats(LEG_IDS, CUR, plans, D.p, D.results, D.game || {}, gamma, weights, onlyLeg);
+let pfCache = null;
+const LAMBDAS = [0.005, 0.01, 0.02, 0.035, 0.05, 0.075, 0.1, 0.15, 0.2, 0.3, 0.45, 0.7, 1.0, 1.5, 3, 20];
+function solvePortfolio(){
+  const key = JSON.stringify([store.locks, store.excl, store.stance, store.together]);
+  if (pfCache && pfCache.key === key) return pfCache.val;
+  const alive = D.entries.map((e,k)=>k).filter(k=>D.entries[k].alive);
+  const st = STANCES[store.stance], gamma = st.gamma, lw = st.leverage_weight;
+  const sols = alive.map((k)=>solve(k));
+  const weights = () => sols.map(S => { const t = S.plan[D.current_leg]; const lev = t && D.lev ? D.lev[t] : undefined; return lev ? Math.pow(Math.max(lev,1e-6), lw) : 1; });
+  const evalAll = () => pfStats(sols.map(S=>S.plan), gamma, weights());
+  const indepSols = sols.slice(); const indep = evalAll();
+  let cur = indep;
+  if (store.together && gamma < 1 && alive.length > 1){
+    // Coordinate descent: for one entry at a time, re-solve its whole season with a penalty of lambda (log units)
+    // on every cell another entry is planned on (a team the others already used elsewhere costs nothing) and an
+    // equal bonus on the cell of that team's opponent (a hedge), for a ladder of lambdas from "barely nudge" to
+    // "never share"; keep the path the exact joint objective likes best. Whole alternative paths are compared,
+    // so the search does not get stuck where one-cell moves would (breaking the correlation between two paths
+    // only pays once several legs differ). Restarted from each entry order; the best run wins.
+    const descend = (order) => {
+      const cur_ = {stats: evalAll()};
+      for (let round = 0; round < 10; round++){
+        let changed = false;
+        for (const k of order){
+          const otherOn = {}, otherOpp = {};                // leg -> {team: count of other entries on it / on its opponent}
+          sols.forEach((S,j)=>{ if (j===k) return; for (const [leg,t] of Object.entries(S.plan)){ (otherOn[leg] = otherOn[leg] || {})[t] = (otherOn[leg][t]||0) + 1;
+            const o = oppOf(leg, t); if (o) (otherOpp[leg] = otherOpp[leg] || {})[o] = ((otherOpp[leg]||{})[o]||0) + 1; } });
+          let best = {S: sols[k], stats: cur_.stats};
+          for (const lam of [0, ...LAMBDAS]) for (const mu of (lam ? [0, lam] : [0])){
+            const S = solve(alive[k], (leg,t) => lam * ((otherOn[leg]||{})[t] || 0) - mu * ((otherOpp[leg]||{})[t] || 0));
+            if (S.stuck) continue;
+            const saved = sols[k]; sols[k] = S; const st2 = evalAll(); sols[k] = saved;
+            if (st2.util > best.stats.util * (1 + 1e-9)) best = {S, stats: st2}; }
+          if (best.S !== sols[k]){ sols[k] = best.S; cur_.stats = best.stats; changed = true; } }
+        if (!changed) break; }
+      return cur_.stats; };
+    const orders = [];
+    for (let r = 0; r < alive.length; r++) orders.push(alive.map((_,i)=>(i+r) % alive.length));
+    let bestRun = null;
+    for (const order of orders){
+      for (let i = 0; i < sols.length; i++) sols[i] = indepSols[i];
+      const st2 = descend(order);
+      if (!bestRun || st2.util > bestRun.stats.util * (1 + 1e-9)) bestRun = {stats: st2, sols: sols.slice()}; }
+    for (let i = 0; i < sols.length; i++) sols[i] = bestRun.sols[i];
+    cur = bestRun.stats;
+  }
+  const byEntry = {}, indepBy = {}, moved = {}; let moves = 0;
+  alive.forEach((k,i)=>{ byEntry[k] = sols[i]; indepBy[k] = indepSols[i]; moved[k] = {};
+    for (const l of LEGS){ if (LI[l.id] >= CUR && sols[i].plan[l.id] !== indepSols[i].plan[l.id]){ moved[k][l.id] = 1; moves++; } } });
+  const val = {alive, byEntry, indepBy, moved, stats: cur, indep, gamma, lw, moves, weekNow: pfStats(sols.map(S=>S.plan), gamma, weights(), D.current_leg)};
+  pfCache = {key, val}; return val;
+}
+
+function oppOf(leg, team){ return ((D.opp[leg]||{})[team]||'').replace(/^(vs|@)\s*/, ''); }
+function fvOf(team, fromLeg){ let v=0; for (const l of LEGS){ if (LI[l.id] <= LI[fromLeg]) continue; const p=D.p[l.id][team]; if (p!==undefined) v += Math.max(0, p-0.6); } return v; }
+function extraLine(leg, team){
+  const m = store.metric || 'p';
+  if (m==='fv') return `<small class="m2">FV ${fvOf(team, leg).toFixed(2)}</small>`;
+  if (m==='field'){ if (leg!==D.current_leg) return ''; return `<small class="m2">field ${pct(D.field[team]||0,1)}</small>`; }
+  return ''; }
+function q(p){ return p>=0.78?'q5':p>=0.70?'q4':p>=0.62?'q3':p>=0.55?'q2':'q1'; }
+function pct(x,d=0){ return (100*x).toFixed(d)+'%'; }
+function esc(s){ return String(s).replace(/[&<>"]/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+
+function render(){
+  if (store.entry >= D.entries.length) store.entry = 0;
+  if (!D.entries[store.entry].alive) { const a = D.entries.findIndex(x=>x.alive); if (a >= 0) store.entry = a; }
+  const i = store.entry, e = D.entries[i], locks = locksFor(i), excl = exclFor(i);
+  const PF = solvePortfolio();
+  const S = PF.byEntry[i] || solve(i); const MOVED = PF.moved[i] || {};
+  // dead entries have no plan to show: hide their buttons (a dozen "(out)" buttons buried the live ones)
+  document.getElementById('tabs').innerHTML = D.entries.map((en,k)=>(en.alive||k===i)?`<button class="${k===i?'on':''}" data-e="${k}"><span class="dot e${k+1}">${k+1}</span>${esc(en.name)}${en.alive?'':' (out)'}</button>`:'').join('');
+  const nLocks = Object.keys(locks).filter(l=>l !== '__seen_' && !(l in e.picks)).length;
+  const sharedLegs = new Set(PF.stats.shared.map(x=>x.leg)).size;
+  document.getElementById('stats').innerHTML = `
+    <div class="stat"><b class="num">${S.stuck?'—':pct(S.pReach,3)}</b><span>${esc(short(e.name))}: P(survive every leg from ${D.current_leg})</span></div>
+    <div class="stat"><b class="num">${Object.keys(e.picks).length}</b><span>picks submitted</span></div>
+    <div class="stat"><b class="num">${nLocks}</b><span>what-if locks</span></div>
+    <div class="stat"><b class="num">${Object.keys(excl).length}</b><span>teams excluded</span></div>`
+    + (PF.alive.length > 1 ? `
+    <div class="stat pf"><b class="num">${pct(PF.stats.pAny,3)}</b><span>P(at least one entry goes the distance)</span></div>
+    <div class="stat pf"><b class="num">${PF.stats.eN.toFixed(4)}</b><span>expected finalists (of ${PF.alive.length})</span></div>
+    <div class="stat pf"><b class="num">${pct(PF.stats.wipeNow,1)}</b><span>all entries out after ${D.current_leg}</span></div>
+    <div class="stat pf"><b class="num">${sharedLegs}</b><span>legs where entries share a team</span></div>` : '');
+  const hol = LEGS.filter(l=>l.kind==='holiday' && LI[l.id]>=CUR);
+  document.getElementById('holiday').innerHTML = hol.map(l=>{
+    const avail = l.teams.filter(t=>!S.usedTeams.has(t) || S.plan[l.id]===t);
+    return `<div><b>${l.id}</b> <span class="note">${esc(l.label)}</span><div class="chips">${l.teams.map(t=>`<span class="chip ${S.plan[l.id]===t?'on':''} ${(S.usedTeams.has(t)&&S.plan[l.id]!==t)||excl[t]?'gone':''}">${t} ${D.p[l.id][t]!==undefined?pct(D.p[l.id][t]):''}</span>`).join('')}</div><div class="note">${avail.length} of ${l.teams.length} still available on ${esc(short(e.name))}'s path</div></div>`;
+  }).join('');
+  document.getElementById('warn').innerHTML = S.stuck ? `<div class="warnbox"><b>This path cannot finish:</b> no eligible team left for <b>${S.stuck}</b>. Unlock something or free a holiday team.</div>` : '';
+  document.getElementById('planlist').innerHTML = S.rows.map(r=>{ const l=LEGS[LI[r.leg]]; const res=(D.results[r.leg]||{})[r.team];
+    return `<li class="${l.kind==='holiday'?'hol':''}"><span class="lg">${r.leg}</span><span>${r.team?`<b>${r.team}</b> ${res?(res==='W'?'✓':'✗'):'<span class="note">'+pct(r.p)+'</span>'}${r.sub?' <span class="note">submitted</span>':r.card?' <span class="note">card pick</span>':r.fixed?' <span class="note">locked</span>':MOVED[r.leg]?' <span class="note">together</span>':''}`:'<span class="pill crit">none</span>'}</span></li>`; }).join('');
+  // grid
+  const head = `<tr><th style="text-align:left">Team <small>sorted by power rating</small></th>` + LEGS.map(l=>`<th class="${l.kind==='holiday'?'hol':''} ${l.id===D.current_leg?'cur':''}" title="${esc(l.label)} · due ${esc(l.deadline)}">${l.id}<small>${esc(l.dates)}</small></th>`).join('') + `</tr>`;
+  const others = PF.alive.map(k=>[k, PF.byEntry[k].plan]);
+  const body = TEAMS.map(t=>{
+    const a=t.abbr; const usedAt = Object.entries(S.fixed).find(([leg,tt])=>tt===a)?.[0];
+    const cells = LEGS.map(l=>{
+      const p = D.p[l.id][a]; const opp = (D.opp[l.id]||{})[a];
+      if (p===undefined) return `<td><span class="cell off"><small>bye</small></span></td>`;
+      const past = LI[l.id] < CUR; const res=(D.results[l.id]||{})[a]; const gone = l.id===D.current_leg && LOCKED.has(a);
+      const isPlan = S.plan[l.id]===a, isCard = isPlan && S.card===a && l.id===D.current_leg, isFixed = isPlan && !isCard && (l.id in S.fixed), isPin = isPlan && !isFixed && !!MOVED[l.id], isSub = isPlan && (l.id in e.picks);
+      let cls = 'cell '+q(p)+(p<0.5?' dog':'');
+      if (isSub) cls += ' sub'; else if (isFixed) cls += ' lock'; else if (isCard) cls += ' card'; else if (isPin) cls += ' pin'; else if (isPlan) cls += ' plan';
+      if (!isPlan && (S.fixedTeams.has(a)||excl[a])) cls += ' used';
+      if ((past || gone) && !isPlan) cls = 'cell off';
+      if (isPlan && res==='W') cls += ' won'; if (isPlan && res && res!=='W') cls += ' lost';
+      const fld = l.id===D.current_leg && D.field[a]!==undefined ? ` · field ${pct(D.field[a])}` : '';
+      const who = others.filter(([k,plan])=>plan[l.id]===a).map(([k])=>dot(k)).join('');
+      const whoTxt = others.filter(([k,plan])=>plan[l.id]===a).map(([k])=>short(D.entries[k].name)).join(', ');
+      const title = `${a} ${opp} ${l.id}: ${pct(p,1)} to win${fld}${isCard?" · the card's pick this week":''}${gone&&!isSub?' · already kicked off':''}${usedAt&&!isPlan?` (used in ${usedAt})`:''}${whoTxt?` · on it: ${whoTxt}`:''}`;
+      const dis = isSub || (past && !isFixed && !isCard) || (gone && !isSub);
+      const extra = extraLine(l.id, a);
+      return `<td><button class="${cls}" data-leg="${l.id}" data-team="${a}" title="${esc(title)}" ${dis?'disabled':''}>${who?`<span class="who">${who}</span>`:''}<b>${pct(p)}</b><small>${esc(opp)}</small>${extra}</button></td>`;
+    }).join('');
+    const arrow = t.tilt>=0.4?'<span style="color:var(--good)">↑</span>':t.tilt<=-0.4?'<span style="color:var(--crit)">↓</span>':'';
+    return `<tr class="${excl[a]?'excl':''}"><th title="${esc(t.name)} · rating ${t.rating>0?'+':''}${t.rating.toFixed(1)} · expected by Dec ${t.tilt>=0?'+':''}${t.tilt.toFixed(1)}${t.why?' — '+esc(t.why):''}">${a}${arrow}<small>${t.rating>0?'+':''}${t.rating.toFixed(1)}</small><span class="x" data-x="${a}" title="${excl[a]?'include again':'exclude (injury / what-if)'}">${excl[a]?'↺':'✕'}</span></th>${cells}</tr>`;
+  }).join('');
+  document.getElementById('grid').innerHTML = `<thead>${head}</thead><tbody>${body}</tbody>`;
+  document.querySelectorAll('.mbtn').forEach(b=>b.classList.toggle('on', b.dataset.m===(store.metric||'p')));
+  document.querySelectorAll('.stbtn').forEach(b=>b.classList.toggle('on', b.dataset.s===store.stance));
+  const pfb = document.getElementById('pf'); if (pfb){ pfb.classList.toggle('on', !!store.together); pfb.textContent = store.together ? 'Planning entries together' : 'Plan entries together'; }
+  renderChamp(); renderMulti(PF); renderTogether(PF); renderEV();
+}
+function renderChamp(){
+  const e = D.entries[store.entry]; const cp=e.champion_plan||{}, cc=e.champion_choices||{};
+  const el=document.getElementById('champbox'); if(!el) return;
+  if (!Object.keys(cp).length){ el.innerHTML='<span class="note">No champion plan for this entry.</span>'; return; }
+  let logp=0; for (const [l,t] of Object.entries(cp)){ const p=D.p[l]?.[t]; if (p) logp+=Math.log(p); }
+  el.innerHTML = `<p class="note" style="margin:0 0 6px">A greedy walk through the season with the champion choice model: each leg, the team a champion would most likely take from what this entry has left (skipping any pick that would leave a holiday leg empty). Chance this exact path survives: <b>${pct(Math.exp(logp),3)}</b>. Press <b>Champion's plan</b> above to load it as locks.</p>
+    <ol class="plan">${LEGS.filter(l=>LI[l.id]>=CUR).map(l=>{ const t=cp[l.id]; const alts=(cc[l.id]||[]).map(([tt,x])=>`${tt} ${pct(x,0)}`).join(' · '); return `<li class="${l.kind==='holiday'?'hol':''}"><span class="lg">${l.id}</span><span><b>${t||'—'}</b> <span class="note">${alts}</span></span></li>`; }).join('')}</ol>`;
+}
+function renderMulti(PF){
+  const el = document.getElementById('multi');
+  const picks = PF.alive.map(k=>({k, name: D.entries[k].name, team: PF.byEntry[k].plan[D.current_leg]})).filter(x=>x.team);
+  if (!picks.length){ el.innerHTML='<span class="note">No alive entries.</span>'; return; }
+  const W = PF.weekNow, n = picks.length;
+  const list = picks.map(x=>`<span class="chip">${dot(x.k)} ${esc(short(x.name))}: <b>${x.team}</b> ${pct(D.p[D.current_leg][x.team])}</span>`).join(' ');
+  const hedge = W.hedged.length ? ` <b>${W.hedged.map(h=>`${short(D.entries[PF.alive[h.a]].name)} and ${short(D.entries[PF.alive[h.b]].name)} are on opposite sides of ${h.team}–${h.other}`).join('; ')}</b> — exactly one of them survives that game.` : '';
+  el.innerHTML = `<div class="chips">${list}</div><p class="note" style="margin:8px 0 0">All survive ${D.current_leg}: <b>${pct(W.byN[n],1)}</b> · at least one: <b>${pct(W.pAny,1)}</b> · wiped out: <b>${pct(W.byN[0],1)}</b> (${new Set(picks.map(x=>x.team)).size} distinct team${new Set(picks.map(x=>x.team)).size>1?'s':''}).${hedge}</p>`;
+}
+function renderTogether(PF){
+  const el = document.getElementById('together'); if (!el) return;
+  if (PF.alive.length < 2){ el.innerHTML = '<span class="note">Only one entry is alive, so there is nothing to balance — its path above is the whole plan.</span>'; return; }
+  const st = STANCES[store.stance];
+  const row = (label, s, on) => `<tr class="${on?'on':''}"><td>${label}</td><td>${pct(s.pAny,3)}</td><td>${s.eN.toFixed(4)}</td><td>${pct(s.wipeNow,1)}</td><td>${new Set(s.shared.map(x=>x.leg)).size}</td><td>${new Set(s.hedged.map(x=>x.leg)).size}</td></tr>`;
+  const same = store.together && PF.moves === 0;
+  const cmp = `<table class="cmp"><thead><tr><th>Season plan</th><th>≥1 entry goes the distance</th><th>expected finalists</th><th>all out after ${D.current_leg}</th><th>legs on one team</th><th>legs hedged</th></tr></thead><tbody>
+    ${row('Each entry on its own best path', PF.indep, !store.together || same)}
+    ${store.together ? row(`Together — ${esc(store.stance)} (γ=${st.gamma})${same?' — no change: nothing worth moving':''}`, PF.stats, !same) : ''}</tbody></table>`;
+  const legs = LEGS.filter(l=>LI[l.id]>=CUR);
+  const head = `<tr><th>Leg</th>${PF.alive.map(k=>`<th>${dot(k)} ${esc(short(D.entries[k].name))}</th>`).join('')}</tr>`;
+  const body = legs.map(l=>{
+    const sh = PF.stats.shared.filter(x=>x.leg===l.id), hd = PF.stats.hedged.filter(x=>x.leg===l.id);
+    const tds = PF.alive.map((k,ix)=>{ const S = PF.byEntry[k]; const t = S.plan[l.id]; if (!t) return `<td class="none">none</td>`;
+      const res=(D.results[l.id]||{})[t]; const mv = !!(PF.moved[k]||{})[l.id] && !(l.id in S.fixed); const isCard = S.card && l.id===D.current_leg; const cls = [sh.some(x=>x.a===ix||x.b===ix)?'shared':'', hd.some(x=>x.a===ix||x.b===ix)?'hedge':'', mv?'pin':'', (l.id in S.fixed)?'fixed':''].join(' ');
+      return `<td class="${cls}" title="${esc(short(D.entries[k].name))} ${t} ${pct(D.p[l.id][t]||0,1)}${(l.id in e_picks(k))?' submitted':isCard?" the card's pick this week":(l.id in S.fixed)?' locked':mv?' moved by the together-solver (alone it would take '+(PF.indepBy[k].plan[l.id]||'—')+')':''}"><b>${t}</b> <span class="note">${res?(res==='W'?'✓':'✗'):pct(D.p[l.id][t]||0)}</span></td>`; }).join('');
+    return `<tr class="${l.kind==='holiday'?'hol':''}"><td>${l.id}</td>${tds}</tr>`; }).join('');
+  const what = store.together
+    ? (st.gamma === 0 ? `<b>≥1 finalist</b> (γ=0) only counts whether at least one entry goes the distance — a second finalist is worth nothing extra — so the solver separates the entries as far as their own odds allow (${PF.moves} pick${PF.moves===1?'':'s'} moved, marked ⇄).`
+     : st.gamma >= 1 ? `<b>${esc(store.stance)}</b> is linear (γ=1): the objective is the expected number of finalists, which every entry maximises on its own, so nothing is moved. Pick <b>balanced</b> or <b>spread</b> to trade a little per-entry odds for not losing every entry on one Sunday.`
+                     : `Under <b>${esc(store.stance)}</b> (γ=${st.gamma}) the solver moved ${PF.moves} pick${PF.moves===1?'':'s'} (marked ⇄) away from each entry's solo-best path so the entries share fewer coins: one bad Sunday should not take every entry. Your own locks are respected; lock a cell to overrule it.`)
+    : `Every entry is on its own best path — exactly what the <b>This week's suggestions</b> tab shows. Press <b>Plan entries together</b> to re-solve them as a set under the stance.`;
+  el.innerHTML = `<p class="note" style="margin:0 0 6px">${what}</p><div class="gridwrap" style="max-height:none">${cmp}</div><p class="note" style="margin:8px 0 4px">Leg by leg. <span style="background:color-mix(in srgb,var(--warn) 22%,transparent);padding:0 4px">amber</span> = entries on the same team (they live or die together) · <span style="background:color-mix(in srgb,var(--pick) 18%,transparent);padding:0 4px">teal</span> = opposite sides of one game (exactly one survives) · bold = submitted or locked · ⇄ = placed by the together-solver.</p><div class="gridwrap" style="max-height:none"><table class="all"><thead>${head}</thead><tbody>${body}</tbody></table></div>`;
+}
+function e_picks(k){ return D.entries[k].picks; }
+let fieldEdit = null;
+function renderEV(){
+  const leg = D.current_leg; const teams = Object.keys(D.p[leg]).sort((a,b)=>D.p[leg][b]-D.p[leg][a]);
+  if (!fieldEdit){ fieldEdit = {}; for (const t of teams) fieldEdit[t] = D.field[t]||0; }
+  const opp = t => oppOf(leg, t);
+  const base = teams.reduce((s,t)=>s+fieldEdit[t]*D.p[leg][t],0);
+  const rows = teams.map(t=>{ const p=D.p[leg][t]; const cond = fieldEdit[t] + teams.filter(s=>s!==t && s!==opp(t)).reduce((s,x)=>s+fieldEdit[x]*D.p[leg][x],0); const lev = cond>0? base/cond : 1;
+    const fv = fvOf(t, leg);
+    return `<tr><th>${t}<small>${esc(D.opp[leg][t]||'')}</small></th><td class="cell" style="cursor:default"><b>${pct(p)}</b></td><td><input data-f="${t}" type="number" min="0" max="100" step="0.5" value="${(100*fieldEdit[t]).toFixed(1)}" style="width:64px;font:inherit;background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:4px;padding:3px 5px"></td><td class="cell" style="cursor:default">×${lev.toFixed(2)}</td><td class="cell" style="cursor:default"><b>${(p*lev).toFixed(3)}</b></td><td class="cell" style="cursor:default">${fv.toFixed(2)}</td></tr>`; }).join('');
+  const tot = teams.reduce((s,t)=>s+fieldEdit[t],0);
+  document.getElementById('ev').innerHTML = `<thead><tr><th style="text-align:left">Team</th><th>Win %</th><th>Field % <small>(sum ${pct(tot)})</small></th><th>Leverage</th><th>EV = win × lev</th><th>Future value</th></tr></thead><tbody>${rows}</tbody>`;
+  document.getElementById('ev').insertAdjacentHTML('beforeend', `<tfoot><tr><th colspan="6" style="text-align:left;font-family:inherit;font-size:12.5px;font-weight:400;color:var(--muted)">Field expected to survive ${leg}: ${pct(base,1)}</th></tr></tfoot>`);
+}
+document.addEventListener('change', ev=>{ const f=ev.target.dataset.f; if (f){ fieldEdit[f]=Math.max(0, parseFloat(ev.target.value)||0)/100; renderEV(); } });
+document.addEventListener('click', ev=>{
+  const tab = ev.target.closest('[data-e]'); if (tab){ store.entry = +tab.dataset.e; save(); render(); return; }
+  const x = ev.target.closest('[data-x]'); if (x){ const ex=exclFor(store.entry); const a=x.dataset.x; if (ex[a]) delete ex[a]; else ex[a]=1; save(); render(); return; }
+  const c = ev.target.closest('.cell[data-leg]'); if (c && !c.disabled){
+    const i=store.entry, e=D.entries[i], locks=locksFor(i), leg=c.dataset.leg, team=c.dataset.team;
+    if (subTeams(e).has(team) || (leg===D.current_leg && LOCKED.has(team))) return;      // already played / already kicked off
+    if (locks[leg]===team) delete locks[leg];
+    else { for (const l of Object.keys(locks)) if (l !== '__seen_' && locks[l]===team) delete locks[l]; locks[leg]=team; }
+    save(); render(); return; }
+  const mb = ev.target.closest('.mbtn'); if (mb){ store.metric = mb.dataset.m; save(); render(); return; }
+  const sb = ev.target.closest('.stbtn'); if (sb){ store.stance = sb.dataset.s; save(); render(); return; }
+  if (ev.target.id==='pf'){ store.together = !store.together; save(); render(); return; }
+  if (ev.target.id==='clear'){ store.locks[store.entry]={}; store.excl[store.entry]={}; save(); render(); }
+  if (ev.target.id==='model'){ const i=store.entry; store.locks[i]={}; store.excl[i]={}; const mp=D.entries[i].model_plan; for (const [l,t] of Object.entries(mp)) if (!(l in D.entries[i].picks)) store.locks[i][l]=t; save(); render(); }
+  if (ev.target.id==='champ'){ const i=store.entry; store.locks[i]={}; store.excl[i]={}; const cp=D.entries[i].champion_plan||{}; for (const [l,t] of Object.entries(cp)) if (!(l in D.entries[i].picks)) store.locks[i][l]=t; save(); render(); }
+  if (ev.target.id==='copy'){ const PF=solvePortfolio(); const legs=LEGS.filter(l=>LI[l.id]>=CUR);
+    const txt = PF.alive.length > 1 ? legs.map(l=>`${l.id}: `+PF.alive.map(k=>`${short(D.entries[k].name)} ${PF.byEntry[k].plan[l.id]||'—'}`).join(' · ')).join('\n')
+                                    : solve(store.entry).rows.map(r=>`${r.leg}: ${r.team||'—'}`).join('\n');
+    navigator.clipboard?.writeText(txt); ev.target.textContent='Copied'; setTimeout(()=>ev.target.textContent='Copy plan',1200); }
+});
+render();
+window.__survivorMap = {solve, solvePortfolio, pfStats, render, store, invalidate: () => { pfCache = null; }};
+</script>
+<script>(function(){ if (window.parent === window) return; const post = () => parent.postMessage({hqFrame: location.pathname.split('/').pop(), h: document.documentElement.scrollHeight}, '*');
+  new ResizeObserver(post).observe(document.body); post(); })();</script></body></html></body></html>
