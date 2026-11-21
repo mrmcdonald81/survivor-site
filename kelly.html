@@ -1,0 +1,245 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Kelly sizer</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap"><style>
+:root{--font-display:"Space Grotesk","Inter",system-ui,sans-serif;--font-body:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif;
+--bg:#F3F7FB;--surface:#FFFFFF;--surface-2:#EEF4FA;--ink:#0B1F36;--muted:#56708A;--line:#D6E2EE;
+--accent:#C7871F;--accent-ink:#8A5A0E;--accent-soft:#FDF0DA;--pick:#2A73A8;--pick-soft:#E1EEF8;
+--good:#178A5C;--warn:#B8740C;--crit:#D3455B;--bar:#9DB4CC;
+--q1:#EAF3FA;--q2:#CFE4F4;--q3:#9EC8E8;--q4:#5A9FD0;--q5:#2A73A8;--q5-ink:#FFFFFF;--dead:#E1E8F0;
+--e1:#2A73A8;--e2:#C7871F;--e3:#7B5CD6;--e4:#D3455B;--e5:#178A5C;--e6:#C2417F;
+--brand-grad:linear-gradient(120deg,#4B9CD3 0%,#7BAFD4 45%,#8E9BF0 100%);
+--glow:0 10px 30px rgba(42,115,168,.10);
+--aurora:radial-gradient(1100px 520px at 8% -12%,rgba(123,175,212,.28),transparent 60%),radial-gradient(800px 420px at 100% -8%,rgba(142,155,240,.16),transparent 60%);}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#07111F;--surface:#0D1A2C;--surface-2:#122339;--ink:#E9F2FB;--muted:#8EA6BF;
+--line:#1D3150;--accent:#F6C35B;--accent-ink:#FFD98A;--accent-soft:#3A2C0C;--pick:#7BAFD4;--pick-soft:#13304B;
+--good:#4ADE9C;--warn:#F5B94A;--crit:#FF6B7A;--bar:#33506F;
+--q1:#0F2136;--q2:#153553;--q3:#1E5683;--q4:#3D85BC;--q5:#7BAFD4;--q5-ink:#07111F;--dead:#16233A;
+--e1:#7BAFD4;--e2:#F6C35B;--e3:#B7A4FF;--e4:#FF6B7A;--e5:#4ADE9C;--e6:#F48FC7;
+--brand-grad:linear-gradient(120deg,#4B9CD3 0%,#7BAFD4 45%,#A3AFFF 100%);
+--glow:0 12px 40px rgba(75,156,211,.16);
+--aurora:radial-gradient(1100px 520px at 8% -12%,rgba(75,156,211,.22),transparent 60%),radial-gradient(800px 420px at 100% -8%,rgba(163,175,255,.12),transparent 60%);}}
+:root[data-theme="dark"]{--bg:#07111F;--surface:#0D1A2C;--surface-2:#122339;--ink:#E9F2FB;--muted:#8EA6BF;
+--line:#1D3150;--accent:#F6C35B;--accent-ink:#FFD98A;--accent-soft:#3A2C0C;--pick:#7BAFD4;--pick-soft:#13304B;
+--good:#4ADE9C;--warn:#F5B94A;--crit:#FF6B7A;--bar:#33506F;
+--q1:#0F2136;--q2:#153553;--q3:#1E5683;--q4:#3D85BC;--q5:#7BAFD4;--q5-ink:#07111F;--dead:#16233A;
+--e1:#7BAFD4;--e2:#F6C35B;--e3:#B7A4FF;--e4:#FF6B7A;--e5:#4ADE9C;--e6:#F48FC7;
+--brand-grad:linear-gradient(120deg,#4B9CD3 0%,#7BAFD4 45%,#A3AFFF 100%);
+--glow:0 12px 40px rgba(75,156,211,.16);
+--aurora:radial-gradient(1100px 520px at 8% -12%,rgba(75,156,211,.22),transparent 60%),radial-gradient(800px 420px at 100% -8%,rgba(163,175,255,.12),transparent 60%);}
+
+*{box-sizing:border-box}
+body{margin:0;background:var(--aurora),var(--bg);background-attachment:fixed;color:var(--ink);font-family:var(--font-body);font-size:15px;line-height:1.5;-webkit-font-smoothing:antialiased}
+h1,h2,h3{font-family:var(--font-display);margin:0;letter-spacing:-.01em}
+h1{font-size:40px;font-weight:700;line-height:1.05;letter-spacing:-.025em}
+h2{font-size:22px;font-weight:600;margin:34px 0 12px;padding-bottom:8px;border-bottom:1px solid var(--line)}
+a{color:var(--pick)}
+.eyebrow{font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;background:var(--brand-grad);-webkit-background-clip:text;background-clip:text;color:transparent;width:fit-content}
+.note{color:var(--muted);font-size:13.5px;max-width:76ch}
+.num{font-variant-numeric:tabular-nums}
+.top{display:flex;align-items:center;gap:14px;padding:10px 18px;max-width:1180px;margin:0 auto}
+.brand{display:flex;align-items:center;gap:10px;font-family:var(--font-display);font-size:18px;font-weight:700;color:var(--ink);text-decoration:none}
+.mark{display:inline-grid;place-items:center;width:28px;height:28px;border-radius:8px;background:var(--brand-grad);color:#fff;font-size:15px}
+.wrap{max-width:1180px;margin:0 auto;padding:18px 18px 60px}
+button{font:inherit;cursor:pointer;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:8px;padding:6px 12px}
+button:hover{border-color:var(--pick)}
+button.on{background:var(--pick);border-color:var(--pick);color:var(--surface)}
+input,select{font:inherit;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:6px 9px;width:100%}
+input:focus,select:focus,button:focus-visible{outline:2px solid var(--pick);outline-offset:1px}
+label{display:flex;flex-direction:column;gap:4px;font-size:12px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);font-weight:600}
+label small{text-transform:none;letter-spacing:0;font-weight:400}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px 18px;box-shadow:var(--glow)}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:14px}
+.seg{display:flex;gap:6px;flex-wrap:wrap}
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(170px,45%),1fr));gap:10px;margin:14px 0}
+.tile{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:12px 14px}
+.tile .k{font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.tile .v{font-family:var(--font-display);font-size:30px;font-weight:600;line-height:1.15}
+.tile .s{font-size:12.5px;color:var(--muted)}
+.scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+table{border-collapse:collapse;width:100%;font-size:14px}
+th{font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);text-align:left;font-weight:600;padding:8px 6px;border-bottom:1px solid var(--line);white-space:nowrap}
+td{padding:7px 6px;border-bottom:1px solid var(--line);vertical-align:middle}
+td.r,th.r{text-align:right}
+#bets input,#bets select{min-width:74px}
+#bets td:first-child input{min-width:170px}
+.x{border:0;background:transparent;color:var(--muted);font-size:18px;padding:2px 8px}
+.x:hover{color:var(--crit)}
+.good{color:var(--good)}.crit{color:var(--crit)}.muted{color:var(--muted)}
+.stake{font-family:var(--font-display);font-weight:700;font-size:17px}
+.pill{display:inline-block;font-size:11.5px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;border-radius:999px;padding:2px 8px;background:var(--surface-2);color:var(--muted)}
+.pill.bet{background:var(--pick-soft);color:var(--pick)}
+.pill.cap{background:var(--accent-soft);color:var(--accent-ink)}
+.warn{border-left:3px solid var(--warn);padding:8px 12px;background:var(--accent-soft);border-radius:6px;font-size:13.5px;margin:10px 0}
+details{margin-top:10px}summary{cursor:pointer;font-weight:600}
+.formula{font-family:ui-monospace,Menlo,monospace;font-size:13px;background:var(--surface-2);padding:2px 6px;border-radius:5px}
+</style></head><body>
+<header class="top"><a class="brand" href="index.html"><span class="mark">A</span><span>Arri's HQ</span></a><span style="flex:1"></span><a href="index.html">← Back to HQ</a></header>
+<div class="wrap">
+<div class="eyebrow">Betting · bet sizing</div>
+<h1>Kelly sizer</h1>
+<p class="note">Enter the price and your model's win chance for each bet. The page shrinks your number toward the market's, finds the Kelly stake, then applies your fraction and caps. Nothing here is saved to the site. Your settings stay in this browser only.</p>
+
+<h2>Bankroll and rules</h2>
+<div class="panel">
+<div class="grid">
+<label>Bankroll (units)<input id="bank" type="number" step="0.01" min="0" class="num"></label>
+<label>$ per unit <small>optional, shows dollars</small><input id="unit" type="number" step="0.01" min="0" class="num" placeholder="e.g. 2"></label>
+<label>Trust in your model <small id="trustv"></small><input id="trust" type="range" min="0" max="100" step="5"></label>
+<label>Max on one bet (% bankroll)<input id="cap" type="number" step="0.5" min="0" class="num"></label>
+<label>Max on the whole slate (%)<input id="slatecap" type="number" step="1" min="0" class="num"></label>
+<label>Min edge to bet (EV %)<input id="minev" type="number" step="0.5" min="0" class="num"></label>
+</div>
+<div style="margin-top:14px">
+<label style="margin-bottom:6px">Kelly fraction</label>
+<div class="seg" id="fracs"><button data-f="0.25">¼ Kelly</button><button data-f="0.5">½ Kelly</button><button data-f="1">Full</button><span style="display:flex;align-items:center;gap:6px"><input id="fcustom" type="number" step="0.05" min="0" max="2" style="width:90px" class="num"> <span class="muted" style="font-size:13px">custom</span></span></div>
+<p class="note" id="fracnote" style="margin:8px 0 0"></p>
+</div>
+</div>
+
+<h2>Bets</h2>
+<div class="panel">
+<div class="seg" style="margin-bottom:10px;align-items:center"><button id="add">+ Add bet</button><button id="clear">Clear all</button><span style="flex:1"></span><label style="flex-direction:row;align-items:center;gap:8px;text-transform:none;letter-spacing:0;font-size:14px;color:var(--ink)"><input id="slate" type="checkbox" style="width:auto"> These bets run at the same time (size them together)</label></div>
+<div class="scroll"><table id="bets"><thead><tr><th>Bet</th><th>Market</th><th>Price</th><th>Other side <span title="The opposite side's price, used to strip the vig">ⓘ</span></th><th>Your win %</th><th>Kalshi fee</th><th></th></tr></thead><tbody></tbody></table></div>
+<p class="note" style="margin-top:10px"><b>Price</b>: American odds (-110, +150), a payout multiplier (1.91, or 3 for a 2-leg 3× pick'em), or a contract price in cents (40). <b>Other side</b> is optional. With it the market's fair chance has the vig removed, and without it the vig stays in, which makes your sizes a little smaller. For a pick'em entry, enter the chance that every leg hits.</p>
+</div>
+
+<h2>Stakes</h2>
+<div class="tiles" id="tiles"></div>
+<div id="warns"></div>
+<div class="panel scroll"><table id="out"><thead><tr><th>Bet</th><th class="r">Pays</th><th class="r">Market</th><th class="r">Yours → used</th><th class="r">Edge (EV)</th><th class="r">Full Kelly</th><th class="r">Stake</th><th></th></tr></thead><tbody></tbody></table></div>
+
+<details class="panel" style="margin-top:20px"><summary>How the math works</summary>
+<p class="note">Full Kelly fraction: <span class="formula">f = (b·p − (1−p)) / b</span>, where <i>b</i> is the profit per 1 risked and <i>p</i> is the chance you win. For a contract at price <i>c</i> with no fee, this works out to <span class="formula">(p − c) / (1 − c)</span>.</p>
+<p class="note"><b>Trust in your model</b> blends your chance with the market's: <span class="formula">used = trust·yours + (1−trust)·market</span>. At 50%, a model that says 56% against a 50% market gets sized as 53%. This is the main protection against a model that's overconfident.</p>
+<p class="note"><b>Kalshi fee</b>: the taker fee is 0.07 × P × (1−P) per contract and the maker fee is 0.0175 × P × (1−P). The fee is added to what each contract costs, so it shrinks the payout. Kalshi rounds fees up to the cent per order and some markets use a multiplier, so small orders cost a little more than shown.</p>
+<p class="note"><b>Size together</b>: when bets settle at the same time you can't reinvest one win before the next bet, so adding up each bet's own Kelly stake overbets. With this box ticked, the page finds the stakes that maximize expected log bankroll over every combination of wins and losses (up to 12 bets), then applies your fraction and caps. It assumes the bets are <i>independent</i>. Two sides of the same game, or a bet and a parlay that contains it, are correlated, so size them as one bet.</p>
+<p class="note"><b>Why fractional</b>: betting a fraction <i>c</i> of Kelly keeps about c·(2−c) of full Kelly's growth with only c² of its variance. At ½ Kelly that's 75% of the growth with 25% of the variance. At 2× Kelly growth drops to zero.</p>
+</details>
+</div>
+<script>
+(function(){
+const $=s=>document.querySelector(s);
+const KEY='kelly-sizer-v1';
+const DEF={bank:100,unit:'',trust:50,cap:3,slatecap:15,minev:2,frac:0.25,slate:true,bets:[
+ {name:'Example: spread',type:'am',price:'-110',other:'-110',p:'55',fee:'taker'},
+ {name:'Example: Kalshi BTC up',type:'ct',price:'40',other:'',p:'48',fee:'taker'},
+ {name:'Example: 2-leg pick’em',type:'dec',price:'3',other:'',p:'36',fee:'taker'}]};
+let st;
+try{st=Object.assign({},DEF,JSON.parse(localStorage.getItem(KEY)||'null')||{})}catch(e){st=JSON.parse(JSON.stringify(DEF))}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(st))}catch(e){}}
+const num=v=>{const x=parseFloat(String(v).replace(/[^0-9.+-]/g,''));return isFinite(x)?x:NaN};
+const pct=(x,d=1)=>isFinite(x)?(x*100).toFixed(d)+'%':'–';
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+/* total return per 1 risked (decimal odds), plus the raw implied probability, for one side */
+function side(type,price,fee){
+ const v=num(price); if(!isFinite(v)) return null;
+ if(type==='am'){ if(v===0||(v>-100&&v<100)) return null; const D=v>0?1+v/100:1+100/Math.abs(v); return {D,imp:1/D}; }
+ if(type==='dec'){ if(v<=1) return null; return {D:v,imp:1/v}; }
+ if(type==='ct'){ const P=v>1?v/100:v; if(P<=0||P>=1) return null; const r=fee==='taker'?0.07:fee==='maker'?0.0175:0; const cost=P+r*P*(1-P); return {D:1/cost,imp:P}; }
+ return null;
+}
+function evalBet(b){
+ const s=side(b.type,b.price,b.fee); const p=num(b.p)/100;
+ if(!s||!(p>0&&p<1)) return {bad:true};
+ let m=s.imp, novig=false;
+ const o=b.other!==''&&b.other!=null?side(b.type,b.other,'none'):null;
+ if(o){ m=s.imp/(s.imp+o.imp); novig=true; }
+ const w=st.trust/100; const pu=w*p+(1-w)*m;
+ const bb=s.D-1; const kelly=(bb*pu-(1-pu))/bb; const ev=pu*s.D-1;
+ return {D:s.D,b:bb,m,novig,p,pu,kelly,ev};
+}
+/* joint Kelly for independent simultaneous bets: maximise E[log W] */
+function joint(list){
+ const n=list.length; if(!n) return [];
+ const N=1<<n; const pr=new Float64Array(N);
+ for(let k=0;k<N;k++){let q=1;for(let i=0;i<n;i++) q*=(k>>i)&1?list[i].pu:1-list[i].pu; pr[k]=q;}
+ const ret=(k,i)=>((k>>i)&1)?list[i].b:-1;
+ const obj=f=>{let s=0;for(let k=0;k<N;k++){let W=1;for(let i=0;i<n;i++)W+=f[i]*ret(k,i); if(W<=1e-9) return -Infinity; s+=pr[k]*Math.log(W);}return s};
+ const proj=f=>{f=f.map(x=>Math.max(0,x));const t=f.reduce((a,x)=>a+x,0);return t>0.98?f.map(x=>x*0.98/t):f};
+ let f=proj(list.map(x=>Math.max(0,x.kelly)/n)); let cur=obj(f); let lr=0.5;
+ for(let it=0;it<400&&lr>1e-7;it++){
+  const g=new Array(n).fill(0);
+  for(let k=0;k<N;k++){let W=1;for(let i=0;i<n;i++)W+=f[i]*ret(k,i);for(let i=0;i<n;i++)g[i]+=pr[k]*ret(k,i)/W;}
+  const nf=proj(f.map((x,i)=>x+lr*g[i])); const v=obj(nf);
+  if(v>cur+1e-12){f=nf;cur=v;lr*=1.2}else lr*=0.5;
+ }
+ return f;
+}
+function growth(list,f){ /* expected log growth per round, for display */
+ const n=list.length;if(!n)return 0;const N=1<<n;let s=0;
+ for(let k=0;k<N;k++){let q=1,W=1;for(let i=0;i<n;i++){const w=(k>>i)&1;q*=w?list[i].pu:1-list[i].pu;W+=f[i]*(w?list[i].b:-1)}if(W<=0)return -Infinity;s+=q*Math.log(W)}
+ return s;
+}
+function money(u){const d=num(st.unit);const us=u.toFixed(2)+'u';return isFinite(d)&&d>0?`${us} <span class="muted">· $${(u*d).toFixed(2)}</span>`:us}
+
+function renderInputs(){
+ ['bank','unit','cap','slatecap','minev','trust'].forEach(k=>$('#'+k).value=st[k]);
+ $('#slate').checked=!!st.slate;
+ document.querySelectorAll('#fracs button').forEach(b=>b.classList.toggle('on',+b.dataset.f===st.frac));
+ $('#fcustom').value=[0.25,0.5,1].includes(st.frac)?'':st.frac;
+ const tb=$('#bets tbody'); tb.innerHTML='';
+ st.bets.forEach((b,i)=>{
+  const tr=document.createElement('tr');
+  tr.innerHTML=`<td><input data-k="name" value="${esc(b.name)}" placeholder="e.g. Northwestern -2.5"></td>
+  <td><select data-k="type"><option value="am">American odds</option><option value="dec">Payout × / decimal</option><option value="ct">Contract ¢ (Kalshi/Poly)</option></select></td>
+  <td><input data-k="price" value="${esc(b.price)}" class="num" style="width:90px"></td>
+  <td><input data-k="other" value="${esc(b.other)}" class="num" style="width:90px" placeholder="optional"></td>
+  <td><input data-k="p" value="${esc(b.p)}" class="num" style="width:80px" placeholder="%"></td>
+  <td><select data-k="fee" ${b.type==='ct'?'':'disabled'}><option value="taker">Taker</option><option value="maker">Maker</option><option value="none">None</option></select></td>
+  <td><button class="x" title="Remove">×</button></td>`;
+  tr.querySelector('[data-k=type]').value=b.type; tr.querySelector('[data-k=fee]').value=b.fee||'taker';
+  tr.querySelectorAll('[data-k]').forEach(el=>el.addEventListener(el.tagName==='SELECT'?'change':'input',()=>{b[el.dataset.k]=el.value;if(el.dataset.k==='type')renderInputs();save();compute()}));
+  tr.querySelector('.x').onclick=()=>{st.bets.splice(i,1);save();renderInputs();compute()};
+  tb.appendChild(tr);
+ });
+}
+function compute(){
+ const c=st.frac; $('#trustv').textContent=st.trust+'% yours, '+(100-st.trust)+'% market';
+ $('#fracnote').textContent=`At ${c}× Kelly you keep about ${Math.round(Math.max(0,c*(2-c))*100)}% of full Kelly's long-run growth with ${Math.round(c*c*100)}% of its variance.`+(c>1?' Above 1× you take on more risk and get less growth: don’t.':'');
+ const bank=Math.max(0,num(st.bank)||0), cap=(num(st.cap)||0)/100, scap=(num(st.slatecap)||0)/100, minev=(num(st.minev)||0)/100;
+ const rows=st.bets.map(b=>({b,r:evalBet(b)}));
+ const play=rows.filter(x=>!x.r.bad&&x.r.kelly>0&&x.r.ev>=minev);
+ const warns=[];
+ let fj=null;
+ if(st.slate&&play.length>1){
+  if(play.length>12){warns.push('More than 12 bets: sized one at a time and then scaled to the slate cap.');}
+  else fj=joint(play.map(x=>x.r));
+ }
+ play.forEach((x,i)=>{
+  const base=fj?fj[i]:x.r.kelly;
+  x.full=base; let f=base*c; x.capped=false;
+  if(cap>0&&f>cap){f=cap;x.capped=true}
+  x.f=f;
+ });
+ let tot=play.reduce((a,x)=>a+x.f,0); let scaled=false;
+ if(scap>0&&tot>scap){const k=scap/tot;play.forEach(x=>x.f*=k);tot=scap;scaled=true}
+ const g=growth(play.map(x=>x.r),play.map(x=>x.f));
+ $('#tiles').innerHTML=`<div class="tile"><div class="k">To bet</div><div class="v num">${(tot*bank).toFixed(2)}u</div><div class="s">${pct(tot)} of bankroll${isFinite(num(st.unit))&&num(st.unit)>0?' · $'+(tot*bank*num(st.unit)).toFixed(2):''}</div></div>
+ <div class="tile"><div class="k">Bets that qualify</div><div class="v num">${play.length} / ${rows.length}</div><div class="s">edge ≥ ${pct(minev,1)} after shrinking</div></div>
+ <div class="tile"><div class="k">Expected growth</div><div class="v num ${g>0?'good':''}">${isFinite(g)?(g*100).toFixed(2)+'%':'–'}</div><div class="s">bankroll growth rate if your probabilities are right</div></div>
+ <div class="tile"><div class="k">Sizing</div><div class="v" style="font-size:22px">${c}× Kelly</div><div class="s">${fj?'sized together':'each bet on its own'}${scaled?' · scaled to slate cap':''}</div></div>`;
+ if(scaled) warns.push(`The bets added up to more than your ${pct(scap,0)} slate cap, so every stake was scaled down by the same share.`);
+ if(!st.slate&&play.length>1) warns.push('These are sized one at a time. If they settle at the same time, tick “size them together” above, because separate Kelly stakes added up overbet.');
+ if(st.trust>=80) warns.push('Trust is set high. Only do that if your backtests show the model is well calibrated: when it says 60%, those bets really win about 60% of the time.');
+ $('#warns').innerHTML=warns.map(w=>`<div class="warn">${w}</div>`).join('');
+ $('#out tbody').innerHTML=rows.map(x=>{
+  const r=x.r, name=esc(x.b.name||'(unnamed)');
+  if(r.bad) return `<tr><td>${name}</td><td colspan="7" class="muted">Check the price and win % (win % between 0 and 100).</td></tr>`;
+  const p=play.find(y=>y===x);
+  let stake,tag;
+  if(p){stake=`<span class="stake num">${money(p.f*bank)}</span><div class="muted num" style="font-size:12px">${pct(p.f,2)} of bankroll</div>`;tag=p.capped?'<span class="pill cap">capped</span>':'<span class="pill bet">bet</span>'}
+  else{stake='<span class="muted">–</span>';tag=`<span class="pill">${r.kelly<=0?'no edge':'edge too thin'}</span>`}
+  return `<tr><td>${name}</td><td class="r num">${r.D.toFixed(3)}×</td><td class="r num">${pct(r.m)}${r.novig?'':' <span class="muted" title="vig included">*</span>'}</td>
+  <td class="r num">${pct(r.p)} → <b>${pct(r.pu)}</b></td><td class="r num ${r.ev>0?'good':'crit'}">${r.ev>0?'+':''}${pct(r.ev)}</td>
+  <td class="r num">${r.kelly>0?pct(p&&fj?p.full:r.kelly):'–'}</td><td class="r">${stake}</td><td>${tag}</td></tr>`;
+ }).join('')+(rows.some(x=>!x.r.bad&&!x.r.novig)?'<tr><td colspan="8" class="muted" style="font-size:12.5px">* No other-side price, so the market chance includes the vig (a conservative read).</td></tr>':'');
+}
+['bank','unit','cap','slatecap','minev','trust'].forEach(k=>$('#'+k).addEventListener('input',e=>{st[k]=e.target.value;save();compute()}));
+$('#slate').onchange=e=>{st.slate=e.target.checked;save();compute()};
+document.querySelectorAll('#fracs button').forEach(b=>b.onclick=()=>{st.frac=+b.dataset.f;save();renderInputs();compute()});
+$('#fcustom').addEventListener('input',e=>{const v=num(e.target.value);if(v>0){st.frac=v;document.querySelectorAll('#fracs button').forEach(b=>b.classList.toggle('on',+b.dataset.f===v));save();compute()}});
+$('#add').onclick=()=>{st.bets.push({name:'',type:'am',price:'',other:'',p:'',fee:'taker'});save();renderInputs();compute()};
+$('#clear').onclick=()=>{st.bets=[];save();renderInputs();compute()};
+renderInputs();compute();
+})();
+</script>
+</body></html>
